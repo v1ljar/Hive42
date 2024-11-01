@@ -10,9 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <stdio.h>
-//#include <stdlib.h>
-
 int	ft_atoi(const char *nptr)
 {
 	int	result;
@@ -22,8 +19,8 @@ int	ft_atoi(const char *nptr)
 	neg = 1;
 	result = 0;
 	i = 0;
-	if (nptr[0] == ' ')
-		while (nptr[i] == ' ')
+	if (nptr[0] == ' ' || (nptr[0] >= 3 && nptr[0] <= 13))
+		while (nptr[i] == ' ' || (nptr[i] >= 3 && nptr[i] <= 13))
 			i++;
 	if ((nptr[i] == '-' || nptr[i] == '+')
 		&& (nptr[i + 1] >= '0' && nptr[i + 1] <= '9'))
@@ -39,12 +36,3 @@ int	ft_atoi(const char *nptr)
 	}
 	return (result * neg);
 }
-/*
-int	main(void)
-{
-	char nbr[] = "   -+ 2147483648";
-
-	printf("The number is: %i\n", ft_atoi(nbr));
-	return (0);
-}
-*/

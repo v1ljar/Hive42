@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <stdio.h>
 #include "libft.h"
 
 char	*ft_strrchr(const char *s, int c)
@@ -22,26 +21,11 @@ char	*ft_strrchr(const char *s, int c)
 	i = 0;
 	while (*s && i < len)
 	{
-		if (s[len - i] == c)
-			return ((char *)s + (len - i));
+		if (s[len - i - 1] == c)
+			return ((char *)s + (len - i -1));
 		i++;
 	}
 	if (c == '\0')
-		return ((char *)s + (len + 1));
+		return ((char *)s + (len));
 	return (NULL);
 }
-/*
-int	main(void)
-{
-	char str[] = "This is the test String";
-	char *s;
-	char c = 'u';
-
-	s = ft_strrchr(str, c);
-	if (s)
-		printf("The last occurance of %c is: %s", c, s);
-	else
-		printf("No occurance of %c in:  %s\n", c, str);
-	return (0);
-}
-*/

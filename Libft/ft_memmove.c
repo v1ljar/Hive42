@@ -21,19 +21,19 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 		return (NULL);
 	de = (char *)dest;
 	sr = (const char *)src;
-	if ((de < sr && (de + n < sr)) || ((sr < de) && (sr + n > de)))
+	if (de < sr)
 	{
 		while (n--)
 		{
-			*(de + n) = *(sr + n);
+			*de = *sr;
+			de++;
+			sr++;
 		}
 	}
-	while (n--)
+	else
 	{
-		*de = *sr;
-		de++;
-		sr++;
+		while (n--)
+		  *(de + n)  = *(sr + n);
 	}
 	return ((void *)dest);
 }
-

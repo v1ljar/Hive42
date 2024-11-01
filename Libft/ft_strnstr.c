@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <stdio.h>
 #include "libft.h"
 
 char	*ft_strnstr(const char *big, const char *little, size_t len)
@@ -18,7 +17,7 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 	size_t	i;
 	size_t	j;
 
-	if (!little)
+	if (little[0] == '\0')
 		return ((char *)big);
 	i = 0;
 	while (i < len && big[i] != '\0')
@@ -34,18 +33,3 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 	}
 	return (NULL);
 }
-/*
-int	main(void)
-{
-	const char	str1[] = "This is the TEST string";
-	const char	search[] = "TEST";
-	char	*res;
-
-	res = ft_strnstr(str1, search, 16);
-	if (res)
-		printf("Found! '%s' is found in: %s\n", search, res);
-	else
-		printf("'%s' NOT FOUND IN: %s\n", search, str1);
-	return (0);
-}
-*/
