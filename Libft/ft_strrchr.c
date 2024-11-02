@@ -22,10 +22,18 @@ char	*ft_strrchr(const char *s, int c)
 	while (i < len)
 	{
 		if (s[len - i - 1] == c)
+<<<<<<< HEAD
 			return ((char *)s + (len - i - 1));
 		i++;
 	}
 	if (c == '\0')
 		return ((char *)s + i);
+=======
+			return ((char *)s + (len - i -1));
+		i++;
+	}
+	if (c == '\0')
+		return ((char *)s + (len));
+>>>>>>> 0ff4ba513d000df9a0bb9ca8b2081ac0ca7f0892
 	return (NULL);
 }

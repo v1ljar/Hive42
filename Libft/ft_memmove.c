@@ -21,12 +21,16 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 		return (NULL);
 	de = (char *)dest;
 	sr = (const char *)src;
+<<<<<<< HEAD
 	if (sr < de)
 	{
 		while (n--)
 			*(de + n) = *(sr + n);
 	}
 	else
+=======
+	if (de < sr)
+>>>>>>> 0ff4ba513d000df9a0bb9ca8b2081ac0ca7f0892
 	{
 		while (n--)
 		{
@@ -35,5 +39,14 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 			sr++;
 		}
 	}
+<<<<<<< HEAD
 	return (dest);
+=======
+	else
+	{
+		while (n--)
+		  *(de + n)  = *(sr + n);
+	}
+	return ((void *)dest);
+>>>>>>> 0ff4ba513d000df9a0bb9ca8b2081ac0ca7f0892
 }
