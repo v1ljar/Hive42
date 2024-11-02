@@ -6,12 +6,9 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 12:09:49 by vuljas            #+#    #+#             */
-/*   Updated: 2024/10/31 14:39:11 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/02 10:51:51 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//#include <stdio.h>
-//#include <stdlib.h>
 
 int	ft_atoi(const char *nptr)
 {
@@ -22,8 +19,8 @@ int	ft_atoi(const char *nptr)
 	neg = 1;
 	result = 0;
 	i = 0;
-	if (nptr[0] == ' ')
-		while (nptr[i] == ' ')
+	if (nptr[0] == ' ' || (nptr[0] >= 9 && nptr[0] <= 13))
+		while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
 			i++;
 	if ((nptr[i] == '-' || nptr[i] == '+')
 		&& (nptr[i + 1] >= '0' && nptr[i + 1] <= '9'))
@@ -39,12 +36,3 @@ int	ft_atoi(const char *nptr)
 	}
 	return (result * neg);
 }
-/*
-int	main(void)
-{
-	char nbr[] = "   -+ 2147483648";
-
-	printf("The number is: %i\n", ft_atoi(nbr));
-	return (0);
-}
-*/

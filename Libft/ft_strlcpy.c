@@ -6,34 +6,26 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:15:46 by vuljas            #+#    #+#             */
-/*   Updated: 2024/10/30 14:04:56 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/02 12:25:12 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "libft.h"
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
 	size_t	i;
+	size_t	len;
 
+	len = ft_strlen(src);
+	if (size == 0)
+		return (len);
 	i = 0;
-	while (i < (size - 1) && src[i] != '\0')
+	while (i < size - 1 && src[i] != '\0')
 	{
 		dst[i] = src[i];
 		i++;
 	}
 	dst[i] = '\0';
-	return (i);
+	return (len);
 }
-/*
-int	main(void)
-{
-	char sr[] = "Source string";
-	char de[10] = "DEstin";
-	size_t x;
-
-	x = ft_strlcpy(de, sr, 16);
-	printf("Length of the created string is: %li\nString is: %s", x, de);
-	return (0);
-}*/

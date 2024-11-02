@@ -1,39 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 15:27:16 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/02 10:30:22 by vuljas           ###   ########.fr       */
+/*   Created: 2024/11/02 14:03:04 by vuljas            #+#    #+#             */
+/*   Updated: 2024/11/02 14:07:27 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+char	*ft_strtrim(char const *s1, char const *set)
 {
-	char		*de;
-	const char	*sr;
-
-	if (!dest && !src && n > 0)
-		return (NULL);
-	de = (char *)dest;
-	sr = (const char *)src;
-	if (sr < de)
-	{
-		while (n--)
-			*(de + n) = *(sr + n);
-	}
-	else
-	{
-		while (n--)
-		{
-			*de = *sr;
-			de++;
-			sr++;
-		}
-	}
-	return (dest);
+	char	*res;
+	
 }

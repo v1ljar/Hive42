@@ -1,39 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 15:27:16 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/02 10:30:22 by vuljas           ###   ########.fr       */
+/*   Created: 2024/11/02 12:28:09 by vuljas            #+#    #+#             */
+/*   Updated: 2024/11/02 14:02:37 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char		*de;
-	const char	*sr;
+	char	*res;
+	size_t	i;
+	size_t	j;
 
-	if (!dest && !src && n > 0)
-		return (NULL);
-	de = (char *)dest;
-	sr = (const char *)src;
-	if (sr < de)
+	i = 0;
+	while (s[i] != '\0')
 	{
-		while (n--)
-			*(de + n) = *(sr + n);
-	}
-	else
-	{
-		while (n--)
+		if (i == start)
 		{
-			*de = *sr;
-			de++;
-			sr++;
+			j = 0;
+			res = malloc(sizeof(char) * (len + 1));
+			if (res == NULL)
+				return (NULL);
+			while (s[i] != '\0' && j < len)
+				res[j++] = s[i++];
+			res[j] = '\0';
+			return (res);
 		}
+		i++;
 	}
-	return (dest);
+	return (NULL);
 }
