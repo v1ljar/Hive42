@@ -1,39 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 15:27:16 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/02 10:30:22 by vuljas           ###   ########.fr       */
+/*   Created: 2024/11/04 15:31:44 by vuljas            #+#    #+#             */
+/*   Updated: 2024/11/04 15:35:53 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	ft_striteri(char *s, void (*f)(unsigned int, char*))
 {
-	char		*de;
-	const char	*sr;
+	int	i;
 
-	if (!dest && !src && n > 0)
-		return (NULL);
-	de = (char *)dest;
-	sr = (const char *)src;
-	if (sr < de)
+	i = 0;
+	while (s[i] != '\0')
 	{
-		while (n--)
-			*(de + n) = *(sr + n);
+		f(i, &s[i]);
+		i++;
 	}
-	else
-	{
-		while (n--)
-		{
-			*de = *sr;
-			de++;
-			sr++;
-		}
-	}
-	return (dest);
 }

@@ -1,39 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 15:27:16 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/02 10:30:22 by vuljas           ###   ########.fr       */
+/*   Created: 2024/11/04 14:18:13 by vuljas            #+#    #+#             */
+/*   Updated: 2024/11/04 15:20:34 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char		*de;
-	const char	*sr;
+	char	*result;
+	int		len;
 
-	if (!dest && !src && n > 0)
+	len = ft_strlen(s);
+	result = (char *)malloc(sizeof(char) * (len + 1));
+	if (!result)
 		return (NULL);
-	de = (char *)dest;
-	sr = (const char *)src;
-	if (sr < de)
+	len = 0;
+	while (s[len] != '\0')
 	{
-		while (n--)
-			*(de + n) = *(sr + n);
+		result[len] = f(len, s[len]);
+		len++;
 	}
-	else
-	{
-		while (n--)
-		{
-			*de = *sr;
-			de++;
-			sr++;
-		}
-	}
-	return (dest);
+	result[len] = '\0';
+	return (result);
 }
