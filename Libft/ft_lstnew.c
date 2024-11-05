@@ -1,39 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 15:27:16 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/02 10:30:22 by vuljas           ###   ########.fr       */
+/*   Created: 2024/11/05 14:13:34 by vuljas            #+#    #+#             */
+/*   Updated: 2024/11/05 14:39:54 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+t_list	*ft_lstnew(void *content)
 {
-	char		*de;
-	const char	*sr;
+	t_list	*result;
 
-	if (!dest && !src && n > 0)
+	result = malloc(sizeof(void *) * 2);
+	if (!result)
 		return (NULL);
-	de = (char *)dest;
-	sr = (const char *)src;
-	if (sr < de)
-	{
-		while (n--)
-			*(de + n) = *(sr + n);
-	}
-	else
-	{
-		while (n--)
-		{
-			*de = *sr;
-			de++;
-			sr++;
-		}
-	}
-	return (dest);
+	result->content = content;
+	result->next = NULL;
+	return (result);
 }
