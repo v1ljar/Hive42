@@ -24,6 +24,8 @@ char	*ft_strtrim(const char *s1, const char *set)
 	size_t	end_len;
 	size_t	total;
 
+	if (!s1)
+		return(NULL);
 	len = ft_strlen(s1);
 	offset = ft_count_front(s1, set);
 	if (offset == len)
