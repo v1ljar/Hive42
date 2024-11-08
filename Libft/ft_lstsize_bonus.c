@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strmapi.c                                       :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 14:18:13 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/07 10:54:36 by vuljas           ###   ########.fr       */
+/*   Created: 2024/11/07 12:37:25 by vuljas            #+#    #+#             */
+/*   Updated: 2024/11/07 12:40:04 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+int	ft_lstsize(t_list *lst)
 {
-	char	*result;
-	int		len;
+	int	result;
 
-	if (!s)
-		return (NULL);
-	len = ft_strlen(s);
-	result = (char *)malloc(sizeof(char) * (len + 1));
-	if (!result)
-		return (NULL);
-	len = 0;
-	while (s[len] != '\0')
+	result = 0;
+	while (lst != NULL)
 	{
-		result[len] = f(len, s[len]);
-		len++;
+		result++;
+		lst = lst->next;
 	}
-	result[len] = '\0';
 	return (result);
 }

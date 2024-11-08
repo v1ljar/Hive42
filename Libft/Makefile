@@ -4,12 +4,13 @@ CC = gcc
 
 WFLAGS = -Wall -Werror -Wextra
 
-CFILES = $(wildcard *.c)
-#ft_isalpha.c ft_isdigit.c ft_strlen.c ft_isalnum.c \
-#ft_isascii.c ft_isprint.c ft_memset.c ft_bzero.c ft_memcpy.c \
-#ft_memmove.c ft_strlcpy.c
+CFILES = $(shell ls ./*.c | ls --hide="*_bonus.c")
 
 OFILES = $(CFILES:.c=.o)
+
+BFILES = $(shell ls ./*_bonus.c)
+
+BOFILES = $(BFILES:.c=.o)
 
 all: $(NAME)
 
@@ -19,6 +20,9 @@ $(NAME): $(OFILES)
 
 %.o: %.c
 	$(CC) $(WFLAGS) -c $< -o $@
+
+bonus: $(BOFILES)
+	ar -rcs $(NAME) $(BOFILES)
 
 clean:
 	rm -f *.o

@@ -6,32 +6,33 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:02:16 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/05 16:55:50 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/07 11:40:13 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 static int	ft_count_words(char const *s, char c);
-static char	**ft_allocate_strings(char **result, char *str, char c);
-static char	*ft_substring(char *res, char *str, int i, int j);
+static char	**ft_allocate_strings(char **result, char const *str, char c);
+static char	*ft_substring(char const *str, int start, int len);
 
 char	**ft_split(char const *s, char c)
 {
 	char	**res;
-	char	*trimmed;
 	int		words;
 
+	if (!s)
+		return (NULL);
 	words = ft_count_words(s, c);
 	res = (char **)malloc(sizeof(char *) * (words + 1));
 	if (!res)
 		return (NULL);
-	trimmed = ft_strtrim(s, &c);
-	res = ft_allocate_strings(res, trimmed, c);
+	res = ft_allocate_strings(res, s, c);
 	if (!res)
 	{
 		while (words >= 0)
 			free(res[words--]);
+		free(res);
 		return (NULL);
 	}
 	return (res);
@@ -46,22 +47,19 @@ static int	ft_count_words(char const *s, char c)
 	i = 0;
 	while (s[i])
 	{
-		if (s[i] == c && (s[i - 1] == c || s[i + 1] == '\0' || i == 0))
+		while (s[i] == c && s[i] != '\0')
 			i++;
-		else if (s[i] == c)
+		if (s[i] != c)
 		{
 			count++;
-			i++;
+			while (s[i] != c && s[i] != '\0')
+				i++;
 		}
-		else
-			i++;
 	}
-	if (s[i] == '\0' && count == 0)
-		count++;
 	return (count);
 }
 
-static char	**ft_allocate_strings(char **result, char *s, char c)
+static char	**ft_allocate_strings(char **result, char const *s, char c)
 {
 	int	i;
 	int	j;
@@ -71,38 +69,38 @@ static char	**ft_allocate_strings(char **result, char *s, char c)
 	k = 0;
 	while (s[i])
 	{
+		while (s[i] == c && s[i] != '\0')
+			i++;
 		j = 0;
 		while (s[i] != c && s[i] != '\0')
 		{
 			i++;
 			j++;
 		}
-		if (s[i] == c || s[i + 1] == '\0')
+		if (j > 0)
 		{
-			result[k] = ft_substring(result[k], s, i, j);
-			i++;
+			result[k] = ft_substring(s, i - j, j);
+			k++;
 		}
-		while (s[i] == c)
-			i++;
-		k++;
 	}
 	result[k] = NULL;
 	return (result);
 }
 
-static char	*ft_substring(char *res, char *str, int i, int j)
+static char	*ft_substring(char const *str, int start, int len)
 {
-	int	count;
+	char	*res;
+	int		count;
 
-	res = (char *)malloc(sizeof(char) * (j + 1));
+	res = (char *)malloc(sizeof(char) * (len + 1));
 	if (!res)
 		return (NULL);
 	count = 0;
-	while (count < j)
+	while (count < len)
 	{
-		res[count] = str[i - j + count];
+		res[count] = str[start + count];
 		count++;
 	}
-	res[j] = '\0';
+	res[len] = '\0';
 	return (res);
 }

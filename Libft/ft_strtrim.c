@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 14:03:04 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/05 12:58:21 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/07 10:47:28 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,13 @@ char	*ft_strtrim(const char *s1, const char *set)
 	size_t	end_len;
 	size_t	total;
 
+	if (!s1)
+		return (NULL);
 	len = ft_strlen(s1);
 	offset = ft_count_front(s1, set);
 	if (offset == len)
 	{
-		res = malloc(sizeof(char) * 1);
-		if (res == NULL)
-			return (NULL);
-		res[0] = '\0';
+		res = ft_calloc(1, 1);
 		return (res);
 	}
 	end_len = ft_count_end(s1, set, len);
