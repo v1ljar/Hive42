@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 15:27:16 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/02 10:30:22 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/10 12:27:07 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	char		*de;
 	const char	*sr;
 
-	if (!dest && !src && n > 0)
+	if (!dest && !src)
 		return (NULL);
+	if (src == dest)
+		return (dest);
 	de = (char *)dest;
 	sr = (const char *)src;
-	if (sr < de)
+	if (sr < de && sr + n > de)
 	{
 		while (n--)
 			*(de + n) = *(sr + n);

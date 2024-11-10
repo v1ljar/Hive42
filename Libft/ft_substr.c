@@ -6,13 +6,14 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 12:28:09 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/05 12:57:22 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/07 10:08:05 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 static char	*ft_allocate_sub(char const *s, size_t len, size_t i);
+static char	*ft_return_empty(void);
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -20,7 +21,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	size_t	i;
 
 	if (!s)
-	  return (NULL);
+		return (NULL);
 	i = 0;
 	while (s[i] != '\0')
 	{
@@ -35,10 +36,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	}
 	if (i < start)
 	{
-		res = malloc(sizeof(char) * 1);
-		if (res == NULL)
-			return (NULL);
-		res[0] = '\0';
+		res = ft_return_empty();
 		return (res);
 	}
 	return (NULL);
@@ -56,5 +54,16 @@ static char	*ft_allocate_sub(char const *s, size_t len, size_t i)
 	while (s[i] != '\0' && j < len)
 		res[j++] = s[i++];
 	res[j] = '\0';
+	return (res);
+}
+
+static char	*ft_return_empty(void)
+{
+	char	*res;
+
+	res = malloc(sizeof(char) * 1);
+	if (res == NULL)
+		return (NULL);
+	res[0] = '\0';
 	return (res);
 }

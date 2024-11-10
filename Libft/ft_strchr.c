@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <stdio.h>
 #include "libft.h"
 
 char	*ft_strchr(const char *s, int c)
@@ -28,18 +27,3 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)s + i);
 	return (NULL);
 }
-/*
-int	main(void)
-{
-	const char str[] = "Test String here";
-	char c = 'u';
-	char *res;
-
-	res = ft_strchr(str, c);
-	if (res)
-		printf("First occurance of %c is: %s", c, res);
-	else
-		printf("No occurance of %c in: %s", c, str);
-	return (0);
-}
-*/

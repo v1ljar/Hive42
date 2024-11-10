@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:46:10 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/05 10:29:19 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/08 10:09:03 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,19 @@
 
 void	ft_putnbr_fd(int n, int fd)
 {
-	if (n == -2147483648)
-		ft_putstr_fd("-2147483648", fd);
-	if (n < 0)
+	long	nbr;
+
+	nbr = n;
+	if (nbr < 0)
 	{
 		ft_putchar_fd('-', fd);
-		n = -n;
+		nbr = -nbr;
 	}
-	if (n > 9)
+	if (nbr > 9)
 	{
-		ft_putnbr_fd(n / 10, fd);
-		ft_putchar_fd(n % 10 + '0', fd);
+		ft_putnbr_fd(nbr / 10, fd);
+		ft_putchar_fd(nbr % 10 + '0', fd);
 	}
-	if (n < 10)
-		ft_putchar_fd(n % 10 + '0', fd);
+	else
+		ft_putchar_fd(nbr % 10 + '0', fd);
 }

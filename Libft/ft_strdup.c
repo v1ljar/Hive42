@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <stdio.h>
-//#include <string.h>
 #include "libft.h"
 
 char	*ft_strdup(const char *s)
@@ -33,18 +31,3 @@ char	*ft_strdup(const char *s)
 	result[i] = '\0';
 	return (result);
 }
-/*
-int	main()
-{
-	char	str[] = "This is the string to duplicate";
-	char	*res;
-
-	res = ft_strdup(str);
-	if (res)
-		printf("Duplication sucessful! %s\n", res);
-	else
-		printf("Duplication failed!\n");
-	free(res);
-	return (0);
-}
-*/
