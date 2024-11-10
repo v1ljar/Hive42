@@ -6,11 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 16:22:38 by vuljas            #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2024/11/10 13:21:49 by vuljas           ###   ########.fr       */
-=======
-/*   Updated: 2024/11/08 09:54:43 by vuljas           ###   ########.fr       */
->>>>>>> 338b55019fff64a411233e65d8a8b1c09a21950b
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +59,9 @@ t_list	*ft_lstnew(void *content);
 void	ft_lstadd_front(t_list **lst, t_list *new);
 int		ft_lstsize(t_list *lst);
 t_list	*ft_lstlast(t_list *lst);
-<<<<<<< HEAD
 void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
-=======
->>>>>>> 338b55019fff64a411233e65d8a8b1c09a21950b
 
 #endif

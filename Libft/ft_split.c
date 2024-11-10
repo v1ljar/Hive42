@@ -6,11 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:02:16 by vuljas            #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2024/11/10 15:44:02 by vuljas           ###   ########.fr       */
-=======
-/*   Updated: 2024/11/07 11:40:13 by vuljas           ###   ########.fr       */
->>>>>>> 338b55019fff64a411233e65d8a8b1c09a21950b
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +15,7 @@
 static int	ft_count_words(char const *s, char c);
 static char	**ft_allocate_strings(char **result, char const *str, char c);
 static char	*ft_substring(char const *str, int start, int len);
-<<<<<<< HEAD
 static void	ft_check_subs(char **result, int i);
-=======
->>>>>>> 338b55019fff64a411233e65d8a8b1c09a21950b
 
 char	**ft_split(char const *s, char c)
 {
@@ -77,7 +70,6 @@ static char	**ft_allocate_strings(char **result, char const *s, char c)
 	i = 0;
 	while (s[len])
 	{
-<<<<<<< HEAD
 		while (s[len] == c && s[len] != '\0')
 			len++;
 		start = 0;
@@ -91,20 +83,6 @@ static char	**ft_allocate_strings(char **result, char const *s, char c)
 			result[i] = ft_substring(s, len - start, start);
 			ft_check_subs(result, i);
 			i++;
-=======
-		while (s[i] == c && s[i] != '\0')
-			i++;
-		j = 0;
-		while (s[i] != c && s[i] != '\0')
-		{
-			i++;
-			j++;
-		}
-		if (j > 0)
-		{
-			result[k] = ft_substring(s, i - j, j);
-			k++;
->>>>>>> 338b55019fff64a411233e65d8a8b1c09a21950b
 		}
 	}
 	result[i] = NULL;
