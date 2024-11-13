@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 12:28:09 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/07 10:08:05 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/13 16:02:21 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ static char	*ft_allocate_sub(char const *s, size_t len, size_t i)
 {
 	char	*res;
 	size_t	j;
+	size_t	s_len;
 
+	s_len = ft_strlen(s);
+	if (if )
 	j = 0;
 	res = malloc(sizeof(char) * (len + 1));
 	if (res == NULL)

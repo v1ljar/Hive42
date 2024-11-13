@@ -6,9 +6,11 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 12:09:49 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/02 10:51:51 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/12 15:13:27 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_atoi(const char *nptr)
 {
