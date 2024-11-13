@@ -29,15 +29,19 @@ $(NAME): $(OFILES)
 %.o: %.c
 	$(CC) $(WFLAGS) -c $< -o $@
 
-bonus:  $(NAME) $(BOFILES)
+bonus: .bonus
+
+.bonus:  $(NAME) $(BOFILES)
 	ar -rcs $(NAME) $(BOFILES)
+	@touch .bonus
 
 clean:
 	rm -f *.o
 
 fclean: clean
 	rm -f $(NAME)
+	@rm .bonus
 
 re: fclean all
 
-.PHONY: all, bonus, clean, fclean, re
+.PHONY: all bonus clean fclean re

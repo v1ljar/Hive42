@@ -13,60 +13,33 @@
 #include "libft.h"
 
 static char	*ft_allocate_sub(char const *s, size_t len, size_t i);
-static char	*ft_return_empty(void);
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*res;
-	size_t	i;
+  	size_t actual_len;
 
 	if (!s)
 		return (NULL);
-	i = 0;
-	while (s[i] != '\0')
-	{
-		if (i == start)
-		{
-			res = ft_allocate_sub(s, len, i);
-			if (res == NULL)
-				return (NULL);
-			return (res);
-		}
-		i++;
-	}
-	if (i < start)
-	{
-		res = ft_return_empty();
-		return (res);
-	}
-	return (NULL);
+	actual_len = ft_strlen(s);
+	if (actual_len < start)
+		return (ft_strdup(""));
+	if (actual_len - start < len)
+		len = actual_len - start;
+	return (ft_allocate_sub(s, len, start));
 }
 
 static char	*ft_allocate_sub(char const *s, size_t len, size_t i)
 {
 	char	*res;
 	size_t	j;
-	size_t	s_len;
-
-	s_len = ft_strlen(s);
-	if (if )
-	j = 0;
-	res = malloc(sizeof(char) * (len + 1));
+	
+	res = malloc(sizeof(char) * len + 1);
 	if (res == NULL)
 		return (NULL);
+	j = 0;
 	while (s[i] != '\0' && j < len)
 		res[j++] = s[i++];
 	res[j] = '\0';
 	return (res);
 }
 
-static char	*ft_return_empty(void)
-{
-	char	*res;
-
-	res = malloc(sizeof(char) * 1);
-	if (res == NULL)
-		return (NULL);
-	res[0] = '\0';
-	return (res);
-}
