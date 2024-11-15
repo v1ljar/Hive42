@@ -24,23 +24,23 @@ BOFILES = $(BFILES:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OFILES)
-	ar -rcs $(NAME) $(OFILES)
+	ar -rcs $@ $<
 
 %.o: %.c
 	$(CC) $(WFLAGS) -c $< -o $@
 
-bonus: .bonus
-
-.bonus:  $(NAME) $(BOFILES)
-	ar -rcs $(NAME) $(BOFILES)
-	@touch .bonus
+bonus: $(NAME) $(BOFILES)
+	@if [ ! -f $(NAME) ] || [ "$$(find $(BOFILES) -newer $(NAME) -print -quit)" ]; then \
+		ar -rcs $(NAME) $(BOFILES); \
+	else \
+		echo "make bonus: Nothing to be done for 'bonus'."; \
+	fi
 
 clean:
 	rm -f *.o
 
 fclean: clean
 	rm -f $(NAME)
-	@rm .bonus
 
 re: fclean all
 
