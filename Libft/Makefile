@@ -24,7 +24,7 @@ BOFILES = $(BFILES:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OFILES)
-	ar -rcs $(NAME) $(OFILES)
+	ar -rcs $@ $<
 
 %.o: %.c
 	$(CC) $(WFLAGS) -c $< -o $@
