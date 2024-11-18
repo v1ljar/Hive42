@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 12:28:09 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/13 16:02:21 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/14 10:17:38 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static char	*ft_allocate_sub(char const *s, size_t len, size_t i);
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-  	size_t actual_len;
+	size_t	actual_len;
 
 	if (!s)
 		return (NULL);
@@ -32,8 +32,8 @@ static char	*ft_allocate_sub(char const *s, size_t len, size_t i)
 {
 	char	*res;
 	size_t	j;
-	
-	res = malloc(sizeof(char) * len + 1);
+
+	res = malloc(sizeof(char) * (len + 1));
 	if (res == NULL)
 		return (NULL);
 	j = 0;
@@ -42,4 +42,3 @@ static char	*ft_allocate_sub(char const *s, size_t len, size_t i)
 	res[j] = '\0';
 	return (res);
 }
-

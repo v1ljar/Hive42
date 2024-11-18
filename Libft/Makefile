@@ -29,18 +29,18 @@ $(NAME): $(OFILES)
 %.o: %.c
 	$(CC) $(WFLAGS) -c $< -o $@
 
-bonus: .bonus
-
-.bonus:  $(NAME) $(BOFILES)
-	ar -rcs $(NAME) $(BOFILES)
-	@touch .bonus
+bonus: $(NAME) $(BOFILES)
+	@if [ ! -f $(NAME) ] || [ "$$(find $(BOFILES) -newer $(NAME) -print -quit)" ]; then \
+		ar -rcs $(NAME) $(BOFILES); \
+	else \
+		echo "make bonus: Nothing to be done for 'bonus'."; \
+	fi
 
 clean:
-	rm -f *.o
+	rm -f $(OFILES) $(BOFILES)
 
 fclean: clean
 	rm -f $(NAME)
-	@rm .bonus
 
 re: fclean all
 

@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 15:04:41 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/01 14:41:37 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/14 13:37:15 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strrchr(const char *s, int c)
 	i = 0;
 	while (i < len)
 	{
-		if (s[len - i - 1] == c)
+		if (s[len - i - 1] == (char)c)
 			return ((char *)s + (len - i - 1));
 		i++;
 	}

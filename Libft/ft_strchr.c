@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:13:36 by vuljas            #+#    #+#             */
-/*   Updated: 2024/10/30 15:34:59 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/14 13:37:04 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 
 char	*ft_strchr(const char *s, int c)
 {
-	while (*s)
+	int	i;
+
+	i = 0;
+	while (s[i] != '\0')
 	{
-		if (*s == c)
-			return ((char *)s);
-		s++;
+		if (s[i] == (char)c)
+			return ((char *)s + i);
+		i++;
 	}
 	if (c == '\0')
-		return ((char *)s);
+		return ((char *)s + i);
 	return (NULL);
 }

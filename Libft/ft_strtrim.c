@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 14:03:04 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/07 10:47:28 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/18 09:49:22 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_strtrim(const char *s1, const char *set)
 	size_t	end_len;
 	size_t	total;
 
-	if (!s1)
+	if (!s1 || !set)
 		return (NULL);
 	len = ft_strlen(s1);
 	offset = ft_count_front(s1, set);

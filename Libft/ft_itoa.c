@@ -6,14 +6,14 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:15:56 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/05 10:24:11 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/18 16:36:05 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_count_digits(long n);
-static char	*ft_fill_str(char *res, long n, int count);
+static int	ft_count_digits(long long n);
+static char	*ft_fill_str(char *res, long long n, int count);
 
 char	*ft_itoa(int n)
 {
@@ -28,7 +28,7 @@ char	*ft_itoa(int n)
 	return (result);
 }
 
-static int	ft_count_digits(long n)
+static int	ft_count_digits(long long n)
 {
 	int	count;
 
@@ -48,7 +48,7 @@ static int	ft_count_digits(long n)
 	return (count);
 }
 
-static char	*ft_fill_str(char *res, long n, int count)
+static char	*ft_fill_str(char *res, long long n, int count)
 {
 	int	len;
 	int	neg;

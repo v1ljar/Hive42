@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 16:22:38 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/12 14:48:13 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/14 14:51:27 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define LIBFT_H
 # include <stdlib.h>
 # include <unistd.h>
-# include <stdint.h>
 
 typedef struct s_list
 {

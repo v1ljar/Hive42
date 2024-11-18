@@ -6,11 +6,9 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 12:09:49 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/12 15:13:27 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/18 17:06:57 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "libft.h"
 
 int	ft_atoi(const char *nptr)
 {
@@ -21,9 +19,8 @@ int	ft_atoi(const char *nptr)
 	neg = 1;
 	result = 0;
 	i = 0;
-	if (nptr[0] == ' ' || (nptr[0] >= 9 && nptr[0] <= 13))
-		while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
-			i++;
+	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
+		i++;
 	if ((nptr[i] == '-' || nptr[i] == '+')
 		&& (nptr[i + 1] >= '0' && nptr[i + 1] <= '9'))
 	{

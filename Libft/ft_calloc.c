@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 14:54:25 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/13 15:50:43 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/16 13:40:33 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,16 @@ void	*ft_calloc(size_t nmemb, size_t size)
 {
 	char	*res;
 	size_t	i;
-	size_t	total;
 
-	total = nmemb * size;
 	if (nmemb == 0 || size == 0)
-		return (malloc(1));
-	if (nmemb != total / size)
+		return (malloc(0));
+	if (nmemb != (nmemb * size) / size)
 		return (NULL);
-	res = malloc(total);
+	res = malloc(nmemb * size);
 	if (res == NULL)
 		return (NULL);
 	i = 0;
-	while (i < (total))
+	while (i < (nmemb * size))
 		res[i++] = 0;
 	return (res);
 }

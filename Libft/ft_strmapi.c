@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:18:13 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/07 10:54:36 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/18 16:34:04 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 	char	*result;
 	int		len;
 
-	if (!s)
+	if (!s || !f)
 		return (NULL);
 	len = ft_strlen(s);
 	result = (char *)malloc(sizeof(char) * (len + 1));
