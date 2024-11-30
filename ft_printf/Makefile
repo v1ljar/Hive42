@@ -13,7 +13,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	ar -rcs $(NAME) $(OBJ)
 
-%.o: %.c
+.o: .c
 	$(CC) $(WFLAGS) -c $< -o $@
 
 clean:

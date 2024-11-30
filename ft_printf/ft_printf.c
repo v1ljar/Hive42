@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 10:50:12 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/21 16:39:17 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/30 14:57:30 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	ft_printf(const char *format, ...)
 	va_list	ap;
 	int		count;
 	int		is_specif;
+	int		res;
 
 	count = 0;
 	va_start(ap, format);
@@ -29,9 +30,13 @@ int	ft_printf(const char *format, ...)
 		{
 			is_specif = ft_validate_specif(*(++format));
 			if (is_specif == 1)
-				count += ft_print_format(*format, ap);
-			else
-				return (-1);
+			{
+				res = ft_print_format(*format, ap);
+				if (res == -1)
+					return (-1);
+			}
+			if (is_specif == 0)
+				count += ft_print_char(*(--format));
 		}
 		else
 		{
@@ -61,10 +66,16 @@ static int	ft_validate_specif(const char specif)
 static int	ft_print_format(const char specifier, va_list ap)
 {
 	int	count;
+	int	res;
 
 	count = 0;
 	if (specifier == 'c')
-		count += ft_print_char(va_arg(ap, int));
+	{
+		res = ft_print_char(va_arg(ap, int));
+		if (res != 1)
+			return (-1);
+		count += res;
+	}
 	else if (specifier == 's')
 		count += ft_print_str(va_arg(ap, char *));
 	else if (specifier == 'i' || specifier == 'd')
