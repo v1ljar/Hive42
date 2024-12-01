@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftprintf.h                                      :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/21 14:07:24 by vuljas            #+#    #+#             */
-/*   Updated: 2024/12/01 13:46:16 by vuljas           ###   ########.fr       */
+/*   Created: 2024/11/04 15:43:02 by vuljas            #+#    #+#             */
+/*   Updated: 2024/11/07 11:39:33 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-# include <stdarg.h>
-# include <unistd.h>
+void	ft_putendl_fd(char *s, int fd)
+{
+	int	len;
 
-# define BASE10 "0123456789abcdef"
-# define BASE16CAP "0123456789ABCDEF"
-
-int	ft_printf(const char *format, ...);
-int	ft_print_char(int c);
-int	ft_print_digit(long nbr, char *str, int base);
-int	ft_print_str(char *str);
-int	ft_print_pointer(void *ptr, char *str, int base);
-
-#endif
+	if (!s)
+		return ;
+	len = ft_strlen(s);
+	write(fd, s, len);
+	write(fd, "\n", 1);
+}

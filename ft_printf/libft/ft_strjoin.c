@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftprintf.h                                      :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/21 14:07:24 by vuljas            #+#    #+#             */
-/*   Updated: 2024/12/01 13:46:16 by vuljas           ###   ########.fr       */
+/*   Created: 2024/11/02 13:32:48 by vuljas            #+#    #+#             */
+/*   Updated: 2024/11/18 09:47:49 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-# include <stdarg.h>
-# include <unistd.h>
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*res;
+	size_t	s1_len;
+	size_t	s2_len;
 
-# define BASE10 "0123456789abcdef"
-# define BASE16CAP "0123456789ABCDEF"
-
-int	ft_printf(const char *format, ...);
-int	ft_print_char(int c);
-int	ft_print_digit(long nbr, char *str, int base);
-int	ft_print_str(char *str);
-int	ft_print_pointer(void *ptr, char *str, int base);
-
-#endif
+	if (!s1 || !s2)
+		return (NULL);
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	res = malloc(sizeof(char) * (s1_len + s2_len + 1));
+	if (res == NULL)
+		return (NULL);
+	ft_memcpy(res, s1, s1_len);
+	ft_memcpy(res + s1_len, s2, s2_len);
+	res[s1_len + s2_len] = '\0';
+	return (res);
+}

@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftprintf.h                                      :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/21 14:07:24 by vuljas            #+#    #+#             */
-/*   Updated: 2024/12/01 13:46:16 by vuljas           ###   ########.fr       */
+/*   Created: 2024/10/31 09:53:24 by vuljas            #+#    #+#             */
+/*   Updated: 2024/11/07 15:03:38 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-# include <stdarg.h>
-# include <unistd.h>
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	unsigned char	*str1;
+	unsigned char	*str2;
+	size_t			i;
 
-# define BASE10 "0123456789abcdef"
-# define BASE16CAP "0123456789ABCDEF"
-
-int	ft_printf(const char *format, ...);
-int	ft_print_char(int c);
-int	ft_print_digit(long nbr, char *str, int base);
-int	ft_print_str(char *str);
-int	ft_print_pointer(void *ptr, char *str, int base);
-
-#endif
+	str1 = (unsigned char *)s1;
+	str2 = (unsigned char *)s2;
+	i = 0;
+	if (n > 0)
+	{
+		while (i < (n - 1) && str1[i] == str2[i] && str1[i] && str2[i])
+			i++;
+		return (str1[i] - str2[i]);
+	}
+	return ('\0');
+}

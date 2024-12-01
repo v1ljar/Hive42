@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftprintf.h                                      :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/21 14:07:24 by vuljas            #+#    #+#             */
-/*   Updated: 2024/12/01 13:46:16 by vuljas           ###   ########.fr       */
+/*   Created: 2024/10/29 11:13:07 by vuljas            #+#    #+#             */
+/*   Updated: 2024/11/08 10:41:44 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-# include <stdarg.h>
-# include <unistd.h>
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	unsigned char		*des;
+	const unsigned char	*sr;
 
-# define BASE10 "0123456789abcdef"
-# define BASE16CAP "0123456789ABCDEF"
-
-int	ft_printf(const char *format, ...);
-int	ft_print_char(int c);
-int	ft_print_digit(long nbr, char *str, int base);
-int	ft_print_str(char *str);
-int	ft_print_pointer(void *ptr, char *str, int base);
-
-#endif
+	if (!dest && !src)
+		return (NULL);
+	if (n == 0 || (dest == src))
+		return (dest);
+	des = (unsigned char *)dest;
+	sr = (const unsigned char *)src;
+	while (n)
+	{
+		if (*des != *sr)
+			*des = *sr;
+		des++;
+		sr++;
+		n--;
+	}
+	return (dest);
+}

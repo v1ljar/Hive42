@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftprintf.h                                      :+:      :+:    :+:   */
+/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/21 14:07:24 by vuljas            #+#    #+#             */
-/*   Updated: 2024/12/01 13:46:16 by vuljas           ###   ########.fr       */
+/*   Created: 2024/11/08 15:40:07 by vuljas            #+#    #+#             */
+/*   Updated: 2024/11/10 14:07:22 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-# include <stdarg.h>
-# include <unistd.h>
-
-# define BASE10 "0123456789abcdef"
-# define BASE16CAP "0123456789ABCDEF"
-
-int	ft_printf(const char *format, ...);
-int	ft_print_char(int c);
-int	ft_print_digit(long nbr, char *str, int base);
-int	ft_print_str(char *str);
-int	ft_print_pointer(void *ptr, char *str, int base);
-
-#endif
+void	ft_lstdelone(t_list *lst, void (*del)(void *))
+{
+	if (!lst)
+		return ;
+	else
+	{
+		del(lst->content);
+		free(lst);
+	}
+}

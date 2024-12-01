@@ -1,4 +1,3 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -18,21 +17,24 @@ int	ft_print_char(int c)
 	int	res;
 
 	res = write(1, &c, 1);
-	if (!res)
+	if (res == -1)
 		return (-1);
-	return (1);
+	return (res);
 }
 
 int	ft_print_str(char *str)
 {
 	int	count;
+	int	res;
 
 	count = 0;
 	if (str == NULL)
 		return (ft_print_str("(null)"));
 	while (str[count] != '\0')
 	{
-		ft_print_char(str[count]);
+		res = ft_print_char(str[count]);
+		if (res == -1)
+			return (-1);
 		count++;
 	}
 	return (count);
@@ -41,15 +43,24 @@ int	ft_print_str(char *str)
 int	ft_print_digit(long nbr, char *str, int base)
 {
 	int	count;
+	int	res;
 
 	count = 0;
 	if (nbr < 0)
 	{
-		write(1, "-", 1);
-		count += (ft_print_digit(-nbr, str, base) + 1);
+		res = write(1, "-", 1);
+		if (res == -1)
+			return (-1);
+		count += res;
+		nbr = -nbr;
 	}
-	else if (nbr < base)
-		count += write(1, &str[nbr], 1);
+	if (nbr < base)
+	{
+		res = write(1, &str[nbr], 1);
+		if (res == -1)
+			return (-1);
+		count += res;
+	}
 	else
 	{
 		count += ft_print_digit(nbr / base, str, base);
@@ -62,16 +73,20 @@ int	ft_print_pointer(void *ptr, char *str, int base)
 {
 	unsigned long	nr;
 	int				count;
+	int				res;
 
 	nr = (unsigned long)ptr;
 	if (nr == 0)
 		return (ft_print_str("(nil)"));
 	ft_print_str("0x");
 	count = 2;
-	if (nr < 0)
-		ft_print_digit(-nr, str, base);
-	else if (nr < (unsigned long)base)
-		count += write(1, &str[nr], 1);
+	if (nr < (unsigned long)base)
+	{
+		res = write(1, &str[nr], 1);
+		if (res == -1)
+			return (-1);
+		count += res;
+	}
 	else
 	{
 		count += ft_print_digit(nr / base, str, base);

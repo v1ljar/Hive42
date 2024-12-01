@@ -13,82 +13,80 @@
 #include "ft_printf.h"
 
 static int	ft_print_format(const char specifier, va_list ap);
-static int	ft_validate_specif(const char specif);
+static int	ft_validate_specif(const char specif, va_list ap);
 
 int	ft_printf(const char *format, ...)
 {
 	va_list	ap;
-	int		count;
+	int		counter;
 	int		is_specif;
 	int		res;
 
-	count = 0;
+	counter = 0;
 	va_start(ap, format);
 	while (*format != '\0')
 	{
 		if (*format == '%')
-		{
-			is_specif = ft_validate_specif(*(++format));
-			if (is_specif == 1)
-			{
-				res = ft_print_format(*format, ap);
-				if (res == -1)
-					return (-1);
-			}
-			if (is_specif == 0)
-				count += ft_print_char(*(--format));
-		}
+			res = ft_validate_specif(*(++format), ap);
 		else
-		{
-			write(1, &(*format), 1);
-			count++;
-		}
+			res = write(1, &(*format), 1);
+		if (res == -1)
+			return (-1);
+		counter += res;
 		format++;
 	}
 	va_end(ap);
-	return (count);
+	return (counter);
 }
 
-static int	ft_validate_specif(const char specif)
+static int	ft_validate_specif(const char specif, va_list ap)
 {
 	char	*symbols;
+	int		count;
+	int		res;
 
+	count = 0;
 	symbols = "cspdiuxX%";
 	while (*symbols)
 	{
 		if (specif == *symbols)
-			return (1);
+		{
+			count = 1;
+			break ;
+		}
 		symbols++;
 	}
-	return (0);
+	if (count == 1)
+		res = ft_print_format(specif, ap);
+	if (count == 0)
+		res = ft_print_char(specif - 1);
+	return (res);
 }
 
 static int	ft_print_format(const char specifier, va_list ap)
 {
-	int	count;
+	int	cnt;
 	int	res;
 
-	count = 0;
+	cnt = 0;
 	if (specifier == 'c')
-	{
 		res = ft_print_char(va_arg(ap, int));
-		if (res != 1)
-			return (-1);
-		count += res;
-	}
 	else if (specifier == 's')
-		count += ft_print_str(va_arg(ap, char *));
+		res = ft_print_str(va_arg(ap, char *));
 	else if (specifier == 'i' || specifier == 'd')
-		count += ft_print_digit(va_arg(ap, int), BASE10, 10);
+		res = ft_print_digit(va_arg(ap, int), BASE10, 10);
 	else if (specifier == 'u')
-		count += ft_print_digit(va_arg(ap, unsigned int), BASE10, 10);
+		res = ft_print_digit(va_arg(ap, unsigned int), BASE10, 10);
 	else if (specifier == 'p')
-		count += ft_print_pointer(va_arg(ap, void *), BASE10, 16);
+		res = ft_print_pointer(va_arg(ap, void *), BASE10, 16);
 	else if (specifier == 'x')
-		count += ft_print_digit(va_arg(ap, unsigned int), BASE10, 16);
+		res = ft_print_digit(va_arg(ap, unsigned int), BASE10, 16);
 	else if (specifier == 'X')
-		count += ft_print_digit(va_arg(ap, unsigned int), BASE16CAP, 16);
+		res = ft_print_digit(va_arg(ap, unsigned int), BASE16CAP, 16);
 	else if (specifier == '%')
-		count += ft_print_char('%');
-	return (count);
+		res = ft_print_char('%');
+	if (res == -1)
+		return (-1);
+	cnt += res;
+	return (cnt);
 }
