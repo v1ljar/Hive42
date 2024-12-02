@@ -6,11 +6,30 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:35:37 by vuljas            #+#    #+#             */
-/*   Updated: 2024/11/26 17:52:21 by vuljas           ###   ########.fr       */
+/*   Updated: 2024/11/29 08:29:29 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "get_next_line.h"
+
+char	*ft_strchr(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return (NULL);
+	while (s[i] != '\0')
+	{
+		if (s[i] == (char)c)
+			return ((char *)s + i);
+		i++;
+	}
+	if (c == '\0')
+		return ((char *)s + i);
+	return (NULL);
+}
 
 size_t	ft_strlen(const char *s)
 {
@@ -22,10 +41,25 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*res;
+	size_t	j;
+
+	res = malloc(sizeof(char) * (len + 1));
+	if (res == NULL)
+		return (NULL);
+	j = 0;
+	while (s[start] != '\0' && j < len)
+		res[j++] = s[start++];
+	res[j] = '\0';
+	return (res);
+}
+
 char	*ft_strdup(const char *s)
 {
-	int		len;
-	int		i;
+	size_t	len;
+	size_t	i;
 	char	*result;
 
 	len = ft_strlen(s);
@@ -42,33 +76,13 @@ char	*ft_strdup(const char *s)
 	return (result);
 }
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
-{
-	unsigned char		*des;
-	const unsigned char	*sr;
-
-	if (!dest && !src)
-		return (NULL);
-	if (n == 0 || (dest == src))
-		return (dest);
-	des = (unsigned char *)dest;
-	sr = (const unsigned char *)src;
-	while (n)
-	{
-		if (*des != *sr)
-			*des = *sr;
-		des++;
-		sr++;
-		n--;
-	}
-	return (dest);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(const char *s1, const char *s2)
 {
 	char	*res;
 	size_t	s1_len;
 	size_t	s2_len;
+	size_t	i;
+	size_t	j;
 
 	if (!s1 || !s2)
 		return (NULL);
@@ -77,33 +91,16 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	res = malloc(sizeof(char) * (s1_len + s2_len + 1));
 	if (res == NULL)
 		return (NULL);
-	ft_memcpy(res, s1, s1_len);
-	ft_memcpy(res + s1_len, s2, s2_len);
-	res[s1_len + s2_len] = '\0';
-	return (res);
-}
-
-ft_next_line(fd, buf, is_valid)
-
-char	*ft_check_line(int fd)
-{
-	size_t		len;
-	char*		result;
-	static char *buf;
-	int			is_valid;
-
-	if (fd <= 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	buf = malloc(BUFFER_SIZE + 1);
-	if (buf == NULL)
-		return (NULL);
-	len = read(fd, buf, BUFFER_SIZE);
-	buf[len] = '\0';
-	is_valid = 0;
-	while (is_valid == 0)
+	i = 0;
+	while (s1[i] != '\0')
 	{
-		ft_next_line(fd, buf, is_valid);
+		res[i] = s1[i];
+		i++;
 	}
-	else
-		return (result);
+	j = 0;
+	while (s2[j] != '\0')
+		res[i++] = s2[j++];
+	res[i] = '\0';
+	free((void *)s1);
+	return (res);
 }
