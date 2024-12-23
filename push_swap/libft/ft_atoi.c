@@ -13,10 +13,10 @@
 #include <limits.h>
 #include "libft.h"
 
-int	ft_atoi(const char *nptr)
+long	ft_atoi(const char *nptr)
 {
 	long	result;
-	int		neg;
+	long	neg;
 	int		i;
 
 	neg = 1;
@@ -31,13 +31,9 @@ int	ft_atoi(const char *nptr)
 		i++;
 	}
 	while (nptr[i] >= '0' && nptr[i] <= '9')
-	{
-		result = (result * 10) + (nptr[i] - '0');
-		if (neg == -1 && result < 0)
-		  return ((int)LONG_MIN);
-		else if (neg == 1 && result < 0)
-		  return ((int)LONG_MAX);
-		i++;
-	}
-	return ((int)result * neg);
+		result = (result * 10) + (nptr[i++] - '0');
+	if ((nptr[i] != '\0' &&!(nptr[i] >= '0' && nptr[i] <= '9'))
+		|| result < INT_MIN || result > INT_MAX)
+		exit(ft_printf("Error\n"));
+	return (result * neg);
 }

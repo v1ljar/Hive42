@@ -4,7 +4,7 @@ CC = cc
 
 WFLAGS = -Wall -Werror -Wextra
 
-SRC = push_swap.c
+SRC = push_swap.c push_swap_utils.c
 
 LIBNAME = libft.a
 
