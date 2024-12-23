@@ -1,14 +1,14 @@
 NAME = push_swap
 
-LIBNAME = libftprintf.a
-
-LIBDIR = ./includes/
-
 CC = cc
 
 WFLAGS = -Wall -Werror -Wextra
 
 SRC = push_swap.c
+
+LIBNAME = libft.a
+
+LIBDIR = ./libft/
 
 all: $(LIBNAME) $(NAME)
 
@@ -16,16 +16,15 @@ $(LIBNAME): $(LIBDIR)
 	$(MAKE) -C $<
 
 $(NAME):
-	$(CC) $(WFLAGS) -o $@ $(SRC) -L./includes -lftprintf
+	$(CC) $(WFLAGS) $(SRC) -o $(NAME) -L./libft -lft
 
 clean:
 	$(MAKE) -C $(LIBDIR) clean
 
-fclean:
+fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C $(LIBDIR) fclean
 
-re: fclean $(NAME)
-	$(MAKE) -C $(LIBDIR) re
+re: fclean all
 
 .PHONY: all clean fclean re
