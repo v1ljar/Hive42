@@ -54,7 +54,7 @@ void	fill_stack_a(t_stack *stack_a, int argc, char **argv)
 			exit(-1);
 		}
 		j = 0;
-		while (buf[j] && valid_nbr(stack_a->arr, ft_atoi(buf[j])))
+		while (buf[j] && valid_nbr(stack_a, ft_atoi(buf[j]), buf))
 		{
 			stack_a->arr[stack_a->size++] = ft_atoi(buf[j]);
 			j++;
@@ -64,18 +64,18 @@ void	fill_stack_a(t_stack *stack_a, int argc, char **argv)
 	}
 }
 
-int	valid_nbr(int *arr, long nbr)
+int	valid_nbr(t_stack *stack_a, long nbr, char	**buf)
 {
 	int	i;
 
 	i = 0;
-	while (arr[i])
+	while (stack_a->arr[i])
 	{
-		if (arr[i] == nbr)
-		{
-			ft_printf("Error\n");
-			free(arr);
-			exit(-1);
+		if (stack_a->arr[i] == nbr || nbr < INT_MIN || nbr > INT_MAX)
+		{			
+			free(stack_a->arr);
+			free_split(buf);
+			exit(ft_printf("Error\n"));
 		}
 		i++;
 	}

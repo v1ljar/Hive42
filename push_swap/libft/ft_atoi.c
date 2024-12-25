@@ -31,9 +31,10 @@ long	ft_atoi(const char *nptr)
 		i++;
 	}
 	while (nptr[i] >= '0' && nptr[i] <= '9')
+	{
 		result = (result * 10) + (nptr[i++] - '0');
-	if ((nptr[i] != '\0' &&!(nptr[i] >= '0' && nptr[i] <= '9'))
-		|| result < INT_MIN || result > INT_MAX)
-		exit(ft_printf("Error\n"));
+		if ((nptr[i] != '\0' && !(nptr[i] >= '0' && nptr[i] <= '9')))
+			exit(ft_printf("Error\n"));
+	}
 	return (result * neg);
 }
