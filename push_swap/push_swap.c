@@ -30,13 +30,14 @@ void  find_largest_values(t_stack *stack_a, int *largest, int *seclargest, int *
 void  align_stack_b(t_stack *stack_b, int value);
 void  stack_b_final_check(t_stack *stack_b);
 int   check_stack_b_order(t_stack *stack_b);
+int   ft_stack_b_greatest(t_stack *stack_b);
 
 int main(int argc, char **argv)
 //int	main(void)
 {
 	size_t		total_args;
 	t_stack	stack_a;
-  int i;
+  //int i;
   //int argc = 6;
   //char *argv[] = {"push_swap", "3", "0", "2", "4", "1"};
 
@@ -48,7 +49,7 @@ int main(int argc, char **argv)
 		return (ft_printf("Error\n"), -1);
 	stack_a.size = 0;
 	fill_stack_a(&stack_a, argc, argv);
-  i = 0;
+  /*i = 0;
   ft_printf("Original Stack A: ", stack_a.size);
 	while (i < stack_a.size)
 	{    
@@ -56,7 +57,7 @@ int main(int argc, char **argv)
     if (i + 1 == stack_a.size)
       ft_printf("\n");
 		i++;
-	}
+	}*/
   check_stack_completed(&stack_a);
   sort_stack(&stack_a);
   check_stack_completed(&stack_a);
@@ -197,7 +198,7 @@ void  sort_rest(t_stack *stack_a)
   }
   stack_b.size = 0;
   find_largest_values(stack_a, &largest, &seclargest, &thirdlargest);
-  ft_printf("Largest: %i\tSecond largest: %i\tThird largest: %i\n", largest, seclargest, thirdlargest);
+  //ft_printf("Largest: %i\tSecond largest: %i\tThird largest: %i\n", largest, seclargest, thirdlargest);
   while (stack_a->size > 3)
   {
     if (stack_a->arr[0] == largest || stack_a->arr[0] == seclargest || stack_a->arr[0] == thirdlargest)
@@ -221,11 +222,15 @@ void  align_stack_b(t_stack *stack_b, int value)
   int moves;
 
   pos = 0;
-  while ((pos < stack_b->size && stack_b->arr[pos] < value) || (stack_b->arr[pos] - value < stack_b->arr[pos + 1] - value))
+  while ((pos < stack_b->size && stack_b->arr[pos] > value))
     pos++;
-  if (pos == 0 || pos == stack_b->size)
-    return ;
-  ft_printf("HERE, pos: %i\n", pos);
+  if (pos == 0)
+    pos = ft_stack_b_greatest(stack_b) - 1;
+  else if (pos == stack_b->size)
+  {
+    pos = ft_stack_b_greatest(stack_b) + 1;
+  }
+  //ft_printf("HERE, pos: %i\n", pos);
   if (pos <= stack_b->size / 2)
   {
     moves = pos;
@@ -240,6 +245,22 @@ void  align_stack_b(t_stack *stack_b, int value)
   }
 }
 
+int   ft_stack_b_greatest(t_stack *stack_b)
+{
+  int pos_greatest;
+  int i;
+
+  pos_greatest = 0;
+  i = 1;
+  while (i < stack_b->size - 1)
+  {
+    if (stack_b->arr[i] > stack_b->arr[pos_greatest])
+      pos_greatest = i;
+    i++;
+  }
+  return (i - 1);
+}
+
 int check_stack_b_order(t_stack *stack_b)
 {
   int i;
@@ -251,7 +272,7 @@ int check_stack_b_order(t_stack *stack_b)
   i = 1;
   while (i < stack_b->size)
   {
-    if (stack_b->arr[i] < stack_b->arr[biggest_index])
+    if (stack_b->arr[i] > stack_b->arr[biggest_index])
       biggest_index = i;
     i++;
   }
@@ -272,7 +293,7 @@ void  stack_b_final_check(t_stack *stack_b)
   int seq_b;
 
   seq_b = check_stack_b_order(stack_b);
-  ft_printf("smallest element: %i", seq_b);
+  //ft_printf("smallest element: %i", seq_b);
   if (seq_b > 0)
   {
     if (seq_b > stack_b->size / 2)
@@ -320,12 +341,12 @@ void  find_largest_values(t_stack *stack_a, int *largest, int *seclargest, int *
 void  sa(t_stack *stack_a)
 {
   int temp;
-  int i;
+  //int i;
 
   temp = stack_a->arr[0];
   stack_a->arr[0] = stack_a->arr[1];
   stack_a->arr[1] = temp;
-  i = 0;
+  /*i = 0;
   ft_printf("Stack A after sa: ");
 	while (i < stack_a->size)
 	{    
@@ -333,27 +354,27 @@ void  sa(t_stack *stack_a)
     if (!stack_a->arr[i + 1])
       ft_printf("\n");
 		i++;
-	}
+	}*/
   ft_printf("sa\n");
 }
 
 void  sb(t_stack *stack_b)
 {
   int temp;
-  int i;
+  //int i;
 
   temp = stack_b->arr[0];
   stack_b->arr[0] = stack_b->arr[1];
   stack_b->arr[1] = temp;
-  i = 0;
-  ft_printf("Stack B after sb: ");
+  /*i = 0;
+  ft_printf("\t\t\tStack B after sb: ");
 	while (i < stack_b->size)
 	{    
 		ft_printf("%i ", stack_b->arr[i]);
     if (i + 1 == stack_b->size)
       ft_printf("\n");
 		i++;
-	}
+	}*/
   ft_printf("sb\n");
 }
 
@@ -370,7 +391,7 @@ void  ra(t_stack *stack_a)
     i++;
   }
   stack_a->arr[stack_a->size - 1] = temp;
-  i = 0;
+  /*i = 0;
   ft_printf("Stack A after ra: ");
 	while (i < stack_a->size)
 	{    
@@ -378,7 +399,7 @@ void  ra(t_stack *stack_a)
     if (!stack_a->arr[i + 1])
       ft_printf("\n");
 		i++;
-	}
+	}*/
   ft_printf("ra\n");
 }
 void  rb(t_stack *stack_b)
@@ -394,15 +415,15 @@ void  rb(t_stack *stack_b)
     i++;
   }
   stack_b->arr[stack_b->size - 1] = temp;
-  i = 0;
-  ft_printf("Stack B after rb: ");
+  /*i = 0;
+  ft_printf("\t\t\t\t\tStack B after rb: ");
 	while (i < stack_b->size)
 	{    
 		ft_printf("%i ", stack_b->arr[i]);
     if (!stack_b->arr[i + 1])
       ft_printf("\n");
 		i++;
-	}
+	}*/
   ft_printf("rb\n");
 }
 
@@ -419,7 +440,7 @@ void  rra(t_stack *stack_a)
     i--; 
   }
   stack_a->arr[0] = temp;
-  i = 0;
+  /*i = 0;
   ft_printf("Stack A after rra: ");
 	while (i < stack_a->size)
 	{    
@@ -427,7 +448,7 @@ void  rra(t_stack *stack_a)
     if (!stack_a->arr[i + 1])
       ft_printf("\n");
 		i++;
-	}
+	}*/
   ft_printf("rra\n");
 }
 
@@ -444,15 +465,15 @@ void  rrb(t_stack *stack_b)
     i--;
   }
   stack_b->arr[0] = temp;
-  i = 0;
-  ft_printf("Stack B after rrb: ");
+  /*i = 0;
+  ft_printf("\t\t\t\t\tStack B after rrb: ");
 	while (i < stack_b->size)
 	{    
 		ft_printf("%i ", stack_b->arr[i]);
     if (!stack_b->arr[i + 1])
       ft_printf("\n");
 		i++;
-	}
+	}*/
   ft_printf("rrb\n");
 }
 
@@ -475,7 +496,7 @@ void  pb(t_stack *stack_a, t_stack *stack_b)
     i++;
   }
   stack_a->size--;
-  i = 0;
+  /*i = 0;
   ft_printf("Stack A after pb: ", stack_a->size);
 	while (i < stack_a->size)
 	{    
@@ -485,14 +506,14 @@ void  pb(t_stack *stack_a, t_stack *stack_b)
 		i++;
 	}
   i = 0;
-  ft_printf("Stack B after pb: ", stack_b->size);
+  ft_printf("\t\t\t\t\tStack B after pb: ", stack_b->size);
 	while (i < stack_b->size)
 	{    
 		ft_printf("%i ", stack_b->arr[i]);
     if (i + 1 == stack_b->size)
       ft_printf("\n");
 		i++;
-	}
+	}*/
   ft_printf("pb\n");
 }
 
@@ -515,7 +536,7 @@ void  pa(t_stack *stack_a, t_stack *stack_b)
     i++;
   }
   stack_b->size--;
-  i = 0;
+  /*i = 0;
   ft_printf("Stack A after pa: ", stack_a->size);
 	while (i < stack_a->size)
 	{    
@@ -525,14 +546,14 @@ void  pa(t_stack *stack_a, t_stack *stack_b)
 		i++;
 	}
   i = 0;
-  ft_printf("Stack B after pa: ", stack_b->size);
+  ft_printf("\t\t\t\t\tStack B after pa: ", stack_b->size);
 	while (i < stack_b->size)
 	{    
 		ft_printf("%i ", stack_b->arr[i]);
     if (i + 1 == stack_b->size)
       ft_printf("\n");
 		i++;
-	}
+	}*/
   ft_printf("pa\n");
 }
 
