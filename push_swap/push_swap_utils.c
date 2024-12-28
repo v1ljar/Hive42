@@ -1,9 +1,9 @@
 #include "push_swap.h"
 
-int	ft_validate_argv(int argc, char **argv)
+size_t	ft_validate_argv(int argc, char **argv)
 {
 	char	**storage;
-	int		res;
+	size_t	res;
 	int		i;
 	int		j;
 
@@ -56,7 +56,7 @@ void	fill_stack_a(t_stack *stack_a, int argc, char **argv)
 		j = 0;
 		while (buf[j] && valid_nbr(stack_a, ft_atoi(buf[j]), buf))
 		{
-			stack_a->arr[stack_a->size++] = ft_atoi(buf[j]);
+			stack_a->arr[stack_a->size++] = (int)ft_atoi(buf[j]);
 			j++;
 		}
 		free_split(buf);

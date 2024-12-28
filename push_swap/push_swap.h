@@ -22,7 +22,7 @@ typedef struct s_stack
 	int	size;
 }	t_stack;
 
-int		ft_validate_argv(int argc, char **argv);
+size_t	ft_validate_argv(int argc, char **argv);
 void	free_split(char **storage);
 void	fill_stack_a(t_stack *stack_a, int argc, char **argv);
 int		valid_nbr(t_stack *stack_a, long nbr, char	**buf);
