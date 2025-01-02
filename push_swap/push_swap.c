@@ -32,6 +32,7 @@ void  stack_b_final_check(t_stack *stack_b);
 int   check_stack_b_order(t_stack *stack_b);
 int   ft_stack_b_greatest(t_stack *stack_b);
 int   ft_stack_b_pos(t_stack *stack_b, int value);
+void calculate_cost(t_stack *stack_a,t_stack *stack_b);
 
 int main(int argc, char **argv)
 //int	main(void)
@@ -215,6 +216,7 @@ void  sort_rest(t_stack *stack_a)
       ra(stack_a);
     else
     {
+      calculate_cost(stack_a, &stack_b);
       align_stack_b(&stack_b, stack_a->arr[0]);
       pb(stack_a, &stack_b);
     }
@@ -224,6 +226,38 @@ void  sort_rest(t_stack *stack_a)
   while (stack_b.size > 0)
     pa(stack_a, &stack_b);
 	free(stack_b.arr);
+}
+
+void calculate_cost(t_stack *stack_a,t_stack *stack_b)
+{
+  t_cost  moves;
+  t_cost  result;
+  int     i;
+  int     res;
+
+  moves.a_cost = 0;
+  moves.b_cost = 0;
+  moves.total = 2147483647;
+  result.a_cost = 0;
+  result.b_cost = 0;
+  result.total = 2147483647;
+  i = 0;
+  res = 0;
+  while (i < stack_a->size)
+  {
+    moves.a_cost = i;
+    moves.b_cost = ft_stack_b_pos(stack_b, stack_a->arr[i]);
+    moves.total = moves.a_cost + moves.b_cost;
+    if (moves.total < result.total)
+    {
+      result.a_cost = moves.a_cost;
+      result.b_cost = moves.b_cost;
+      result.total = moves.total;
+      res = i;
+    }
+    i++;  
+  }
+  ft_printf("Shotest moves has: %i, result.b_cost: %i, total moves: %i\n", stack_a->arr[res], result.b_cost, result.total);
 }
 
 void  align_stack_b(t_stack *stack_b, int value)
