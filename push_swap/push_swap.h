@@ -22,6 +22,13 @@ typedef struct s_stack
 	int	size;
 }	t_stack;
 
+typedef struct s_cost
+{
+	int	a_cost;
+	int	b_cost;
+	int	total;
+}	t_cost;
+
 size_t	ft_validate_argv(int argc, char **argv);
 void	free_split(char **storage);
 void	fill_stack_a(t_stack *stack_a, int argc, char **argv);
