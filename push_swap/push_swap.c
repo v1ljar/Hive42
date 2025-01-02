@@ -94,7 +94,7 @@ void check_stack_completed(t_stack *stack_a)
       return ;
     i++;
   }
-  ft_printf("Sorted!\n");
+  //ft_printf("Sorted!\n");
   free(stack_a->arr);
   /*
   i = 0;
@@ -214,7 +214,7 @@ void  sort_rest(t_stack *stack_a)
   }
   stack_b.size = 0;
   find_largest_values(stack_a, &largest, &seclargest, &thirdlargest);
-  //ft_printf("Largest: %i\tSecond largest: %i\tThird largest: %i\n", largest, seclargest, thirdlargest);
+  ft_printf("Largest: %i\tSecond largest: %i\tThird largest: %i\n", largest, seclargest, thirdlargest);
   while (stack_a->size > 3)
   {
     if (stack_a->arr[0] == largest || stack_a->arr[0] == seclargest || stack_a->arr[0] == thirdlargest)
@@ -222,15 +222,35 @@ void  sort_rest(t_stack *stack_a)
     else
     {
       calculate_cost(stack_a, &stack_b, largest, seclargest, thirdlargest);
+      //ft_printf("Largest: %i\tSecond largest: %i\tThird largest: %i\n", largest, seclargest, thirdlargest);
       //align_stack_b(&stack_b, stack_a->arr[0]);
       //pb(stack_a, &stack_b);
     }
   }
   stack_b_final_check(&stack_b);
   sort_three(stack_a);
+  //ft_printf("*****************************************************");
   while (stack_b.size > 0)
     pa(stack_a, &stack_b);
-	free(stack_b.arr);
+  /*int i = 0;
+  ft_printf("Stack A after pa: ", stack_a->size);
+	while (i < stack_a->size)
+	{    
+		ft_printf("%i ", stack_a->arr[i]);
+    if (i== stack_a->size)
+      ft_printf("\n");
+		i++;
+	}
+  i = 0;
+  ft_printf("\t\t\t\t\tStack B after pa: ");
+	while (i < stack_b.size)
+	{    
+		ft_printf("%i ", stack_b.arr[i]);
+    if (i == stack_b.size)
+      ft_printf("\n");
+		i++;
+	}*/
+  free(stack_b.arr);
 }
 
 void calculate_cost(t_stack *stack_a,t_stack *stack_b, int largest, int seclargest, int thirdlargest)
@@ -238,7 +258,7 @@ void calculate_cost(t_stack *stack_a,t_stack *stack_b, int largest, int seclarge
   t_cost  moves;
   t_cost  result;
   int     i;
-  int     res;
+  //int     res;
 
   moves.a_cost = 0;
   moves.b_cost = 0;
@@ -247,26 +267,44 @@ void calculate_cost(t_stack *stack_a,t_stack *stack_b, int largest, int seclarge
   result.b_cost = 0;
   result.total = 2147483647;
   i = 0;
-  res = 0;
+  //res = 0;
   while (i < stack_a->size)
   {
     if (stack_a->arr[i] == largest || stack_a->arr[i] == seclargest || stack_a->arr[i] == thirdlargest)
       i++;
-    moves.a_cost = i;
-    moves.b_cost = ft_stack_b_pos(stack_b, stack_a->arr[i]);
-    moves.total = moves.a_cost + moves.b_cost;
-    if (moves.total < result.total)
+    else
     {
-      result.a_cost = moves.a_cost;
-      result.b_cost = moves.b_cost;
-      result.total = moves.total;
-      res = stack_a->arr[i];
+      if (i <= stack_a->size / 2)
+        moves.a_cost = i;
+      if (i > stack_a->size / 2)
+        moves.a_cost = stack_a->size - i;
+      if (ft_stack_b_pos(stack_b, stack_a->arr[i]) <= stack_b->size / 2)
+      {
+        moves.b_cost = ft_stack_b_pos(stack_b, stack_a->arr[i]);
+        moves.total = moves.a_cost + moves.b_cost;
+        
+      }
+      if (ft_stack_b_pos(stack_b, stack_a->arr[i]) > stack_b->size / 2)
+      {
+        moves.b_cost = ft_stack_b_pos(stack_b, stack_a->arr[i]);
+        moves.total = moves.a_cost + (stack_b->size - ft_stack_b_pos(stack_b, stack_a->arr[i]));
+      }
+      //ft_printf("a_cost: %i\tb_cost: %d\t", moves.a_cost, moves.b_cost);
+      //ft_printf("total: %d\n", moves.total);
+      moves.a_cost = i;
+      if (moves.total <= result.total)
+      {
+        result.a_cost = moves.a_cost;
+        result.b_cost = moves.b_cost;
+        result.total = moves.total;
+        //res = stack_a->arr[i];
+      }
+      i++;
     }
-    i++;  
   }
   //ft_printf("Shotest moves has: %i, result.b_cost: %i, total moves: %i\n", res, result.b_cost, result.total);
   ft_make_moves(&result, stack_a, stack_b);
-  i = 0;
+  /*i = 0;
   ft_printf("Stack A after pb: ", stack_a->size);
 	while (i < stack_a->size)
 	{    
@@ -283,7 +321,7 @@ void calculate_cost(t_stack *stack_a,t_stack *stack_b, int largest, int seclarge
     if (i + 1 == stack_b->size)
       ft_printf("\n");
 		i++;
-	}
+	}*/
 }
 
 void  ft_make_moves(t_cost *result, t_stack *stack_a, t_stack *stack_b)
@@ -300,17 +338,17 @@ void  ft_make_moves(t_cost *result, t_stack *stack_a, t_stack *stack_b)
   //ft_printf("in make_moves !!ra: %d\trb: %d\t\n", result->a_cost, result->b_cost);
   if (result->a_cost > 0 || result->b_cost > 0)
   {
-    if (result->a_cost <= stack_a->size)
+    if (result->a_cost <= stack_a->size / 2)
       ra_v = result->a_cost;
-    if (result->a_cost > stack_a->size)
+    if (result->a_cost > stack_a->size / 2)
       rra_v = stack_a->size - result->a_cost;
-    if (result->b_cost <= stack_b->size)
+    if (result->b_cost <= stack_b->size / 2)
       rb_v = result->b_cost;
-    if (result->b_cost > stack_b->size)
+    if (result->b_cost > stack_b->size / 2)
       rrb_v = stack_b->size - result->b_cost;
   }
   //ft_printf("ra: %d\trb: %d\trra: %d\trrb: %d\t\n", ra_v, rb_v, rra_v, rrb_v);
-  if (ra > 0 || rb > 0 || rra > 0 || rrb > 0)
+  if (ra_v > 0 || rb_v > 0 || rra_v > 0 || rrb_v > 0)
   {
     while (ra_v > 0 && rb_v > 0)
     {
