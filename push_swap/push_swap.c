@@ -31,6 +31,7 @@ void  align_stack_b(t_stack *stack_b, int value);
 void  stack_b_final_check(t_stack *stack_b);
 int   check_stack_b_order(t_stack *stack_b);
 int   ft_stack_b_greatest(t_stack *stack_b);
+int   ft_stack_b_pos(t_stack *stack_b, int value);
 
 int main(int argc, char **argv)
 //int	main(void)
@@ -60,6 +61,15 @@ int main(int argc, char **argv)
 	}*/
   check_stack_completed(&stack_a);
   sort_stack(&stack_a);
+  /*i = 0;
+  ft_printf("Stack A, size: %i\t", stack_a.size);
+	while (i < stack_a.size)
+	{    
+		ft_printf("%i ", stack_a.arr[i]);
+    if (i == stack_a.size)
+      ft_printf("\n");
+		i++;
+	}*/
   check_stack_completed(&stack_a);
 	free(stack_a.arr);  
 	return (0);
@@ -80,14 +90,14 @@ void check_stack_completed(t_stack *stack_a)
       return ;
     i++;
   }
-  ft_printf("Sorted!\n");
-  /*i = 0;
+  /*ft_printf("Sorted!\n");
+  i = 0;
   ft_printf("Stack A, size: %i\n", stack_a->size);
 	while (i < stack_a->size)
 	{    
 		ft_printf("%i ", stack_a->arr[i]);
-    if (!stack_a->arr[i + 1])
-      fr_printf("\n");
+    if (i == stack_a->size)
+      ft_printf("\n");
 		i++;
 	}*/
   exit(0);
@@ -221,16 +231,21 @@ void  align_stack_b(t_stack *stack_b, int value)
   int pos;
   int moves;
 
-  pos = 0;
-  while ((pos < stack_b->size && stack_b->arr[pos] > value))
+  /*pos = 0;
+// Iterate while elements in stack_b and while arr[pos] is greater than value
+  while (pos < stack_b->size && stack_b->arr[pos] > value)
     pos++;
-  if (pos == 0)
-    pos = ft_stack_b_greatest(stack_b) - 1;
-  else if (pos == stack_b->size)
+  ft_printf("\t\t\t\t\tHERE OG, pos: %i\n", pos);
+  if (pos == stack_b->size && stack_b->arr[pos - 1] < value)
+    pos = ft_stack_b_greatest(stack_b, value);
+// Smallest value to front of biggest
+  if (pos == stack_b->size && stack_b->arr[pos - 1] > value)
   {
-    pos = ft_stack_b_greatest(stack_b) + 1;
-  }
-  //ft_printf("HERE, pos: %i\n", pos);
+    pos = ft_stack_b_greatest(stack_b, value);
+  }*/
+  pos = ft_stack_b_pos(stack_b, value);
+
+  //ft_printf("\t\t\t\t\tHERE, pos: %i\n", pos);
   if (pos <= stack_b->size / 2)
   {
     moves = pos;
@@ -245,6 +260,23 @@ void  align_stack_b(t_stack *stack_b, int value)
   }
 }
 
+int   ft_stack_b_pos(t_stack *stack_b, int value)
+{
+  int i;
+
+  i = 0;
+  if (value > stack_b->arr[i] && value < stack_b->arr[stack_b->size - 1])
+    return (i);
+  while (i < stack_b->size - 1)
+  {
+    if (value < stack_b->arr[i] && value > stack_b->arr[i + 1])
+      return (i + 1);
+    i++;
+  }
+  if (i == stack_b->size - 1)
+    i = ft_stack_b_greatest(stack_b);
+  return (i);
+}
 int   ft_stack_b_greatest(t_stack *stack_b)
 {
   int pos_greatest;
@@ -252,13 +284,13 @@ int   ft_stack_b_greatest(t_stack *stack_b)
 
   pos_greatest = 0;
   i = 1;
-  while (i < stack_b->size - 1)
+  while (i < stack_b->size)
   {
     if (stack_b->arr[i] > stack_b->arr[pos_greatest])
       pos_greatest = i;
     i++;
   }
-  return (i - 1);
+  return (pos_greatest);
 }
 
 int check_stack_b_order(t_stack *stack_b)
@@ -351,7 +383,7 @@ void  sa(t_stack *stack_a)
 	while (i < stack_a->size)
 	{    
 		ft_printf("%i ", stack_a->arr[i]);
-    if (!stack_a->arr[i + 1])
+    if (i == stack_a->size)
       ft_printf("\n");
 		i++;
 	}*/
@@ -396,7 +428,7 @@ void  ra(t_stack *stack_a)
 	while (i < stack_a->size)
 	{    
 		ft_printf("%i ", stack_a->arr[i]);
-    if (!stack_a->arr[i + 1])
+    if (i == stack_a->size)
       ft_printf("\n");
 		i++;
 	}*/
@@ -420,7 +452,7 @@ void  rb(t_stack *stack_b)
 	while (i < stack_b->size)
 	{    
 		ft_printf("%i ", stack_b->arr[i]);
-    if (!stack_b->arr[i + 1])
+    if (i == stack_b->size)
       ft_printf("\n");
 		i++;
 	}*/
