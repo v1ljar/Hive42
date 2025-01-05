@@ -14,6 +14,7 @@
 # define PUSH_SWAP_H
 
 # include "./libft/libft.h"
+# include <unistd.h>
 # include <limits.h>
 
 typedef struct s_stack
@@ -28,6 +29,21 @@ typedef struct s_cost
 	int	b_cost;
 	int	total;
 }	t_cost;
+
+typedef struct s_array
+{
+	int	largest;
+	int	sec;
+	int	third;
+}	t_array;
+
+typedef struct s_values
+{
+	int ra_v;
+	int rb_v;
+	int rra_v;
+	int rrb_v;
+}	t_values;
 
 size_t	ft_validate_argv(int argc, char **argv);
 void	free_split(char **storage);

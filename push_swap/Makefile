@@ -2,9 +2,9 @@ NAME = push_swap
 
 CC = cc
 
-WFLAGS = -Wall -Werror -Wextra
+WFLAGS = -Wall -Werror -Wextra -g
 
-SRC = push_swap.c push_swap_utils.c
+SRC = push_swap.c push_swap_utils_fill_stack_a.c
 
 LIBNAME = libft.a
 
