@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap_utils.c                                  :+:      :+:    :+:   */
+/*   push_swap_utils_fill_stack_a.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 12:39:29 by vuljas            #+#    #+#             */
-/*   Updated: 2025/01/05 12:39:40 by vuljas           ###   ########.fr       */
+/*   Updated: 2025/01/07 17:32:32 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	ft_validate_buf(char **buf);
+static void	ft_validate_buf(char **buf, t_stack *stack_a);
 
 size_t	ft_validate_argv(int argc, char **argv)
 {
@@ -26,10 +26,10 @@ size_t	ft_validate_argv(int argc, char **argv)
 	while (i < argc)
 	{
 		storage = ft_split(argv[i], ' ');
-		if (!storage)
+		if (!storage || *storage == NULL)
 		{
 			ft_free_split(storage);
-			return(write(2, "Error\n", 6), -1);
+			exit(write(2, "Error\n", 6));
 		}
 		j = 0;
 		while (storage[j++])
@@ -63,10 +63,9 @@ void	ft_fill_stack_a(t_stack *stack_a, int argc, char **argv)
 		if (!buf)
 		{
 			ft_free_split(buf);
-			write(2, "Error\n", 6);
-			exit(-1);
+			exit(write(2, "Error\n", 6));
 		}
-		ft_validate_buf(buf);		
+		ft_validate_buf(buf, stack_a);
 		j = 0;
 		while (buf[j] && ft_valid_nbr(stack_a, ft_atoi(buf[j]), buf))
 		{
@@ -79,7 +78,7 @@ void	ft_fill_stack_a(t_stack *stack_a, int argc, char **argv)
 	}
 }
 
-void	ft_validate_buf(char **buf)
+static void	ft_validate_buf(char **buf, t_stack *stack_a)
 {
 	int	i;
 	int	j;
@@ -91,19 +90,13 @@ void	ft_validate_buf(char **buf)
 		if (buf[i][0] == '+' || buf[i][0] == '-')
 		{
 			if (buf[i][1] < '0' || buf[i][1] > '9')
-			{
-				ft_free_split(buf);
-				exit(write(2, "Error\n", 6));
-			}
+				ft_free_and_exit(buf, stack_a);
 			j++;
 		}		
 		while (buf[i][j] != '\0')
 		{			
 			if (buf[i][j] < '0' || buf[i][j] > '9')
-			{
-				ft_free_split(buf);
-				exit(write(2, "Error\n", 6));
-			}
+				ft_free_and_exit(buf, stack_a);
 			j++;
 		}
 		i++;
@@ -118,7 +111,7 @@ int	ft_valid_nbr(t_stack *stack_a, long nbr, char	**buf)
 	while (i < stack_a->size || nbr < INT_MIN || nbr > INT_MAX)
 	{
 		if (stack_a->arr[i] == nbr || nbr < INT_MIN || nbr > INT_MAX)
-		{			
+		{
 			free(stack_a->arr);
 			ft_free_split(buf);
 			exit(write(2, "Error\n", 6));
