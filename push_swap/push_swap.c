@@ -53,25 +53,29 @@ void  ft_sort_stack(t_stack *stack_a)
     else
       ft_sort_rest(stack_a);
   }
-  else if (seq != 0)
+  if (seq > stack_a->size / 2)
   {
-    if (seq > stack_a->size / 2)
-    {
-      while (stack_a->size - seq--)
+    seq = stack_a->size - seq;
+    while (seq > 0)
+      {
         rra(stack_a);
-    }
-    while (seq--)
-      ra(stack_a);
+        seq--;
+      }
+  }
+  while (seq > 0)
+  {
+    ra(stack_a);
+    seq--;
   }
 }
 
-void  ft_sort_two(t_stack *stack_a)
+static void  ft_sort_two(t_stack *stack_a)
 {
   if (stack_a->arr[0] > stack_a->arr[1])
     sa(stack_a);
 }
 
-void  ft_sort_three(t_stack *stack_a)
+static void  ft_sort_three(t_stack *stack_a)
 {
   int a;
   int b;
@@ -98,7 +102,7 @@ void  ft_sort_three(t_stack *stack_a)
     ra(stack_a);
 }
 
-void  ft_sort_rest(t_stack *stack_a)
+static void  ft_sort_rest(t_stack *stack_a)
 {
   t_stack stack_b;
   t_array  biggest;
@@ -107,8 +111,7 @@ void  ft_sort_rest(t_stack *stack_a)
   if (!stack_b.arr)
   {
     free(stack_a->arr);
-    write(2, "Error\n", 6);
-    exit(1);
+    exit(write(2, "Error\n", 6));
   }
   stack_b.size = 0;
   ft_find_largest_values(stack_a, &biggest);
@@ -124,5 +127,11 @@ void  ft_sort_rest(t_stack *stack_a)
   ft_sort_three(stack_a);
   while (stack_b.size > 0)
     pa(stack_a, &stack_b);
+  /*int i = 0;
+  while (i < stack_a->size)
+  {
+    ft_printf("%i\n", stack_a->arr[i]);
+    i++;
+  }*/
   free(stack_b.arr);
 }

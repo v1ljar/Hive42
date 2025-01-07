@@ -39,7 +39,7 @@ int ft_check_stack_order(t_stack *stack_a)
     i++;
   }
   i = 0;
-  while (i < stack_a->size - 1)
+  while (stack_a->size > 0 && i < stack_a->size - 1)
   {
     current = stack_a->arr[(smallest_index + i) % stack_a->size];
     next = stack_a->arr[(smallest_index + i + 1) % stack_a->size];
@@ -50,7 +50,6 @@ int ft_check_stack_order(t_stack *stack_a)
   return (smallest_index);
 }
 
-// Stack b final check before pa
 void  ft_stack_b_final_check(t_stack *stack_b)
 {
   int seq_b;

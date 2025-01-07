@@ -65,7 +65,7 @@ void ft_calculate_cost(t_stack *stack_a, t_stack *stack_b, t_array *biggest)
       ft_initialize_moves_cost(stack_a, stack_b, &moves, i);
       moves.a_cost = i;
       if (moves.total <= result.total)
-        ft_save_least_moves(&result, & moves);
+        ft_save_least_moves(&result, &moves);
       i++;
     }
   }
