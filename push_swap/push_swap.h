@@ -15,7 +15,6 @@
 
 # include "./libft/libft.h"
 # include <unistd.h>
-# include <limits.h>
 
 typedef struct s_stack
 {
@@ -32,9 +31,8 @@ typedef struct s_cost
 
 typedef struct s_array
 {
-	int	largest;
-	int	sec;
-	int	third;
+	int	*largest;
+	int	amount;
 }	t_array;
 
 typedef struct s_values
@@ -60,6 +58,8 @@ void	ft_free_and_exit(char **buf, t_stack *stack_a);
 // Sort
 void	ft_find_largest_values(t_stack *stack_a, t_array *biggest);
 void	ft_calculate_cost(t_stack *stack_a, t_stack *stack_b, t_array *biggest);
+
+int		ft_comp_biggest(int x, t_array *big);
 // Sort make moves
 void	ft_make_moves(t_cost *result, t_stack *stack_a, t_stack *stack_b);
 // Sort b pos

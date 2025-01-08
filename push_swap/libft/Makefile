@@ -27,10 +27,18 @@ $(NAME): $(OFILES)
 	$(CC) $(WFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OFILES) $(BOFILES)
+	@if [ "$$(find . -name "*.o" -print -quit)" ] ; then \
+		rm -f $(OFILES); \
+	else \
+		echo "make clean: Nothing to be cleaned in Libft."; \
+	fi
 
 fclean: clean
-	rm -f $(NAME)
+	@if [ ! -f $(NAME) ] ; then \
+		echo "make fclean: Nothing to be cleaned in Libft."; \
+	else \
+		rm -f $(NAME); \
+	fi
 
 re: fclean all
 

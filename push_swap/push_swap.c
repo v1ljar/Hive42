@@ -101,25 +101,25 @@ static void	ft_sort_rest(t_stack *stack_a)
 	t_stack	stack_b;
 	t_array	biggest;
 
-	stack_b.arr = ft_calloc(sizeof(int), (size_t)(stack_a->size - 3));
+	ft_find_largest_values(stack_a, &biggest);
+	stack_b.arr = ft_calloc(sizeof(int), (size_t)(stack_a->size - biggest.amount));
 	if (!stack_b.arr)
 	{
 		free(stack_a->arr);
 		exit(write(2, "Error\n", 6));
 	}
-	stack_b.size = 0;
-	ft_find_largest_values(stack_a, &biggest);
-	while (stack_a->size > 3)
+	stack_b.size = 0;	
+	while (stack_a->size > biggest.amount)
 	{
-		if (stack_a->arr[0] == biggest.largest || stack_a->arr[0] == biggest.sec
-			|| stack_a->arr[0] == biggest.third)
+		if (ft_comp_biggest(stack_a->arr[0], &biggest) == 1)
 			ra(stack_a);
 		else
 			ft_calculate_cost(stack_a, &stack_b, &biggest);
 	}
 	ft_stack_b_final_check(&stack_b);
-	ft_sort_three(stack_a);
+	ft_sort_rest(stack_a);
 	while (stack_b.size > 0)
 		pa(stack_a, &stack_b);
 	free(stack_b.arr);
+	free(biggest.largest);
 }

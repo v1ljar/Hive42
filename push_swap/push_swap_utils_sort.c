@@ -16,15 +16,72 @@ static void	ft_init_m_cost(t_stack *st_a, t_stack *st_b, t_cost *m, int i);
 static void	ft_save_least_moves(t_cost *result, t_cost *moves);
 static void	ft_initialize_cost_structs(t_cost *moves, t_cost *result);
 
-void	ft_find_largest_values(t_stack *stack_a, t_array *biggest)
+void		ft_initialize_biggest(t_array *biggest)
 {
 	int	i;
 
-	biggest->largest = INT_MIN;
-	biggest->sec = INT_MIN;
-	biggest->third = INT_MIN;
+	i = 0;
+	while (i < biggest->amount)
+	{
+		biggest->largest[i] = -2147483648;
+		i++;
+	}
+}
+
+void	ft_find_largest_values(t_stack *stack_a, t_array *biggest)
+{
+	int	i;
+	int	j;
+	int	k;
+	int	len;
+
+	if (stack_a->size == 4)
+		len = 3;
+	else
+		len = 5;
+	biggest->amount = len;
+	biggest->largest = malloc(sizeof(int) * stack_a->size - len);
+	if (!biggest->largest)
+	{
+		free(stack_a->arr);
+		exit(write(2, "Error\n", 6));
+	}
+	ft_initialize_biggest(biggest);
+	/*i = 0;
+	while (i < biggest->amount)
+	{
+		ft_printf("%d | %d\n", biggest->amount, i);
+		ft_printf("%d\n", biggest->largest[i]);
+		i++;
+	}*/
 	i = 0;
 	while (i < stack_a->size)
+	{
+		j = len;
+		while (j > 0)
+		{
+			if (stack_a->arr[i] > biggest->largest[j - 1])
+			{
+				k = 0;
+				while (k < j)
+				{
+					biggest->largest[k] =  biggest->largest[k + 1];
+					k++;
+				}
+				biggest->largest[k] = stack_a->arr[i];
+			}
+			j--;
+		}
+		i++;
+	}
+	i = 0;
+	while (i < biggest->amount)
+	{
+		ft_printf("%d | %d\n", biggest->amount, i);
+		ft_printf("%d\n", biggest->largest[i]);
+		i++;
+	}
+	/*while (i < stack_a->size)
 	{
 		if (stack_a->arr[i] > biggest->largest)
 		{
@@ -40,7 +97,7 @@ void	ft_find_largest_values(t_stack *stack_a, t_array *biggest)
 		else if (stack_a->arr[i] > biggest->third)
 			biggest->third = stack_a->arr[i];
 		i++;
-	}
+	}*/
 }
 
 static void	ft_initialize_cost_structs(t_cost *moves, t_cost *result)
@@ -52,8 +109,45 @@ static void	ft_initialize_cost_structs(t_cost *moves, t_cost *result)
 	result->b_cost = 0;
 	result->total = 2147483647;
 }
+int	ft_comp_biggest(int x, t_array *big)
+{
+	int	i;
+
+	i = 0;
+	while (i < big->amount)
+	{
+		if (x == big->largest[i])
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 void	ft_calculate_cost(t_stack *st_a, t_stack *st_b, t_array *big)
+{
+	t_cost	moves;
+	t_cost	result;
+	int		i;
+
+	ft_initialize_cost_structs(&moves, &result);
+	i = 0;
+	while (i < st_a->size)
+	{
+		if (ft_comp_biggest(st_a->arr[i], big) == 1)
+			i++;
+		else
+		{
+			ft_init_m_cost(st_a, st_b, &moves, i);
+			moves.a_cost = i;
+			if (moves.total <= result.total)
+				ft_save_least_moves(&result, &moves);
+			i++;
+		}
+	}
+	ft_make_moves(&result, st_a, st_b);
+}
+
+/*void	ft_calculate_cost(t_stack *st_a, t_stack *st_b, t_array *big)
 {
 	t_cost	moves;
 	t_cost	result;
@@ -76,7 +170,7 @@ void	ft_calculate_cost(t_stack *st_a, t_stack *st_b, t_array *big)
 		}
 	}
 	ft_make_moves(&result, st_a, st_b);
-}
+}*/
 
 static void	ft_save_least_moves(t_cost *result, t_cost *moves)
 {

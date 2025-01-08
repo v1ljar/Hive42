@@ -108,9 +108,9 @@ int	ft_valid_nbr(t_stack *stack_a, long nbr, char	**buf)
 	int	i;
 
 	i = 0;
-	while (i < stack_a->size || nbr < INT_MIN || nbr > INT_MAX)
+	while (i < stack_a->size || nbr < -2147483648 || nbr > 2147483647)
 	{
-		if (stack_a->arr[i] == nbr || nbr < INT_MIN || nbr > INT_MAX)
+		if (stack_a->arr[i] == nbr || nbr < -2147483648 || nbr > 2147483647)
 		{
 			free(stack_a->arr);
 			ft_free_split(buf);
