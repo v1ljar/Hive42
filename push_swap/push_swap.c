@@ -108,7 +108,7 @@ static void	ft_sort_rest(t_stack *stack_a)
 		free(stack_a->arr);
 		exit(write(2, "Error\n", 6));
 	}
-	stack_b.size = 0;	
+	stack_b.size = 0;
 	while (stack_a->size > biggest.amount)
 	{
 		if (ft_comp_biggest(stack_a->arr[0], &biggest) == 1)
@@ -117,9 +117,10 @@ static void	ft_sort_rest(t_stack *stack_a)
 			ft_calculate_cost(stack_a, &stack_b, &biggest);
 	}
 	ft_stack_b_final_check(&stack_b);
-	ft_sort_rest(stack_a);
+	free(biggest.largest);
+	if (ft_check_stack_order(stack_a) != 0)
+		ft_check_stack_completed(stack_a);
 	while (stack_b.size > 0)
 		pa(stack_a, &stack_b);
 	free(stack_b.arr);
-	free(biggest.largest);
 }

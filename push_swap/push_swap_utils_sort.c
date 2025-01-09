@@ -35,12 +35,12 @@ void	ft_find_largest_values(t_stack *stack_a, t_array *biggest)
 	int	k;
 	int	len;
 
-	if (stack_a->size == 4)
+	if (stack_a->size == 4 || stack_a->size == 5)
 		len = 3;
 	else
 		len = 5;
 	biggest->amount = len;
-	biggest->largest = malloc(sizeof(int) * stack_a->size - len);
+	biggest->largest = malloc(sizeof(int) * len);
 	if (!biggest->largest)
 	{
 		free(stack_a->arr);
@@ -57,10 +57,10 @@ void	ft_find_largest_values(t_stack *stack_a, t_array *biggest)
 	i = 0;
 	while (i < stack_a->size)
 	{
-		j = len;
-		while (j > 0)
+		j = len - 1;
+		while (j >= 0)
 		{
-			if (stack_a->arr[i] > biggest->largest[j - 1])
+			if (stack_a->arr[i] > biggest->largest[j])
 			{
 				k = 0;
 				while (k < j)
@@ -68,17 +68,11 @@ void	ft_find_largest_values(t_stack *stack_a, t_array *biggest)
 					biggest->largest[k] =  biggest->largest[k + 1];
 					k++;
 				}
-				biggest->largest[k] = stack_a->arr[i];
+				biggest->largest[j] = stack_a->arr[i];
+				break;
 			}
 			j--;
 		}
-		i++;
-	}
-	i = 0;
-	while (i < biggest->amount)
-	{
-		ft_printf("%d | %d\n", biggest->amount, i);
-		ft_printf("%d\n", biggest->largest[i]);
 		i++;
 	}
 	/*while (i < stack_a->size)

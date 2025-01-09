@@ -20,7 +20,7 @@ void	ft_check_stack_completed(t_stack *stack_a)
 	if (valid == -1 || valid > 0)
 		ft_sort_stack(stack_a);
 	free(stack_a->arr);
-	exit(0);
+	
 }
 
 int	ft_check_stack_order(t_stack *stack_a)

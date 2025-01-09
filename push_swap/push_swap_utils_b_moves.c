@@ -30,15 +30,18 @@ void	rb(t_stack *stack_b)
 	int	temp;
 	int	i;
 
-	temp = stack_b->arr[0];
-	i = 0;
-	while (i < stack_b->size - 1)
+	if (stack_b->size > 0)
 	{
-		stack_b->arr[i] = stack_b->arr[i + 1];
-		i++;
+		temp = stack_b->arr[0];
+		i = 0;
+		while (i < stack_b->size - 1)
+		{
+			stack_b->arr[i] = stack_b->arr[i + 1];
+			i++;
+		}
+		stack_b->arr[stack_b->size - 1] = temp;
+		ft_printf("rb\n");
 	}
-	stack_b->arr[stack_b->size - 1] = temp;
-	ft_printf("rb\n");
 }
 
 void	rrb(t_stack *stack_b)
@@ -46,15 +49,18 @@ void	rrb(t_stack *stack_b)
 	int	temp;
 	int	i;
 
-	temp = stack_b->arr[stack_b->size - 1];
-	i = stack_b->size - 1;
-	while (i > 0)
+	if (stack_b->size > 0)
 	{
-		stack_b->arr[i] = stack_b->arr[i - 1];
-		i--;
+		temp = stack_b->arr[stack_b->size - 1];
+		i = stack_b->size - 1;
+		while (i > 0)
+		{
+			stack_b->arr[i] = stack_b->arr[i - 1];
+			i--;
+		}
+		stack_b->arr[0] = temp;
+		ft_printf("rrb\n");
 	}
-	stack_b->arr[0] = temp;
-	ft_printf("rrb\n");
 }
 
 void	pb(t_stack *stack_a, t_stack *stack_b)
@@ -87,21 +93,24 @@ void	rrr(t_stack *stack_a, t_stack *stack_b)
 	int	temp;
 	int	i;
 
-	temp = stack_a->arr[stack_a->size - 1];
-	i = stack_a->size - 1;
-	while (i > 0)
+	if (stack_a->size != 0 && stack_b->size != 0)
 	{
-		stack_a->arr[i] = stack_a->arr[i - 1];
-		i--;
+		temp = stack_a->arr[stack_a->size - 1];
+		i = stack_a->size - 1;
+		while (i > 0)
+		{
+			stack_a->arr[i] = stack_a->arr[i - 1];
+			i--;
+		}
+		stack_a->arr[0] = temp;
+		temp = stack_b->arr[stack_b->size - 1];
+		i = stack_b->size - 1;
+		while (i > 0)
+		{
+			stack_b->arr[i] = stack_b->arr[i - 1];
+			i--;
+		}
+		stack_b->arr[0] = temp;
+		ft_printf("rrr\n");
 	}
-	stack_a->arr[0] = temp;
-	temp = stack_b->arr[stack_b->size - 1];
-	i = stack_b->size - 1;
-	while (i > 0)
-	{
-		stack_b->arr[i] = stack_b->arr[i - 1];
-		i--;
-	}
-	stack_b->arr[0] = temp;
-	ft_printf("rrr\n");
 }
