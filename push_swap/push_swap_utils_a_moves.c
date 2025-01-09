@@ -30,7 +30,7 @@ void	ra(t_stack *stack_a)
 	int	temp;
 	int	i;
 
-	if (stack_a->size == 0)
+	if (stack_a->size > 0)
 	{
 		temp = stack_a->arr[0];
 		i = 0;
@@ -49,7 +49,7 @@ void	rra(t_stack *stack_a)
 	int	temp;
 	int	i;
 
-	if (stack_a->size == 0)
+	if (stack_a->size > 0)
 	{
 		temp = stack_a->arr[stack_a->size - 1];
 		i = stack_a->size - 1;

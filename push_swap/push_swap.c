@@ -15,6 +15,7 @@
 static void	ft_sort_two(t_stack *stack_a);
 static void	ft_sort_three(t_stack *stack_a);
 static void	ft_sort_rest(t_stack *stack_a);
+void		ft_sort_reminder_a(t_stack *stack_a, t_stack *stack_b);
 
 int	main(int argc, char **argv)
 {
@@ -31,7 +32,7 @@ int	main(int argc, char **argv)
 	ft_fill_stack_a(&stack_a, argc, argv);
 	ft_check_stack_completed(&stack_a);
 	ft_sort_stack(&stack_a);
-	ft_check_stack_completed(&stack_a);
+	//ft_check_stack_completed(&stack_a);
 	free(stack_a.arr);
 	return (0);
 }
@@ -102,7 +103,7 @@ static void	ft_sort_rest(t_stack *stack_a)
 	t_array	biggest;
 
 	ft_find_largest_values(stack_a, &biggest);
-	stack_b.arr = ft_calloc(sizeof(int), (size_t)(stack_a->size - biggest.amount));
+	stack_b.arr = ft_calloc(sizeof(int), (size_t)(stack_a->size - 3));
 	if (!stack_b.arr)
 	{
 		free(stack_a->arr);
@@ -119,8 +120,45 @@ static void	ft_sort_rest(t_stack *stack_a)
 	ft_stack_b_final_check(&stack_b);
 	free(biggest.largest);
 	if (ft_check_stack_order(stack_a) != 0)
-		ft_check_stack_completed(stack_a);
+		ft_sort_reminder_a(stack_a, &stack_b);
 	while (stack_b.size > 0)
-		pa(stack_a, &stack_b);
+		pa(stack_a, &stack_b);	
 	free(stack_b.arr);
+}
+
+void		ft_sort_reminder_a(t_stack *stack_a, t_stack *stack_b)
+{
+	t_array	biggest;
+
+	ft_find_largest_values(stack_a, &biggest);
+	while (stack_a->size > biggest.amount)
+	{
+		if (ft_comp_biggest(stack_a->arr[0], &biggest) == 1)
+			ra(stack_a);
+		else
+			ft_calculate_cost(stack_a, stack_b, &biggest);
+	}
+	ft_stack_b_final_check(stack_b);
+	/*int i = 0;
+	while (i < stack_a->size)
+	{
+		ft_printf("%d ", stack_a->arr[i]);
+		i++;
+		if (i == stack_a->size)
+			ft_printf("\n");
+	}
+	i = 0;
+	while (i < stack_b->size)
+	{
+		ft_printf("%d ", stack_b->arr[i]);
+		i++;
+		if (i == stack_b->size)
+			ft_printf("\n");
+	}*/
+	free(biggest.largest);
+	//ft_printf("Final sort 3 last values\n");
+	if (stack_a->size == 3)
+		ft_sort_three(stack_a);
+	else
+		ft_sort_reminder_a(stack_a, stack_b);
 }
