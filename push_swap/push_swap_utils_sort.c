@@ -38,7 +38,7 @@ void	ft_find_largest_values(t_stack *stack_a, t_array *biggest)
 	if (stack_a->size == 4 || stack_a->size == 5)
 		len = 3;
 	else
-		len = 5;
+		len = stack_a->size / 2;
 	biggest->amount = len;
 	biggest->largest = malloc(sizeof(int) * len);
 	if (!biggest->largest)
@@ -125,7 +125,7 @@ void	ft_calculate_cost(t_stack *st_a, t_stack *st_b, t_array *big)
 
 	ft_initialize_cost_structs(&moves, &result);
 	i = 0;
-	while (i < st_a->size)
+	while (i < st_a->size && ft_check_stack_order(st_a) == -1)
 	{
 		if (ft_comp_biggest(st_a->arr[i], big) == 1)
 			i++;
