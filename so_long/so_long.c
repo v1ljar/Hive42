@@ -5,6 +5,9 @@ int     ft_initialize_board(char *map_path, t_map_data *board);
 void    ft_initialize_map_data(t_map_data *board, char *whole_map, int lines);
 int     ft_validate_parts(t_map_data *board);
 int     ft_validate_amount(t_map_data *board);
+int     ft_validate_path(t_map_data *board);
+void    ft_dfs(char **map, int x, int y, char prev, unsigned char new);
+int     ft_path_is_valid(t_map_data *b);
 
 int main(int argc, char **argv)
 {
@@ -30,6 +33,8 @@ int ft_validate_map(char *map_path, t_map_data *board)
         return (-1);
     if ((ft_validate_amount(board) == -1))
         return (-1);
+    if ((ft_validate_path(board) == -1))
+        return (-1);
     return (0);
 }
 int ft_validate_parts(t_map_data *board)
@@ -51,6 +56,8 @@ int ft_validate_parts(t_map_data *board)
             else if (board->map[i][j] == 'P')
             {
                 board->start_count++;
+                board->player_x = j + 1;
+                board->player_y = i + 1;
                 j++;
             }
             else if (board->map[i][j] == 'E')
@@ -92,8 +99,57 @@ int     ft_validate_amount(t_map_data *b)
         i++;
     }
     ft_printf("Exits: %i\tStarts: %i\tCollectibles: %i\tRows: %i\tLine len:%i\n", b->exit_count, b->start_count, b->collectibles, b->rows, b->line_len);
-
+    ft_printf("Player pos: x = %i and y = %i\n", b->player_x, b->player_y);
     return (0);
+}
+
+int     ft_validate_path(t_map_data *b)
+{
+    char previous;
+
+    previous = b->map[b->rows][b->line_len];
+    if (previous == '1')
+        return (-1);
+    ft_dfs(b->map, b->player_x, b->player_y, previous, '1');
+    if ((ft_path_is_valid(b) == -1))
+        return (-1);
+    return (0);
+}
+
+int    ft_path_is_valid(t_map_data *b)
+{
+    int i;
+    int j;
+
+    i = 0;
+    while (i < b->rows)
+    {
+        j = 0;
+        while (b->map[i][j] != '\0')
+        {
+            if (b->map[i][j] == '1' || b->map[i][j] == '0')
+                j++;
+            else
+                return (-1);
+        }
+        i++;
+    }
+    return (0);
+}
+
+void    ft_dfs(char **map, int x, int y, char prev, unsigned char new)
+{
+    if (map[x][y] != prev)
+        return ;
+    map[x][y] = new;
+    if (x - 1 >= 0)
+        ft_dfs(map, x - 1, y, prev, new);
+    if (y + 1 < 3)
+        ft_dfs(map, x, y + 1, prev, new);
+    if (x + 1 < 3)
+        ft_dfs(map, x + 1, y, prev, new);
+    if (y - 1 >= 0)
+        ft_dfs(map, x, y - 1, prev, new);
 }
 
 int ft_initialize_board(char *map_path, t_map_data *board)

@@ -12,6 +12,8 @@ typedef struct s_map_data
     int     collectibles;
     int     exit_count;
     int     start_count;
+    int     player_x;
+    int     player_y;
 }   t_map_data;
 
 #endif
