@@ -2,7 +2,7 @@ NAME = so_long
 
 CC = cc
 
-WFLAGS = -Werror -Wextra -Wall
+WFLAGS = -Werror -Wextra -Wall -g
 
 SRC = so_long.c
 
