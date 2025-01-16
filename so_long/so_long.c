@@ -120,10 +120,10 @@ int     ft_validate_path(t_map_data *b)
 {
     char previous;
 
-    previous = b->map_dup[b->player_x][b->player_y];
+    previous = b->map_dup[b->player_y][b->player_x];
     if (previous == '1')
         return (-1);
-    ft_flood_fill(b, b->player_x, b->player_y, previous, '1');
+    ft_flood_fill(b, b->player_y, b->player_x, previous, '1');
     if ((ft_path_is_valid(b) == -1))
         return (-1);
     return (0);
@@ -147,30 +147,23 @@ int    ft_path_is_valid(t_map_data *b)
         }
         i++;
     }
-    i = 0;
-    while(i < b->rows)
-        ft_printf("%s\n", b->map_dup[i++]);
-    i = 0;
-    i = 0;
-    while (i < b->rows)
-        free(b->map_dup[i++]);
-    free(b->map_dup);
+    ft_free_vector(b->map_dup, b->rows);
     return (0);
 }
 
-void    ft_flood_fill(t_map_data *b, int x, int y, char prev, unsigned char new)
+void    ft_flood_fill(t_map_data *b, int y, int x, char prev, unsigned char new)
 {
-    if (b->map_dup[x][y] == '1')
+    if (b->map_dup[y][x] == '1')
         return ;
-    b->map_dup[x][y] = (char)new;
-    if (x - 1 >= 0)
-        ft_flood_fill(b, x - 1, y, prev, new);
-    if (y + 1 < b->line_len)
-        ft_flood_fill(b, x, y + 1, prev, new);
-    if (x + 1 < b->rows)
-        ft_flood_fill(b, x + 1, y, prev, new);
+    b->map_dup[y][x] = (char)new;
     if (y - 1 >= 0)
-        ft_flood_fill(b, x, y - 1, prev, new);
+        ft_flood_fill(b, y - 1, x, prev, new);
+    if (x + 1 < b->line_len)
+        ft_flood_fill(b, y, x + 1, prev, new);
+    if (y + 1 < b->rows)
+        ft_flood_fill(b, y + 1, x, prev, new);
+    if (x - 1 >= 0)
+        ft_flood_fill(b, y, x - 1, prev, new);
 }
 
 int ft_initialize_board(char *map_path, t_map_data *board)
