@@ -7,6 +7,7 @@
 typedef struct s_map_data
 {
     char    **map;
+    char    **map_dup;
     int     line_len;
     int     rows;
     int     collectibles;
