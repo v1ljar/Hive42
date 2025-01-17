@@ -1,18 +1,16 @@
 #include "so_long.h"
+#include <stdio.h> // For puts!
 
-int     ft_validate_map(char *map_path, t_map_data *board);
-int     ft_initialize_board(char *map_path, t_map_data *board);
-void    ft_initialize_map_data(t_map_data *board, char *whole_map, int lines);
-int     ft_validate_parts(t_map_data *board);
-int     ft_validate_amount(t_map_data *board);
-int     ft_validate_path(t_map_data *board);
-void    ft_flood_fill(t_map_data *b, int x, int y, char prev, unsigned char new);
-int     ft_path_is_valid(t_map_data *b);
-void    ft_free_vector(char **str, int len);
+void    ft_hook(void *param);
+void    my_keyhook(t_mlx_key_data keydata, void *param);
 
 int main(int argc, char **argv)
 {
-    t_map_data board;
+    t_map_data          board;
+    mlx_t               *mlx;
+    mlx_texture_t       *bg_texture;
+    mlx_texture_t       *player_texture;
+    static mlx_image_t  *bg_image;
 
     if (argc != 2 || ft_validate_map(argv[1], &board) == -1)
     {
@@ -20,186 +18,86 @@ int main(int argc, char **argv)
         ft_free_vector(board.map_dup, board.rows);
         return (ft_printf("Error\n"));
     }
-    int i = 0;
-    while(i < board.rows)
-        ft_printf("%s\n", board.map[i++]);
+    if (!(mlx = mlx_init((128*(board.line_len + 3)), (128*(board.rows + 2)), "So long GAME", true)))
+    {
+        puts(mlx_strerror(mlx_errno));
+        return (EXIT_FAILURE);
+    }
+    bg_texture = mlx_load_png("./textures/bg2.png");
+    if (!bg_texture)
+    {
+        mlx_close_window(mlx);
+        puts(mlx_strerror(mlx_errno));
+        return (EXIT_FAILURE);
+    }
+    if (!(bg_image = mlx_texture_to_image(mlx, bg_texture)))
+    {
+        mlx_close_window(mlx);
+        puts(mlx_strerror(mlx_errno));
+        return (EXIT_FAILURE);
+    }
+    if (mlx_image_to_window(mlx, bg_image, 0, 0) < 0)
+    {
+        mlx_close_window(mlx);
+        puts(mlx_strerror(mlx_errno));
+        return (EXIT_FAILURE);
+    }
+    player_texture = mlx_load_png("./textures/player.png");
+    if (!player_texture)
+    {
+        mlx_close_window(mlx);
+        puts(mlx_strerror(mlx_errno));
+        return (EXIT_FAILURE);
+    }
+    if (!(image = mlx_texture_to_image(mlx, player_texture)))
+    {
+        mlx_close_window(mlx);
+        puts(mlx_strerror(mlx_errno));
+        return (EXIT_FAILURE);
+    }
+    if (mlx_image_to_window(mlx, image, (128*(board.player_x + 1)), (128*(board.player_y + 1))) == -1)
+    {
+        mlx_close_window(mlx);
+        puts(mlx_strerror(mlx_errno));
+        return (EXIT_FAILURE);
+    }
+    mlx_loop_hook(mlx, ft_hook, mlx);
+    mlx_key_hook(mlx, (void *)&my_keyhook, NULL);
+
+    mlx_loop(mlx);
+    mlx_terminate(mlx);
     ft_free_vector(board.map, board.rows);
-    return (0);
+    return (EXIT_SUCCESS);
 }
 
-void    ft_free_vector(char **str, int len)
+void    ft_hook(void *param)
 {
-    int i;
+    mlx_t               *mlx;
 
-    i = 0;
-    while (i < len)
-        free(str[i++]);
-    free(str);
+    mlx = param;
+    if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
+        mlx_close_window(mlx);
+    /*if (mlx_is_key_down(mlx, MLX_KEY_UP))
+        image->instances[0].y -= 50;
+    if (mlx_is_key_down(mlx, MLX_KEY_DOWN))
+        image->instances[0].y += 50;
+    if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
+        image->instances[0].x -= 50;
+    if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
+        image->instances[0].x += 50;*/
 }
 
-int ft_validate_map(char *map_path, t_map_data *board)
+void    my_keyhook(t_mlx_key_data keydata, void *param)
 {
-    if ((ft_initialize_board(map_path, board) == -1))
-        return (-1);
-    if ((ft_validate_parts(board) == -1))
-        return (-1);
-    if ((ft_validate_amount(board) == -1))
-        return (-1);
-    if ((ft_validate_path(board) == -1))
-        return (-1);
-    return (0);
-}
-int ft_validate_parts(t_map_data *board)
-{
-    int i;
-    int j;
+    mlx_t               *mlx;
 
-    i = 0;
-    while (i < board->rows)
-    {
-        j = 0;
-        while (board->map[i][j] != '\0')
-        {
-            if (board->map[i][j] == 'C')
-            {
-                board->collectibles++;
-                j++;
-            }
-            else if (board->map[i][j] == 'P')
-            {
-                board->start_count++;
-                board->player_x = j;
-                board->player_y = i;
-                j++;
-            }
-            else if (board->map[i][j] == 'E')
-            {
-                board->exit_count++;
-                j++;
-            }
-            else if (board->map[i][j] == '1' || board->map[i][j] == '0')
-                j++;
-            else
-                break;
-        }
-        if (j != board->line_len)
-            return (-1);
-        i++;
-    }
-    return (0);
-}
-
-int     ft_validate_amount(t_map_data *b)
-{
-    int i;
-    int j;
-
-    if (b->exit_count != 1 || b->start_count != 1 || b->collectibles == 0)
-        return (-1);
-    i = 0;
-    while (i < b->rows)
-    {
-        j = 0;
-        while (b->map[i][j] != '\0')
-        {
-            if (b->map[0][j] != '1' || b->map[b->rows - 1][j] != '1')
-                return (-1);
-            if (b->map[i][0] != '1' || b->map[1][b->line_len - 1] != '1')
-                return (-1);
-            j++;
-        }
-        i++;
-    }
-    ft_printf("Exits: %i\tStarts: %i\tCollectibles: %i\tRows: %i\tLine len:%i\n", b->exit_count, b->start_count, b->collectibles, b->rows, b->line_len);
-    ft_printf("Player pos: x = %i and y = %i\n", b->player_x, b->player_y);
-    return (0);
-}
-
-
-int     ft_validate_path(t_map_data *b)
-{
-    char previous;
-
-    previous = b->map_dup[b->player_y][b->player_x];
-    if (previous == '1')
-        return (-1);
-    ft_flood_fill(b, b->player_y, b->player_x, previous, '1');
-    if ((ft_path_is_valid(b) == -1))
-        return (-1);
-    return (0);
-}
-
-int    ft_path_is_valid(t_map_data *b)
-{
-    int i;
-    int j;
-
-    i = 0;
-    while (i < b->rows)
-    {
-        j = 0;
-        while (b->map_dup[i][j] != '\0')
-        {
-            if (b->map_dup[i][j] == '1' || b->map_dup[i][j] == '0')
-                j++;
-            else
-                return (-1);
-        }
-        i++;
-    }
-    ft_free_vector(b->map_dup, b->rows);
-    return (0);
-}
-
-void    ft_flood_fill(t_map_data *b, int y, int x, char prev, unsigned char new)
-{
-    if (b->map_dup[y][x] == '1')
-        return ;
-    b->map_dup[y][x] = (char)new;
-    if (y - 1 >= 0)
-        ft_flood_fill(b, y - 1, x, prev, new);
-    if (x + 1 < b->line_len)
-        ft_flood_fill(b, y, x + 1, prev, new);
-    if (y + 1 < b->rows)
-        ft_flood_fill(b, y + 1, x, prev, new);
-    if (x - 1 >= 0)
-        ft_flood_fill(b, y, x - 1, prev, new);
-}
-
-int ft_initialize_board(char *map_path, t_map_data *board)
-{
-    char    *whole_map;
-    int     fd;
-    char    *str;
-    int     lines;
-
-    fd = open(map_path, O_RDONLY);
-    lines = 0;
-    whole_map = ft_strdup("");
-    while ((str = get_next_line(fd)) != NULL)
-    {
-        whole_map = ft_strjoin_gnl((const char *)whole_map, (const char *) str);
-        free(str);
-        lines++;
-    }
-    close(fd);
-    if (lines < 3 || (ft_strlen(whole_map) < 17))
-    {
-        free(whole_map);
-        return (-1);
-    }
-    ft_initialize_map_data(board, whole_map, lines);
-    return (0);
-}
-
-void    ft_initialize_map_data(t_map_data *board, char *whole_map, int lines)
-{
-    board->map = ft_split(whole_map, '\n');
-    board->map_dup = ft_split(whole_map, '\n');
-    board->line_len = (int)ft_strlen(whole_map) / lines;
-    board->rows = lines;
-    board->collectibles = 0;
-    board->exit_count = 0;
-    board->start_count = 0;
-    free(whole_map);
+    mlx = param;
+    if (keydata.key == MLX_KEY_W && keydata.action == MLX_RELEASE)
+		image->instances[0].y -= 128;
+    if (keydata.key == MLX_KEY_S && keydata.action == MLX_RELEASE)
+		image->instances[0].y += 128;
+    if (keydata.key == MLX_KEY_A && keydata.action == MLX_RELEASE)
+		image->instances[0].x -= 128;
+    if (keydata.key == MLX_KEY_D && keydata.action == MLX_RELEASE)
+		image->instances[0].x += 128;
 }

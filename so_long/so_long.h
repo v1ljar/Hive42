@@ -3,6 +3,7 @@
 
 #include "./libft/libft.h"
 #include <fcntl.h>
+#include "./MLX42/include/MLX42/MLX42.h"
 
 typedef struct s_map_data
 {
@@ -16,5 +17,27 @@ typedef struct s_map_data
     int     player_x;
     int     player_y;
 }   t_map_data;
+
+typedef struct s_mlx_key_data
+{
+    keys_t          key;
+    action_t        action;
+    int32_t         os_key;
+    modifier_key_t  modifier;
+}   t_mlx_key_data;
+
+static mlx_image_t  *image;
+//typedef void (*mlx_keyfunc)(t_mlx_key_data keydata, void *param);
+// Map initilizaton
+int     ft_validate_map(char *map_path, t_map_data *board);
+int     ft_initialize_board(char *map_path, t_map_data *board);
+void    ft_initialize_map_data(t_map_data *board, char *whole_map, int lines);
+int     ft_validate_parts(t_map_data *board);
+int     ft_validate_amount(t_map_data *board);
+// Map validation
+int     ft_validate_path(t_map_data *board);
+void    ft_flood_fill(t_map_data *b, int x, int y, char prev, unsigned char new);
+int     ft_path_is_valid(t_map_data *b);
+void    ft_free_vector(char **str, int len);
 
 #endif
