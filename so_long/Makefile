@@ -4,7 +4,7 @@ CC = cc
 
 WFLAGS = -Werror -Wextra -Wall -g
 
-SRC = so_long.c
+SRC = so_long.c so_long_utils_map_initialization.c so_long_utils_map_validation.c
 
 LIBFT = libft.a
 
@@ -16,7 +16,7 @@ $(LIBFT): $(LIBFTDIR)
 		$(MAKE) -C $<
 
 $(NAME):
-		$(CC) $(WFLAGS) -o $@ $(SRC) -L./libft -lft
+		$(CC) $(WFLAGS) -o $@ $(SRC) -L./libft -lft ./MLX42/build/libmlx42.a -ldl -lglfw -pthread -lm
 
 clean:
 		$(MAKE) -C $(LIBFTDIR) clean

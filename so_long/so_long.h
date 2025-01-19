@@ -1,9 +1,9 @@
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
-#include "./libft/libft.h"
-#include <fcntl.h>
-#include "./MLX42/include/MLX42/MLX42.h"
+# include "./libft/libft.h"
+# include <fcntl.h>
+# include "./MLX42/include/MLX42/MLX42.h"
 
 typedef struct s_map_data
 {
@@ -26,7 +26,24 @@ typedef struct s_mlx_key_data
     modifier_key_t  modifier;
 }   t_mlx_key_data;
 
-static mlx_image_t  *image;
+typedef struct s_game_data
+{
+    mlx_image_t     *image;
+    mlx_t           *mlx;
+    t_map_data      *data;
+    mlx_texture_t   *bg_texture;
+    mlx_texture_t   *player_texture;    
+    mlx_texture_t   *wall_texture;
+    mlx_texture_t   *free_texture;
+    mlx_texture_t   *collectible_texture;
+    mlx_texture_t   *finish_texture;
+    mlx_image_t     *bg_image;
+    mlx_image_t     *wall_image;
+    mlx_image_t     *free_image;
+    mlx_image_t     *collectible_image;
+    mlx_image_t     *finish_image;
+}   t_game_data;
+
 //typedef void (*mlx_keyfunc)(t_mlx_key_data keydata, void *param);
 // Map initilizaton
 int     ft_validate_map(char *map_path, t_map_data *board);
