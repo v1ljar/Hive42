@@ -28,7 +28,7 @@ typedef struct s_mlx_key_data
 
 typedef struct s_game_data
 {
-    mlx_image_t     *image;
+    mlx_image_t     *player_image;
     mlx_t           *mlx;
     t_map_data      *data;
     mlx_texture_t   *bg_texture;
@@ -47,6 +47,7 @@ typedef struct s_game_data
     int             moves;
     int             exit_x;
     int             exit_y;
+    int             exit_valid;
 }   t_game_data;
 
 //typedef void (*mlx_keyfunc)(t_mlx_key_data keydata, void *param);
