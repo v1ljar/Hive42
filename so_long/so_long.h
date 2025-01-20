@@ -36,12 +36,17 @@ typedef struct s_game_data
     mlx_texture_t   *wall_texture;
     mlx_texture_t   *free_texture;
     mlx_texture_t   *collectible_texture;
-    mlx_texture_t   *finish_texture;
+    mlx_texture_t   *finish_locked_texture;
+    mlx_texture_t   *finish_opened_texture;
     mlx_image_t     *bg_image;
     mlx_image_t     *wall_image;
     mlx_image_t     *free_image;
     mlx_image_t     *collectible_image;
-    mlx_image_t     *finish_image;
+    mlx_image_t     *finish_locked_image;
+    mlx_image_t     *finish_opened_image;
+    int             moves;
+    int             exit_x;
+    int             exit_y;
 }   t_game_data;
 
 //typedef void (*mlx_keyfunc)(t_mlx_key_data keydata, void *param);
