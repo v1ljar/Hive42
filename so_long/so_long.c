@@ -113,6 +113,7 @@ void    ft_init_images(t_game_data *game)
         ft_free_exit(game);
     if (!(game->finish_locked_image = mlx_texture_to_image(game->mlx, game->finish_locked_texture)))
         ft_free_exit(game);
+    ft_printf("Window x: %i|\ty: %i", game->mlx->window, game->mlx->height);
 }
 void    ft_map_on_window(t_game_data *game)
 {
@@ -212,7 +213,7 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
     temp_moves = game->moves;
     if (keydata.key == MLX_KEY_W && keydata.action == MLX_RELEASE)
     {
-        if (game->data->map[game->data->player_y - 1][game->data->player_x] != '1')
+        if (game->data->map[game->data->player_y - 1][game->data->player_x] != '1' && (!(game->data->map[game->data->player_y - 1][game->data->player_x] == 'E' && game->exit_valid == 0)))
         {
             if (game->data->map[game->data->player_y - 1][game->data->player_x] == 'C')
                 {
@@ -228,7 +229,7 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
     }
     if (keydata.key == MLX_KEY_S && keydata.action == MLX_RELEASE)
     {
-        if (game->data->map[game->data->player_y + 1][game->data->player_x] != '1')
+        if (game->data->map[game->data->player_y + 1][game->data->player_x] != '1' && (!(game->data->map[game->data->player_y + 1][game->data->player_x] == 'E' && game->exit_valid == 0)))
         {
             if (game->data->map[game->data->player_y + 1][game->data->player_x] == 'C')
                 {
@@ -244,7 +245,7 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
     }
     if (keydata.key == MLX_KEY_A && keydata.action == MLX_RELEASE)
 	{
-        if (game->data->map[game->data->player_y][game->data->player_x - 1] != '1')
+        if (game->data->map[game->data->player_y][game->data->player_x - 1] != '1' && (!(game->data->map[game->data->player_y][game->data->player_x - 1] == 'E' && game->exit_valid == 0)))
         {
             if (game->data->map[game->data->player_y][game->data->player_x - 1] == 'C')
                 {
@@ -260,7 +261,7 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
     }
     if (keydata.key == MLX_KEY_D && keydata.action == MLX_RELEASE)
 	{
-        if (game->data->map[game->data->player_y][game->data->player_x + 1] != '1')
+        if (game->data->map[game->data->player_y][game->data->player_x + 1] != '1' && (!(game->data->map[game->data->player_y][game->data->player_x + 1] == 'E' && game->exit_valid == 0)))
         {
             if (game->data->map[game->data->player_y][game->data->player_x + 1] == 'C')
                 {
