@@ -32,6 +32,8 @@ void    ft_declare_game_data(t_game_data *game, t_map_data *board)
     game->exit_x = 0;
     game->exit_y = 0;
     game->exit_valid = 0;
+    game->win_x = 0;
+    game->win_y = 0;
 }
 
 void    ft_init_mlx_and_textures(t_game_data *game)
@@ -113,7 +115,8 @@ void    ft_init_images(t_game_data *game)
         ft_free_exit(game);
     if (!(game->finish_locked_image = mlx_texture_to_image(game->mlx, game->finish_locked_texture)))
         ft_free_exit(game);
-    ft_printf("Window x: %i|\ty: %i", game->mlx->window, game->mlx->height);
+    mlx_get_monitor_size(0, &game->win_x, &game->win_y);
+    ft_printf("Window y: %u|\tx: %u", game->win_y, game->win_x);
 }
 void    ft_map_on_window(t_game_data *game)
 {
@@ -121,8 +124,8 @@ void    ft_map_on_window(t_game_data *game)
     int j;
 
     i = 0;
-    if (mlx_image_to_window(game->mlx, game->bg_image, 0, 0) < 0)
-        ft_free_exit(game);
+    //if (mlx_image_to_window(game->mlx, game->bg_image, 0, 0) < 0)
+    //    ft_free_exit(game);
     while (i < game->data->rows)
     {
         j = 0;

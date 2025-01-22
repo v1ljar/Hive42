@@ -48,6 +48,8 @@ typedef struct s_game_data
     int             exit_x;
     int             exit_y;
     int             exit_valid;
+    int32_t         win_y;
+    int32_t         win_x;
 }   t_game_data;
 
 //typedef void (*mlx_keyfunc)(t_mlx_key_data keydata, void *param);
