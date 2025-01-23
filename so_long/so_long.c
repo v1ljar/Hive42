@@ -12,6 +12,7 @@ void    ft_free_exit(t_game_data *game);
 void    ft_delete_collectable(t_game_data *game);
 void    ft_free_instances(t_game_data *game, int len);
 void    ft_count_offset(t_game_data *game, int *offset_y, int *offset_x);
+void    ft_adjust_screen(t_game_data *game);
 
 int main(int argc, char **argv)
 {
@@ -144,7 +145,6 @@ void    ft_init_images(t_game_data *game)
         ft_free_exit(game);
     if (!(game->finish_locked_image = mlx_texture_to_image(game->mlx, game->finish_locked_texture)))
         ft_free_exit(game);
-    mlx_get_monitor_size(0, &game->win_x, &game->win_y);
 }
 
 void    ft_free_instances(t_game_data *game, int len)
@@ -165,15 +165,14 @@ void     ft_count_offset(t_game_data *game, int *offset_y, int *offset_x)
 {
     if (game->data->rows * 100 > (int)game->win_y)
     {
-        if ((*offset_y = ((((game->data->player_y) * 100) - (int)game->win_y) / 100)) < 0)
+        if ((*offset_y = ((((game->data->player_y + 5) * 100) - (int)game->win_y) / 100)) < 0)
             *offset_y = 0;
     }
     if (game->data->line_len * 100 > (int)game->win_x)
     {
-        if ((*offset_x = ((((game->data->player_x) * 100) - (int)game->win_x) / 100)) < 0)
+        if ((*offset_x = ((((game->data->player_x + 5) * 100) - (int)game->win_x) / 100)) < 0)
             *offset_x = 0;
     }
-    ft_printf("Offset y: %i, x: %i\n", *offset_y, *offset_x);
 }
 
 void    ft_map_on_window(t_game_data *game)
@@ -187,16 +186,17 @@ void    ft_map_on_window(t_game_data *game)
     offset_y = 0;
     offset_x = 0;
     i = 0;
-    //mlx_set_window_pos(game->mlx, (game->win_x / 3), (game->win_y / 3));
+    
     if (mlx_image_to_window(game->mlx, game->bg_image, 0, 0) < 0)
         ft_free_exit(game);
-    
+    mlx_get_monitor_size(0, &game->win_x, &game->win_y);
+    mlx_set_window_size(game->mlx, game->win_x, game->win_y);
     col_count = 0;
     ft_count_offset(game, &offset_y, &offset_x);
-    while ((i + offset_y) < game->data->rows && i < game->win_y / 100)
+    while ((i + offset_y) < game->data->rows && i - 1 < game->win_y / 100)
     {
         j = 0;
-        while ((j + offset_x) < game->data->line_len && j < game->win_x / 100)
+        while ((j + offset_x) < game->data->line_len && j - 1 < game->win_x / 100)
         {
             if (game->data->map[i + offset_y][j + offset_x] == '1')
             {
@@ -232,7 +232,7 @@ void    ft_map_on_window(t_game_data *game)
         }
         i++;
     }
-    if (mlx_image_to_window(game->mlx, game->player_image, (100*game->data->player_x), (100*(game->data->player_y))) == -1)
+    if (mlx_image_to_window(game->mlx, game->player_image, (100*(game->data->player_x - offset_x)), (100*(game->data->player_y - offset_y))) == -1)
         ft_free_exit(game);
 }
 
@@ -273,6 +273,21 @@ void    ft_delete_collectable(t_game_data *game)
     }
 }
 
+void    ft_adjust_screen(t_game_data *game)
+{
+    if (game->data->rows * 100 > (int)game->win_y || game->data->line_len * 100 > (int)game->win_x)
+    {
+        int offset_y;
+        int offset_x;
+
+        offset_y = 0;
+        offset_x = 0;
+        ft_count_offset(game, &offset_y, &offset_x);
+        if (offset_y > 5 || offset_y > 5)
+            ft_map_on_window(game);
+    }
+}
+
 void    my_keyhook(t_mlx_key_data keydata, void *param)
 {
     t_game_data *game;
@@ -280,7 +295,7 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
 
     game = param;
     temp_moves = game->moves;
-    ft_delete_collectable(game);    
+    ft_delete_collectable(game);
     if (keydata.key == MLX_KEY_W && keydata.action == MLX_RELEASE)
     {
         if (game->data->map[game->data->player_y - 1][game->data->player_x] != '1' && (!(game->data->map[game->data->player_y - 1][game->data->player_x] == 'E' && game->exit_valid == 0)))
@@ -345,8 +360,8 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
             if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
                 ft_game_loop(game);
         }
-        
     }
+    ft_adjust_screen(game);
     if (game->data->collectibles == game->collected_cols)
         {
             mlx_delete_image(game->mlx, game->finish_locked_image);
