@@ -28,10 +28,10 @@ typedef struct s_mlx_key_data
 
 typedef struct s_collectible
 {
-    int     x;
-    int     y;
-    int     enabled;
-    void    *img;
+    int         x;
+    int         y;
+    int         enabled;
+    mlx_image_t *img;
 }   t_collectible;
 
 typedef struct s_game_data
@@ -57,6 +57,7 @@ typedef struct s_game_data
     int             exit_x;
     int             exit_y;
     int             exit_valid;
+    int             collected_cols;
     int32_t         win_y;
     int32_t         win_x;
 }   t_game_data;

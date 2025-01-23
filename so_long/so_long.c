@@ -11,6 +11,34 @@ void    ft_init_images(t_game_data *game);
 void    ft_free_exit(t_game_data *game);
 void    ft_delete_collectable(t_game_data *game);
 void    ft_free_instances(t_game_data *game, int len);
+void    ft_count_offset(t_game_data *game, int *offset_y, int *offset_x);
+
+int main(int argc, char **argv)
+{
+    t_map_data          board;
+    t_game_data         game;
+
+    if (argc != 2 || ft_validate_map(argv[1], &board) == -1)
+    {
+        ft_free_vector(board.map, board.rows);
+        ft_free_vector(board.map_dup, board.rows);
+        return (ft_printf("Error! Map is not valid!\n"));
+    }
+    
+    ft_declare_game_data(&game, &board);    
+    ft_init_mlx_and_textures(&game);
+    ft_init_images(&game);
+    ft_printf("y: %u\tx: %u\n", game.win_y, game.win_x);
+    ft_map_on_window(&game);
+
+    mlx_loop_hook(game.mlx, ft_hook, &game);
+    mlx_key_hook(game.mlx, (void *)&my_keyhook, &game);
+
+    mlx_loop(game.mlx);
+    mlx_terminate(game.mlx);
+    ft_free_vector(board.map, board.rows);
+    return (EXIT_SUCCESS);
+}
 
 void    ft_declare_game_data(t_game_data *game, t_map_data *board)
 {
@@ -34,6 +62,7 @@ void    ft_declare_game_data(t_game_data *game, t_map_data *board)
     game->exit_x = 0;
     game->exit_y = 0;
     game->exit_valid = 0;
+    game->collected_cols = 0;
     mlx_get_monitor_size(0, &game->win_x, &game->win_y);
     game->collectibles_list = malloc(sizeof(t_collectible *) * game->data->collectibles);
     if (!(game->collectibles_list))
@@ -93,54 +122,6 @@ void    ft_init_mlx_and_textures(t_game_data *game)
         ft_free_exit(game);
 }
 
-int main(int argc, char **argv)
-{
-    t_map_data          board;
-    t_game_data         game;
-
-    if (argc != 2 || ft_validate_map(argv[1], &board) == -1)
-    {
-        ft_free_vector(board.map, board.rows);
-        ft_free_vector(board.map_dup, board.rows);
-        return (ft_printf("Error! Map is not valid!\n"));
-    }
-    ft_declare_game_data(&game, &board);
-    ft_init_mlx_and_textures(&game);
-    ft_init_images(&game);
-   
-    ft_map_on_window(&game);
-
-    mlx_loop_hook(game.mlx, ft_hook, &game);
-    mlx_key_hook(game.mlx, (void *)&my_keyhook, &game);
-
-    mlx_loop(game.mlx);
-    mlx_terminate(game.mlx);
-    ft_free_vector(board.map, board.rows);
-    return (EXIT_SUCCESS);
-}
-
-void    ft_free_instances(t_game_data *game, int len)
-{
-    int i;
-
-    i = 0;
-    while (i < len)
-    {
-        free(game->collectibles_list[i]->img);
-        free(game->collectibles_list[i]);
-        i++;
-    }
-    free(game->collectibles_list);
-}
-
-void    ft_free_exit(t_game_data *game)
-{
-    mlx_close_window(game->mlx);
-    mlx_terminate(game->mlx);
-    ft_free_vector(game->data->map, game->data->rows);
-    ft_free_instances(game, game->data->collectibles);
-    exit(ft_printf("Error! Failed to allocate memory1!\n"));
-}
 void    ft_init_images(t_game_data *game)
 {
     if (!(game->bg_image = mlx_texture_to_image(game->mlx, game->bg_texture)))
@@ -164,24 +145,60 @@ void    ft_init_images(t_game_data *game)
     if (!(game->finish_locked_image = mlx_texture_to_image(game->mlx, game->finish_locked_texture)))
         ft_free_exit(game);
     mlx_get_monitor_size(0, &game->win_x, &game->win_y);
-    ft_printf("Window y: %u|\tx: %u\n", game->win_y, game->win_x);
 }
+
+void    ft_free_instances(t_game_data *game, int len)
+{
+    int i;
+
+    i = 0;
+    while (i < len)
+    {
+        free(game->collectibles_list[i]->img);
+        free(game->collectibles_list[i]);
+        i++;
+    }
+    free(game->collectibles_list);
+}
+
+void     ft_count_offset(t_game_data *game, int *offset_y, int *offset_x)
+{
+    if (game->data->rows * 100 > (int)game->win_y)
+    {
+        if ((*offset_y = ((((game->data->player_y) * 100) - (int)game->win_y) / 100)) < 0)
+            *offset_y = 0;
+    }
+    if (game->data->line_len * 100 > (int)game->win_x)
+    {
+        if ((*offset_x = ((((game->data->player_x) * 100) - (int)game->win_x) / 100)) < 0)
+            *offset_x = 0;
+    }
+    ft_printf("Offset y: %i, x: %i\n", *offset_y, *offset_x);
+}
+
 void    ft_map_on_window(t_game_data *game)
 {
     int i;
     int j;
     int col_count;
+    int offset_y;
+    int offset_x;
+
+    offset_y = 0;
+    offset_x = 0;
     i = 0;
+    //mlx_set_window_pos(game->mlx, (game->win_x / 3), (game->win_y / 3));
     if (mlx_image_to_window(game->mlx, game->bg_image, 0, 0) < 0)
         ft_free_exit(game);
-    mlx_set_window_pos(game->mlx, ((game->win_x / 2) * 100), ((game->win_y / 2) * 100));
+    
     col_count = 0;
-    while (i < game->data->rows)
+    ft_count_offset(game, &offset_y, &offset_x);
+    while ((i + offset_y) < game->data->rows && i < game->win_y / 100)
     {
         j = 0;
-        while (j < game->data->line_len)
+        while ((j + offset_x) < game->data->line_len && j < game->win_x / 100)
         {
-            if (game->data->map[i][j] == '1')
+            if (game->data->map[i + offset_y][j + offset_x] == '1')
             {
                 if ((mlx_image_to_window(game->mlx, game->wall_image, j * 100, i * 100)) < 0)
                     ft_free_exit(game);
@@ -190,19 +207,18 @@ void    ft_map_on_window(t_game_data *game)
             {
                 if ((mlx_image_to_window(game->mlx, game->free_image, j * 100, i * 100)) < 0)
                     ft_free_exit(game);
-                if (game->data->map[i][j] == 'C')
+                if (game->data->map[i + offset_y][j + offset_x] == 'C')
                 {
                     
                     mlx_image_to_window(game->mlx, game->collectibles_list[col_count]->img, j * 100, i * 100);
                     if (!game->collectibles_list[col_count]->img)
                     {
-                        ft_printf("HERE!\n");
                         ft_free_exit(game);
                     }
                     game->collectibles_list[col_count]->x = j;
                     game->collectibles_list[col_count++]->y = i;
                 }
-                if (game->data->map[i][j] == 'E')
+                if (game->data->map[i + offset_y][j + offset_x] == 'E')
                 {
                     game->exit_x = game->data->player_x;
                     game->exit_y = game->data->player_y;
@@ -232,36 +248,10 @@ void    ft_game_loop(t_game_data *game)
 void    ft_hook(void *param)
 {
     t_game_data *game;
-    //int i;
-    //int j;
     
     game = param;
     if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))
         mlx_close_window(game->mlx);
-    /*i = 0;
-    while (i < game->data->rows)
-    {
-        j = 0;
-        while (j < game->data->line_len)
-        {
-            if (game->data->map[i][j] == 'C')
-            {
-                mlx_image_to_window(game->mlx, game->collectible_image, j * 100, i * 100);
-            }
-            else if (game->data->map[i][j] == '0')
-                mlx_image_to_window(game->mlx, game->free_image, j * 100, i *100);
-            j++;
-        }
-        i++;
-    }*/
-    /*if (mlx_is_key_down(mlx, MLX_KEY_UP))
-        image->instances[0].y -= 50;
-    if (mlx_is_key_down(mlx, MLX_KEY_DOWN))
-        image->instances[0].y += 50;
-    if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
-        image->instances[0].x -= 50;
-    if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
-        image->instances[0].x += 50;*/
 }
 
 void    ft_delete_collectable(t_game_data *game)
@@ -276,7 +266,7 @@ void    ft_delete_collectable(t_game_data *game)
             && game->collectibles_list[i]->y == game->data->player_y)
         {
             game->collectibles_list[i]->enabled = 0;
-            mlx_delete_image(game->mlx, game->collectibles_list[i]->img);
+            game->collectibles_list[i]->img->instances->enabled = false;
             break;
         }
         i++;
@@ -290,6 +280,7 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
 
     game = param;
     temp_moves = game->moves;
+    ft_delete_collectable(game);    
     if (keydata.key == MLX_KEY_W && keydata.action == MLX_RELEASE)
     {
         if (game->data->map[game->data->player_y - 1][game->data->player_x] != '1' && (!(game->data->map[game->data->player_y - 1][game->data->player_x] == 'E' && game->exit_valid == 0)))
@@ -297,8 +288,7 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
             if (game->data->map[game->data->player_y - 1][game->data->player_x] == 'C')
                 {
                     game->data->map[game->data->player_y - 1][game->data->player_x] = '0';                    
-                    game->data->collectibles--;
-                    ft_printf("Instance x: %u\n", game->player_image->instances->x);
+                    game->collected_cols++;
                 }
 		    game->player_image->instances[0].y -= 100;
             game->data->player_y--;
@@ -314,7 +304,7 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
             if (game->data->map[game->data->player_y + 1][game->data->player_x] == 'C')
                 {
                     game->data->map[game->data->player_y + 1][game->data->player_x] = '0';                   
-                    game->data->collectibles--;
+                    game->collected_cols++;
                 }
 		    game->player_image->instances[0].y += 100;
             game->data->player_y++;
@@ -330,7 +320,7 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
             if (game->data->map[game->data->player_y][game->data->player_x - 1] == 'C')
                 {
                     game->data->map[game->data->player_y][game->data->player_x - 1] = '0';                    
-                    game->data->collectibles--;
+                    game->collected_cols++;
                 }
 		    game->player_image->instances[0].x -= 100;
             game->data->player_x--;
@@ -346,7 +336,7 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
             if (game->data->map[game->data->player_y][game->data->player_x + 1] == 'C')
                 {
                     game->data->map[game->data->player_y][game->data->player_x + 1] = '0';                    
-                    game->data->collectibles--;
+                    game->collected_cols++;
                 }
 		    game->player_image->instances[0].x += 100;
             game->data->player_x++;
@@ -355,16 +345,25 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
             if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
                 ft_game_loop(game);
         }
+        
     }
-    ft_delete_collectable(game);
-    if (game->data->collectibles == 0)
-    {
-        mlx_delete_image(game->mlx, game->finish_locked_image);
-        game->exit_valid = 1;
-    }
+    if (game->data->collectibles == game->collected_cols)
+        {
+            mlx_delete_image(game->mlx, game->finish_locked_image);
+            game->exit_valid = 1;
+        }
     if (temp_moves != game->moves)
     {
         ft_printf("You have made %i moves.\n", game->moves);
         //ft_map_on_window(game);
     }
+}
+
+void    ft_free_exit(t_game_data *game)
+{
+    mlx_close_window(game->mlx);
+    mlx_terminate(game->mlx);
+    ft_free_vector(game->data->map, game->data->rows);
+    ft_free_instances(game, game->data->collectibles);
+    exit(ft_printf("Error! Failed to allocate memory1!\n"));
 }
