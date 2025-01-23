@@ -26,6 +26,14 @@ typedef struct s_mlx_key_data
     modifier_key_t  modifier;
 }   t_mlx_key_data;
 
+typedef struct s_collectible
+{
+    int     x;
+    int     y;
+    int     enabled;
+    void    *img;
+}   t_collectible;
+
 typedef struct s_game_data
 {
     mlx_image_t     *player_image;
@@ -44,6 +52,7 @@ typedef struct s_game_data
     mlx_image_t     *collectible_image;
     mlx_image_t     *finish_locked_image;
     mlx_image_t     *finish_opened_image;
+    t_collectible **collectibles_list;
     int             moves;
     int             exit_x;
     int             exit_y;
@@ -51,6 +60,7 @@ typedef struct s_game_data
     int32_t         win_y;
     int32_t         win_x;
 }   t_game_data;
+
 
 //typedef void (*mlx_keyfunc)(t_mlx_key_data keydata, void *param);
 // Map initilizaton
