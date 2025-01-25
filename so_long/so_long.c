@@ -12,6 +12,7 @@ void    ft_free_exit(t_game_data *game);
 void    ft_delete_collectable(t_game_data *game);
 void    ft_free_instances(t_game_data *game, int len);
 void    ft_count_offset(t_game_data *game, int *offset_y, int *offset_x);
+void    ft_set_window_size(t_game_data *game);
 void    ft_adjust_screen(t_game_data *game);
 void    ft_map_correct_pos(t_game_data *game);
 void    ft_fill_images(t_game_data *game);
@@ -111,8 +112,8 @@ void    ft_init_mlx_and_textures(t_game_data *game)
         puts(mlx_strerror(mlx_errno));
         exit (EXIT_FAILURE);
     }
-    
     mlx_get_monitor_size(0, &game->win_x, &game->win_y);
+    //ft_set_window_size(game);
     game->bg_texture = mlx_load_png("./textures/bg_f.png");
     if (!game->bg_texture)
         ft_free_exit(game);
@@ -141,7 +142,6 @@ void    ft_init_images(t_game_data *game)
     if (!(game->bg_image = mlx_texture_to_image(game->mlx, game->bg_texture)))
         ft_free_exit(game);    
     mlx_resize_image(game->bg_image, (64 * game->data->line_len), (64 * game->data->rows));
-
     if (!(game->player_image = mlx_texture_to_image(game->mlx, game->player_texture)))
         ft_free_exit(game);
     if (!(game->wall_image = mlx_texture_to_image(game->mlx, game->wall_texture)))
@@ -189,10 +189,13 @@ void    ft_fill_images(t_game_data *game)
     int i;
     int j;
     
-    count = 0;
+    count = 1;
     i = 0;
-    if (!(game->image_list[count++]->img = mlx_texture_to_image(game->mlx, game->bg_texture)))
+    
+    if (!(game->image_list[0]->img = mlx_texture_to_image(game->mlx, game->bg_texture)))
         ft_free_exit(game);
+    //game->image_list[count]->img = game->bg_image;
+    mlx_resize_image(game->image_list[0]->img, (64 * game->data->line_len), (64 * game->data->rows));
     while (i < game->data->rows)
     {        
         j = 0;
@@ -202,7 +205,6 @@ void    ft_fill_images(t_game_data *game)
             {
                 if (!(game->image_list[count++]->img = mlx_texture_to_image(game->mlx, game->wall_texture)))
                     ft_free_exit(game);
-                ft_printf("HERE COUNT: %i\n", count);
             }
             else
             {
@@ -214,12 +216,12 @@ void    ft_fill_images(t_game_data *game)
 
                 if (game->data->map[i][j] == 'E')
                 {
-                    if (!(game->image_list[count++]->img = mlx_texture_to_image(game->mlx, game->finish_opened_texture)))
+                    if (!(game->finish_opened_image = mlx_texture_to_image(game->mlx, game->finish_opened_texture)))
                         ft_free_exit(game);
-
-                    if (!(game->image_list[count++]->img = mlx_texture_to_image(game->mlx, game->finish_locked_texture)))
+                    game->image_list[count++]->img = game->finish_opened_image;
+                    if (!(game->finish_locked_image = mlx_texture_to_image(game->mlx, game->finish_locked_texture)))
                         ft_free_exit(game);
-
+                    game->image_list[count++]->img = game->finish_locked_image;
                 }
             }
             j++;
@@ -230,8 +232,8 @@ void    ft_fill_images(t_game_data *game)
     
     if (!(game->image_list[count++]->img = mlx_texture_to_image(game->mlx, game->player_texture)))
         ft_free_exit(game);
-    ft_printf("HERE COUNT FINAL: %i\n", count);
-    ft_printf("HERE2\n");
+    //ft_printf("HERE COUNT FINAL: %i\n", count);
+    //ft_printf("HERE2\n");
 
 }
 
@@ -251,49 +253,48 @@ void    ft_free_instances(t_game_data *game, int len)
 
 void ft_count_offset(t_game_data *game, int *offset_y, int *offset_x)
 {
-    // Initialize offsets to zero
+    // offsets to zero
     *offset_y = 0;
     *offset_x = 0;
 
-    // Calculate vertical offset
+    // vertical offset
     if (game->data->player_y > (int)game->win_y / 64 / 2)
     {
         *offset_y = game->data->player_y - (int)game->win_y / 64 / 2;
-        // Ensure the offset does not exceed the map bounds
+        // ensure the offset does not exceed the map bounds
         if (*offset_y + (int)game->win_y / 64 > game->data->rows)
             *offset_y = game->data->rows - (int)game->win_y / 64;
     }
 
-    // Ensure offset_y is not negative
+    // offset_y is not negative
     if (*offset_y < 0)
         *offset_y = 0;
 
-    // Calculate horizontal offset
+    // horizontal offset
     if (game->data->player_x > (int)game->win_x / 64 / 2)
     {
         *offset_x = game->data->player_x - (int)game->win_x / 64 / 2;
-        // Ensure the offset does not exceed the map bounds
+        // the offset does not exceed the map bounds
         if (*offset_x + (int)game->win_x / 64 > game->data->line_len)
             *offset_x = game->data->line_len - (int)game->win_x / 64;
     }
 
-    // Ensure offset_x is not negative
+    // offset_x is not negative
     if (*offset_x < 0)
         *offset_x = 0;
 
-    // Debugging output
     ft_printf("Player position: y: %i, x: %i\n", game->data->player_y, game->data->player_x);
     ft_printf("Map size: rows: %i, line_len: %i\n", game->data->rows, game->data->line_len);
     ft_printf("Window size: win_y: %i, win_x: %i\n", (int)game->win_y / 64, (int)game->win_x / 64);
     ft_printf("Calculated offsets: offset_y: %i, offset_x: %i\n", *offset_y, *offset_x);
 
-    // Adjust image positions based on offsets
+    // adjust image positions based on offsets
     for (int i = 0; i < game->data->images_count; i++)
     {
         if (game->image_list[i] && game->image_list[i]->img)
         {
-            game->image_list[i]->img->instances[0].y -= *offset_y * 64; // Adjust Y position
-            game->image_list[i]->img->instances[0].x -= *offset_x * 64; // Adjust X position
+            game->image_list[i]->img->instances[0].y -= *offset_y * 64;
+            game->image_list[i]->img->instances[0].x -= *offset_x * 64;
         }
     }
 }
@@ -319,13 +320,13 @@ void    ft_map_on_window(t_game_data *game)
     img_index = 0;
     col_count = 0;
     ft_printf("Images count: %i\n", game->data->images_count);
-    if (mlx_image_to_window(game->mlx, game->image_list[img_index++]->img, game->data->line_len * 64, game->data->rows * 64) < 0)
+    if (mlx_image_to_window(game->mlx, game->bg_image, game->data->line_len * 64, game->data->rows * 64) < 0)
     {
         ft_free_instances(game, game->data->collectibles);
         puts(mlx_strerror(mlx_errno));
         exit (EXIT_FAILURE);
     }
-    ft_printf("HERE\n");
+    game->image_list[img_index++]->img = game->bg_image;
     //while ((i + offset_y) < game->data->rows && i - 1 < game->win_y / 64)
     while (i < game->data->rows)
     {
