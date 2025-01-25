@@ -16,7 +16,7 @@ $(LIBFT): $(LIBFTDIR)
 		$(MAKE) -C $<
 
 $(NAME):
-		$(CC) $(WFLAGS) -o $@ $(SRC) -L./libft -lft ./MLX42/build/libmlx42.a -ldl -lglfw -pthread -lm
+		$(CC) $(WFLAGS) -o $@ $(SRC) -L./libft -lft ./MLX42/build/libmlx42.a -ldl -lglfw -pthread -lm -O3  -msse4.2 -mavx2
 
 clean:
 		$(MAKE) -C $(LIBFTDIR) clean

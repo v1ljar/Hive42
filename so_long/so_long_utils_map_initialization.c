@@ -51,6 +51,7 @@ void    ft_initialize_map_data(t_map_data *board, char *whole_map, int lines)
     board->collectibles = 0;
     board->exit_count = 0;
     board->start_count = 0;
+    board->images_count = 1;
     free(whole_map);
 }
 
@@ -69,6 +70,7 @@ int ft_validate_parts(t_map_data *board)
             {
                 board->collectibles++;
                 j++;
+                board->images_count += 2;
             }
             else if (board->map[i][j] == 'P')
             {
@@ -76,14 +78,19 @@ int ft_validate_parts(t_map_data *board)
                 board->player_x = j;
                 board->player_y = i;
                 j++;
+                board->images_count += 2;
             }
             else if (board->map[i][j] == 'E')
             {
                 board->exit_count++;
                 j++;
+                board->images_count += 3;
             }
             else if (board->map[i][j] == '1' || board->map[i][j] == '0')
+            {
                 j++;
+                board->images_count++;
+            }
             else
                 break;
         }

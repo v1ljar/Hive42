@@ -16,6 +16,7 @@ typedef struct s_map_data
     int     start_count;
     int     player_x;
     int     player_y;
+    int     images_count;
 }   t_map_data;
 
 typedef struct s_mlx_key_data
@@ -33,6 +34,11 @@ typedef struct s_collectible
     int         enabled;
     mlx_image_t *img;
 }   t_collectible;
+
+typedef struct s_image_list
+{
+    mlx_image_t *img;
+}   t_image_list;
 
 typedef struct s_game_data
 {
@@ -52,7 +58,8 @@ typedef struct s_game_data
     mlx_image_t     *collectible_image;
     mlx_image_t     *finish_locked_image;
     mlx_image_t     *finish_opened_image;
-    t_collectible **collectibles_list;
+    t_collectible   **collectibles_list;
+    t_image_list    **image_list;
     int             moves;
     int             exit_x;
     int             exit_y;
