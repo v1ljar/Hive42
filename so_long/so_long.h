@@ -67,6 +67,10 @@ typedef struct s_game_data
     int             collected_cols;
     int32_t         win_y;
     int32_t         win_x;
+    int             player_win_y;
+    int             player_win_x;
+    int             bg_win_y;
+    int             bg_win_x;
 }   t_game_data;
 
 

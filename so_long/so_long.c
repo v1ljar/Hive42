@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     ft_map_correct_pos(&game);
 
     mlx_loop_hook(game.mlx, ft_hook, &game);
-    mlx_key_hook(game.mlx, (void *)&my_keyhook, &game);
+    mlx_key_hook(game.mlx, (void *)my_keyhook, &game);
 
     mlx_loop(game.mlx);
     mlx_terminate(game.mlx);
@@ -66,6 +66,8 @@ void    ft_declare_game_data(t_game_data *game, t_map_data *board)
     game->exit_y = 0;
     game->exit_valid = 0;
     game->collected_cols = 0;
+    game->bg_win_y = 0;
+    game->bg_win_x = 0;
     game->collectibles_list = malloc(sizeof(t_collectible *) * game->data->collectibles);
     if (!(game->collectibles_list))
     {
@@ -253,6 +255,8 @@ void    ft_free_instances(t_game_data *game, int len)
 
 void ft_count_offset(t_game_data *game, int *offset_y, int *offset_x)
 {
+    int i;
+
     // offsets to zero
     *offset_y = 0;
     *offset_x = 0;
@@ -262,8 +266,8 @@ void ft_count_offset(t_game_data *game, int *offset_y, int *offset_x)
     {
         *offset_y = game->data->player_y - (int)game->win_y / 64 / 2;
         // ensure the offset does not exceed the map bounds
-        if (*offset_y + (int)game->win_y / 64 > game->data->rows)
-            *offset_y = game->data->rows - (int)game->win_y / 64;
+        if (*offset_y + ((int)game->win_y / 64) > game->data->rows)
+            *offset_y = game->data->rows - ((int)game->win_y / 64);
     }
 
     // offset_y is not negative
@@ -283,19 +287,27 @@ void ft_count_offset(t_game_data *game, int *offset_y, int *offset_x)
     if (*offset_x < 0)
         *offset_x = 0;
 
-    ft_printf("Player position: y: %i, x: %i\n", game->data->player_y, game->data->player_x);
+    /*ft_printf("Player position: y: %i, x: %i\n", game->data->player_y, game->data->player_x);
     ft_printf("Map size: rows: %i, line_len: %i\n", game->data->rows, game->data->line_len);
     ft_printf("Window size: win_y: %i, win_x: %i\n", (int)game->win_y / 64, (int)game->win_x / 64);
-    ft_printf("Calculated offsets: offset_y: %i, offset_x: %i\n", *offset_y, *offset_x);
+    ft_printf("Calculated offsets: offset_y: %i, offset_x: %i\n", *offset_y, *offset_x);*/
+
+    // save player starting position on screen
+    game->player_win_y = game->data->player_y - *offset_y;
+    game->player_win_x = game->data->player_x - *offset_x;
+    game->bg_win_y = game->bg_win_y - *offset_y;
+    game->bg_win_x = game->bg_win_x - *offset_x;
 
     // adjust image positions based on offsets
-    for (int i = 0; i < game->data->images_count; i++)
+    i = 0;
+    while (i < game->data->images_count)
     {
         if (game->image_list[i] && game->image_list[i]->img)
         {
             game->image_list[i]->img->instances[0].y -= *offset_y * 64;
             game->image_list[i]->img->instances[0].x -= *offset_x * 64;
         }
+        i++;
     }
 }
 
@@ -319,8 +331,7 @@ void    ft_map_on_window(t_game_data *game)
     i = 0;
     img_index = 0;
     col_count = 0;
-    ft_printf("Images count: %i\n", game->data->images_count);
-    if (mlx_image_to_window(game->mlx, game->bg_image, game->data->line_len * 64, game->data->rows * 64) < 0)
+    if (mlx_image_to_window(game->mlx, game->bg_image, 0, 0) < 0)
     {
         ft_free_instances(game, game->data->collectibles);
         puts(mlx_strerror(mlx_errno));
@@ -361,7 +372,7 @@ void    ft_map_on_window(t_game_data *game)
         }
         i++;
     }
-    mlx_image_to_window(game->mlx, game->player_image, (64*(game->data->player_x)), (64*(game->data->player_y)));
+    mlx_image_to_window(game->mlx, game->player_image, (64 * game->data->player_x), (64 * game->data->player_y));
     game->image_list[img_index++]->img = game->player_image;
 }
 
@@ -377,10 +388,53 @@ void    ft_game_loop(t_game_data *game)
 void    ft_hook(void *param)
 {
     t_game_data *game;
-    
+    int         i;
+
     game = param;
-    if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))
-        mlx_close_window(game->mlx);
+    if (mlx_is_key_down(game->mlx, MLX_KEY_W))
+    {
+        if ((game->player_win_y < ((game->win_y / 64) / 4)) && (int)game->image_list[0]->img->instances[0].y < 0)
+        {
+            i = 0;
+            while (i < game->data->images_count)
+                game->image_list[i++]->img->instances[0].y += 64;
+            game->player_win_y++;
+            game->bg_win_y++;
+        }
+    }
+    if (mlx_is_key_down(game->mlx, MLX_KEY_S))
+    {
+        if ((game->player_win_y > ((int)game->win_y / 64) * 3 / 4) && !(game->bg_win_y <= (((int)game->win_y / 64) - game->data->rows)))
+        {
+            i = 0;
+            while (i < game->data->images_count)
+                game->image_list[i++]->img->instances[0].y -= 64;
+            game->player_win_y--;
+            game->bg_win_y--;
+        }
+    }
+    if (mlx_is_key_down(game->mlx, MLX_KEY_A))
+    {
+        if ((game->player_win_x < (game->win_x / 64) / 4) && (int)game->image_list[0]->img->instances[0].x < 0)
+        {
+            i = 0;
+            while (i < game->data->images_count)
+                game->image_list[i++]->img->instances[0].x += 64;
+            game->player_win_x++;
+            game->bg_win_x++;
+        }
+    }
+    if (mlx_is_key_down(game->mlx, MLX_KEY_D))
+    {
+        if ((game->player_win_x > ((int)game->win_x / 64) * 3 / 4) && !(game->bg_win_x <= (((int)game->win_x / 64) - game->data->line_len)))
+        {
+            i = 0;
+            while (i < game->data->images_count)
+                game->image_list[i++]->img->instances[0].x -= 64;
+            game->player_win_x--;
+            game->bg_win_x--;
+        }
+    }
 }
 
 void    ft_delete_collectable(t_game_data *game)
@@ -413,7 +467,7 @@ void    ft_adjust_screen(t_game_data *game)
         offset_x = 0;
         ft_count_offset(game, &offset_y, &offset_x);
         //if (offset_y > 0 || offset_y > 0)
-            //ft_map_on_window(game);
+        //    ft_map_on_window(game);
     }
 }
 
@@ -423,8 +477,11 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
     int         temp_moves;
 
     game = param;
-    temp_moves = game->moves;    
-    if (keydata.key == MLX_KEY_W && keydata.action == MLX_RELEASE)
+    temp_moves = game->moves;   
+    if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+        mlx_close_window(game->mlx); 
+    //if (keydata.key == MLX_KEY_W && keydata.action == MLX_RELEASE)
+    if (mlx_is_key_down(game->mlx, MLX_KEY_W))
     {
         if (game->data->map[game->data->player_y - 1][game->data->player_x] != '1' && (!(game->data->map[game->data->player_y - 1][game->data->player_x] == 'E' && game->exit_valid == 0)))
         {
@@ -434,13 +491,15 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
                     game->collected_cols++;
                 }
 		    game->player_image->instances[0].y -= 64;
+            game->player_win_y--;
             game->data->player_y--;
             game->moves++;
             if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
                 ft_game_loop(game);
         }
     }
-    if (keydata.key == MLX_KEY_S && keydata.action == MLX_RELEASE)
+    //if (keydata.key == MLX_KEY_S && keydata.action == MLX_RELEASE)
+    if (mlx_is_key_down(game->mlx, MLX_KEY_S))
     {
         if (game->data->map[game->data->player_y + 1][game->data->player_x] != '1' && (!(game->data->map[game->data->player_y + 1][game->data->player_x] == 'E' && game->exit_valid == 0)))
         {
@@ -450,14 +509,16 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
                     game->collected_cols++;
                 }
 		    game->player_image->instances[0].y += 64;
+            game->player_win_y++;
             game->data->player_y++;
             game->moves++;
             if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
                 ft_game_loop(game);
         }
     }
-    if (keydata.key == MLX_KEY_A && keydata.action == MLX_RELEASE)
-	{
+    //if (keydata.key == MLX_KEY_A && keydata.action == MLX_RELEASE)
+	if (mlx_is_key_down(game->mlx, MLX_KEY_A))
+    {
         if (game->data->map[game->data->player_y][game->data->player_x - 1] != '1' && (!(game->data->map[game->data->player_y][game->data->player_x - 1] == 'E' && game->exit_valid == 0)))
         {
             if (game->data->map[game->data->player_y][game->data->player_x - 1] == 'C')
@@ -466,14 +527,16 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
                     game->collected_cols++;
                 }
 		    game->player_image->instances[0].x -= 64;
+            game->player_win_x--;
             game->data->player_x--;
             game->moves++;
             if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
                 ft_game_loop(game);
         }
     }
-    if (keydata.key == MLX_KEY_D && keydata.action == MLX_RELEASE)
-	{
+    //if (keydata.key == MLX_KEY_D && keydata.action == MLX_RELEASE)
+	if (mlx_is_key_down(game->mlx, MLX_KEY_D))
+    {
         if (game->data->map[game->data->player_y][game->data->player_x + 1] != '1' && (!(game->data->map[game->data->player_y][game->data->player_x + 1] == 'E' && game->exit_valid == 0)))
         {
             if (game->data->map[game->data->player_y][game->data->player_x + 1] == 'C')
@@ -482,6 +545,7 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
                     game->collected_cols++;
                 }
 		    game->player_image->instances[0].x += 64;
+            game->player_win_x++;
             game->data->player_x++;
             game->moves++;
             
