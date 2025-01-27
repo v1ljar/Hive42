@@ -1,7 +1,6 @@
 #include "so_long.h"
-#include <stdio.h> // For puts!
 
-void    ft_hook(void *param);
+void    ft_adjust_images(void *param);
 void    ft_game_loop(t_game_data *game);
 void    my_keyhook(t_mlx_key_data keydata, void *param);
 void    ft_map_on_window(t_game_data *game);
@@ -10,12 +9,20 @@ void    ft_init_mlx_and_textures(t_game_data *game);
 void    ft_init_images(t_game_data *game);
 void    ft_free_exit(t_game_data *game);
 void    ft_delete_collectable(t_game_data *game);
-void    ft_free_instances(t_game_data *game, int len);
+void    ft_free_collectibles(t_game_data *game, int len);
 void    ft_count_offset(t_game_data *game, int *offset_y, int *offset_x);
-void    ft_set_window_size(t_game_data *game);
-void    ft_adjust_screen(t_game_data *game);
 void    ft_map_correct_pos(t_game_data *game);
-void    ft_fill_images(t_game_data *game);
+void    ft_fill_images_list(t_game_data *game);
+void    ft_free_images_list(t_game_data *game, int len);
+
+void    ft_allocate_collectibles_list(t_game_data *game);
+void    ft_collectible_failed_free(t_game_data *game, int len);
+
+void    ft_init_mlx_failed(t_game_data *game);
+
+void    ft_init_image_list(t_game_data *game);
+void    ft_fill_wall_images(t_game_data *game, int *count);
+void    ft_fill_images_ex_wall(t_game_data *game, int i, int j, int *count);
 
 int main(int argc, char **argv)
 {
@@ -26,7 +33,7 @@ int main(int argc, char **argv)
     {
         ft_free_vector(board.map, board.rows);
         ft_free_vector(board.map_dup, board.rows);
-        return (ft_printf("Error! Map is not valid!\n"));
+        return (ft_printf("Map is not valid! Error\n"), 1);
     }
     ft_declare_game_data(&game, &board);    
     ft_init_mlx_and_textures(&game);
@@ -34,12 +41,12 @@ int main(int argc, char **argv)
     ft_map_on_window(&game);
     ft_map_correct_pos(&game);
 
-    mlx_loop_hook(game.mlx, ft_hook, &game);
+    mlx_loop_hook(game.mlx, ft_adjust_images, &game);
     mlx_key_hook(game.mlx, (void *)my_keyhook, &game);
 
     mlx_loop(game.mlx);
     mlx_terminate(game.mlx);
-    ft_free_vector(board.map, board.rows);
+    ft_free_exit(&game);
     return (EXIT_SUCCESS);
 }
 
@@ -68,54 +75,38 @@ void    ft_declare_game_data(t_game_data *game, t_map_data *board)
     game->collected_cols = 0;
     game->bg_win_y = 0;
     game->bg_win_x = 0;
+    ft_allocate_collectibles_list(game);
+}
+
+void    ft_allocate_collectibles_list(t_game_data *game)
+{
+    int i;
+
+    i = 0;
     game->collectibles_list = malloc(sizeof(t_collectible *) * game->data->collectibles);
     if (!(game->collectibles_list))
     {
-        puts(mlx_strerror(mlx_errno));
-        exit (EXIT_FAILURE);
+        ft_free_vector(game->data->map, game->data->rows);        
+        exit(ft_printf("Collectibles list malloc failed! Error\n"));
     }
-    int i = 0;
     while (i < game->data->collectibles)
     {
         game->collectibles_list[i] = malloc(sizeof(t_collectible));
         if (!(game->collectibles_list[i]))
-        {
-            ft_free_instances(game, i);
-            puts(mlx_strerror(mlx_errno));
-            exit (EXIT_FAILURE);
-        }
+            ft_collectible_failed_free(game, i);
         game->collectibles_list[i]->img = malloc(sizeof(mlx_image_t *));
         if (!(game->collectibles_list[i]->img))
-        {
-            ft_free_instances(game, i);
-            puts(mlx_strerror(mlx_errno));
-            exit (EXIT_FAILURE);
-        }
+            ft_collectible_failed_free(game, i);
         game->collectibles_list[i]->enabled = 1;
         i++;
-    }    
-}
-void ft_set_window_size(t_game_data *game)
-{
-    if (game->data->rows * 64 > (int)game->win_y && game->data->line_len * 64 > (int)game->win_x)
-        mlx_set_window_size(game->mlx, game->win_x, game->win_y);
-    else if (game->data->rows * 64 > (int)game->win_y && game->data->line_len * 64 < (int)game->win_x)
-        mlx_set_window_size(game->mlx, game->data->line_len * 64, game->win_y);
-    else if (game->data->rows * 64 < (int)game->win_y && game->data->line_len * 64 > (int)game->win_x)
-        mlx_set_window_size(game->mlx, game->win_x, game->data->rows * 64);
-    else
-        mlx_set_window_size(game->mlx, game->data->line_len * 64, game->data->rows * 64);
+    }
 }
 
 void    ft_init_mlx_and_textures(t_game_data *game)
 {
     if (!(game->mlx = mlx_init((64 * game->data->line_len), (64 * game->data->rows), "So long GAME", true)))
-    {
-        puts(mlx_strerror(mlx_errno));
-        exit (EXIT_FAILURE);
-    }
+        ft_init_mlx_failed(game);
     mlx_get_monitor_size(0, &game->win_x, &game->win_y);
-    //ft_set_window_size(game);
     game->bg_texture = mlx_load_png("./textures/bg_f.png");
     if (!game->bg_texture)
         ft_free_exit(game);
@@ -141,6 +132,8 @@ void    ft_init_mlx_and_textures(t_game_data *game)
 
 void    ft_init_images(t_game_data *game)
 {
+    int i;
+
     if (!(game->bg_image = mlx_texture_to_image(game->mlx, game->bg_texture)))
         ft_free_exit(game);    
     mlx_resize_image(game->bg_image, (64 * game->data->line_len), (64 * game->data->rows));
@@ -150,7 +143,11 @@ void    ft_init_images(t_game_data *game)
         ft_free_exit(game);
     if (!(game->free_image = mlx_texture_to_image(game->mlx, game->free_texture)))
         ft_free_exit(game);
-    int i = 0;
+    if (!(game->finish_opened_image = mlx_texture_to_image(game->mlx, game->finish_opened_texture)))
+        ft_free_exit(game);
+    if (!(game->finish_locked_image = mlx_texture_to_image(game->mlx, game->finish_locked_texture)))
+        ft_free_exit(game);        
+    i = 0;
     while (i < game->data->collectibles)
     {
         game->collectibles_list[i]->img = mlx_texture_to_image(game->mlx, game->collectible_texture);
@@ -158,16 +155,19 @@ void    ft_init_images(t_game_data *game)
             ft_free_exit(game);
         i++;
     }
-    if (!(game->finish_opened_image = mlx_texture_to_image(game->mlx, game->finish_opened_texture)))
-        ft_free_exit(game);
-    if (!(game->finish_locked_image = mlx_texture_to_image(game->mlx, game->finish_locked_texture)))
-        ft_free_exit(game);
+    ft_init_image_list(game);
+    ft_fill_images_list(game);
+}
+
+void    ft_init_image_list(t_game_data *game)
+{
+    int i;
+
     game->image_list = malloc(sizeof(t_image_list *) * game->data->images_count);
     if (!(game->image_list))
     {
-        ft_free_instances(game, game->data->collectibles);
-        puts(mlx_strerror(mlx_errno));
-        exit (EXIT_FAILURE);
+        ft_free_exit(game);
+        exit(ft_printf("Images list malloc failed! Error\n"));
     }
     i = 0;
     while (i < game->data->images_count)
@@ -176,27 +176,23 @@ void    ft_init_images(t_game_data *game)
         game->image_list[i]->img = malloc(sizeof(mlx_image_t));
         if (!(game->image_list[i])->img)
         {
-            ft_free_instances(game, game->data->collectibles);
-            puts(mlx_strerror(mlx_errno));
-            exit (EXIT_FAILURE);
+            ft_free_exit(game);
+            exit(ft_printf("Images list malloc failed! Error\n"));
         }
         i++;
     }
-    ft_fill_images(game);
 }
 
-void    ft_fill_images(t_game_data *game)
+void    ft_fill_images_list(t_game_data *game)
 {
     int count;
     int i;
     int j;
     
     count = 1;
-    i = 0;
-    
+    i = 0;    
     if (!(game->image_list[0]->img = mlx_texture_to_image(game->mlx, game->bg_texture)))
         ft_free_exit(game);
-    //game->image_list[count]->img = game->bg_image;
     mlx_resize_image(game->image_list[0]->img, (64 * game->data->line_len), (64 * game->data->rows));
     while (i < game->data->rows)
     {        
@@ -204,121 +200,47 @@ void    ft_fill_images(t_game_data *game)
         while (j < game->data->line_len)
         {
             if (game->data->map[i][j] == '1')
-            {
-                if (!(game->image_list[count++]->img = mlx_texture_to_image(game->mlx, game->wall_texture)))
-                    ft_free_exit(game);
-            }
+                ft_fill_wall_images(game, &count);
             else
-            {
-                if (!(game->image_list[count++]->img = mlx_texture_to_image(game->mlx, game->free_texture)))
-                    ft_free_exit(game);
-                if (game->data->map[i][j] == 'C')
-                    if (!(game->image_list[count++]->img = mlx_texture_to_image(game->mlx, game->collectible_texture)))
-                        ft_free_exit(game);
-
-                if (game->data->map[i][j] == 'E')
-                {
-                    if (!(game->finish_opened_image = mlx_texture_to_image(game->mlx, game->finish_opened_texture)))
-                        ft_free_exit(game);
-                    game->image_list[count++]->img = game->finish_opened_image;
-                    if (!(game->finish_locked_image = mlx_texture_to_image(game->mlx, game->finish_locked_texture)))
-                        ft_free_exit(game);
-                    game->image_list[count++]->img = game->finish_locked_image;
-                }
-            }
-            j++;
-            
+                ft_fill_images_ex_wall(game, i, j, &count);
+            j++;            
         }
         i++;
-    }
-    
+    }    
     if (!(game->image_list[count++]->img = mlx_texture_to_image(game->mlx, game->player_texture)))
         ft_free_exit(game);
-    //ft_printf("HERE COUNT FINAL: %i\n", count);
-    //ft_printf("HERE2\n");
-
 }
 
-void    ft_free_instances(t_game_data *game, int len)
+void    ft_fill_wall_images(t_game_data *game, int *count)
 {
-    int i;
+    int len;
 
-    i = 0;
-    while (i < len)
-    {
-        free(game->collectibles_list[i]->img);
-        free(game->collectibles_list[i]);
-        i++;
-    }
-    free(game->collectibles_list);
+    len = *count;
+    if (!(game->image_list[len++]->img = mlx_texture_to_image(game->mlx, game->wall_texture)))
+        ft_free_exit(game);
+    *count = len;
 }
 
-void ft_count_offset(t_game_data *game, int *offset_y, int *offset_x)
+void    ft_fill_images_ex_wall(t_game_data *game, int i, int j, int *count)
 {
-    int i;
+    int len;
 
-    // offsets to zero
-    *offset_y = 0;
-    *offset_x = 0;
-
-    // vertical offset
-    if (game->data->player_y > (int)game->win_y / 64 / 2)
+    len = *count;
+    if (!(game->image_list[len++]->img = mlx_texture_to_image(game->mlx, game->free_texture)))
+        ft_free_exit(game);
+    if (game->data->map[i][j] == 'C')
+        if (!(game->image_list[len++]->img = mlx_texture_to_image(game->mlx, game->collectible_texture)))
+            ft_free_exit(game);
+    if (game->data->map[i][j] == 'E')
     {
-        *offset_y = game->data->player_y - (int)game->win_y / 64 / 2;
-        // ensure the offset does not exceed the map bounds
-        if (*offset_y + ((int)game->win_y / 64) > game->data->rows)
-            *offset_y = game->data->rows - ((int)game->win_y / 64);
+        if (!(game->finish_opened_image = mlx_texture_to_image(game->mlx, game->finish_opened_texture)))
+            ft_free_exit(game);
+        game->image_list[len++]->img = game->finish_opened_image;
+        if (!(game->finish_locked_image = mlx_texture_to_image(game->mlx, game->finish_locked_texture)))
+            ft_free_exit(game);
+        game->image_list[len++]->img = game->finish_locked_image;
     }
-
-    // offset_y is not negative
-    if (*offset_y < 0)
-        *offset_y = 0;
-
-    // horizontal offset
-    if (game->data->player_x > (int)game->win_x / 64 / 2)
-    {
-        *offset_x = game->data->player_x - (int)game->win_x / 64 / 2;
-        // the offset does not exceed the map bounds
-        if (*offset_x + (int)game->win_x / 64 > game->data->line_len)
-            *offset_x = game->data->line_len - (int)game->win_x / 64;
-    }
-
-    // offset_x is not negative
-    if (*offset_x < 0)
-        *offset_x = 0;
-
-    /*ft_printf("Player position: y: %i, x: %i\n", game->data->player_y, game->data->player_x);
-    ft_printf("Map size: rows: %i, line_len: %i\n", game->data->rows, game->data->line_len);
-    ft_printf("Window size: win_y: %i, win_x: %i\n", (int)game->win_y / 64, (int)game->win_x / 64);
-    ft_printf("Calculated offsets: offset_y: %i, offset_x: %i\n", *offset_y, *offset_x);*/
-
-    // save player starting position on screen
-    game->player_win_y = game->data->player_y - *offset_y;
-    game->player_win_x = game->data->player_x - *offset_x;
-    game->bg_win_y = game->bg_win_y - *offset_y;
-    game->bg_win_x = game->bg_win_x - *offset_x;
-
-    // adjust image positions based on offsets
-    i = 0;
-    while (i < game->data->images_count)
-    {
-        if (game->image_list[i] && game->image_list[i]->img)
-        {
-            game->image_list[i]->img->instances[0].y -= *offset_y * 64;
-            game->image_list[i]->img->instances[0].x -= *offset_x * 64;
-        }
-        i++;
-    }
-}
-
-void    ft_map_correct_pos(t_game_data *game)
-{
-    int offset_y;
-    int offset_x;
-
-    offset_y = 0;
-    offset_x = 0;
-    ft_count_offset(game, &offset_y, &offset_x);
+    *count = len;
 }
 
 void    ft_map_on_window(t_game_data *game)
@@ -333,16 +255,13 @@ void    ft_map_on_window(t_game_data *game)
     col_count = 0;
     if (mlx_image_to_window(game->mlx, game->bg_image, 0, 0) < 0)
     {
-        ft_free_instances(game, game->data->collectibles);
-        puts(mlx_strerror(mlx_errno));
-        exit (EXIT_FAILURE);
+        ft_free_collectibles(game, game->data->collectibles);        
+        exit(ft_printf("Backround to the window failed! Error\n"));
     }
     game->image_list[img_index++]->img = game->bg_image;
-    //while ((i + offset_y) < game->data->rows && i - 1 < game->win_y / 64)
     while (i < game->data->rows)
     {
         j = 0;
-        //while ((j + offset_x) < game->data->line_len && j - 1 < game->win_x / 64)
         while (j < game->data->line_len)
         {
             if (game->data->map[i][j] == '1')
@@ -376,16 +295,54 @@ void    ft_map_on_window(t_game_data *game)
     game->image_list[img_index++]->img = game->player_image;
 }
 
-void    ft_game_loop(t_game_data *game)
+void    ft_map_correct_pos(t_game_data *game)
 {
-    ft_printf("SUCCESS!!! You have completed the map with %i moves. Good job!\n", game->moves);
-    mlx_terminate(game->mlx);
-    mlx_close_window(game->mlx);
-    ft_free_vector(game->data->map, game->data->rows);
-    exit (EXIT_SUCCESS);    
+    int offset_y;
+    int offset_x;
+
+    offset_y = 0;
+    offset_x = 0;
+    ft_count_offset(game, &offset_y, &offset_x);
 }
 
-void    ft_hook(void *param)
+void ft_count_offset(t_game_data *game, int *offset_y, int *offset_x)
+{
+    int i;
+
+    if (game->data->player_y > (int)game->win_y / 64)
+    {
+        *offset_y = game->data->player_y - (int)game->win_y / 64;
+        if (*offset_y + ((int)game->win_y / 64) > game->data->rows)
+            *offset_y = game->data->rows - ((int)game->win_y / 64);
+    }
+    if (*offset_y < 0)
+        *offset_y = 0;
+    if (game->data->player_x > (int)game->win_x / 64)
+    {
+        *offset_x = game->data->player_x - (int)game->win_x / 64;
+        if (*offset_x + (int)game->win_x / 64 > game->data->line_len)
+            *offset_x = game->data->line_len - (int)game->win_x / 64;
+    }
+    if (*offset_x < 0)
+        *offset_x = 0;
+    game->player_win_y = game->data->player_y - *offset_y;
+    game->player_win_x = game->data->player_x - *offset_x;
+    game->bg_win_y = game->bg_win_y - *offset_y;
+    game->bg_win_x = game->bg_win_x - *offset_x;
+    // adjust image positions based on offsets
+    i = 0;
+    while (i < game->data->images_count)
+    {
+        if (game->image_list[i] && game->image_list[i]->img)
+        {
+            game->image_list[i]->img->instances[0].y -= *offset_y * 64;
+            game->image_list[i]->img->instances[0].x -= *offset_x * 64;
+        }
+        i++;
+    }
+}
+
+void    ft_adjust_images(void *param)
 {
     t_game_data *game;
     int         i;
@@ -434,40 +391,6 @@ void    ft_hook(void *param)
             game->player_win_x--;
             game->bg_win_x--;
         }
-    }
-}
-
-void    ft_delete_collectable(t_game_data *game)
-{
-    int i;
-
-    i = 0;
-    while (i < game->data->collectibles)
-    {
-        if (game->collectibles_list[i]->enabled == 1
-            && game->collectibles_list[i]->x == game->data->player_x
-            && game->collectibles_list[i]->y == game->data->player_y)
-        {
-            game->collectibles_list[i]->enabled = 0;
-            game->collectibles_list[i]->img->instances->enabled = false;
-            break;
-        }
-        i++;
-    }
-}
-
-void    ft_adjust_screen(t_game_data *game)
-{
-    if (game->data->rows * 64 > (int)game->win_y || game->data->line_len * 64 > (int)game->win_x)
-    {
-        int offset_y;
-        int offset_x;
-
-        offset_y = 0;
-        offset_x = 0;
-        ft_count_offset(game, &offset_y, &offset_x);
-        //if (offset_y > 0 || offset_y > 0)
-        //    ft_map_on_window(game);
     }
 }
 
@@ -567,17 +490,86 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
     }
 }
 
+void    ft_delete_collectable(t_game_data *game)
+{
+    int i;
+
+    i = 0;
+    while (i < game->data->collectibles)
+    {
+        if (game->collectibles_list[i]->enabled == 1
+            && game->collectibles_list[i]->x == game->data->player_x
+            && game->collectibles_list[i]->y == game->data->player_y)
+        {
+            game->collectibles_list[i]->enabled = 0;
+            game->collectibles_list[i]->img->instances->enabled = false;
+            break;
+        }
+        i++;
+    }
+}
+
+void    ft_game_loop(t_game_data *game)
+{
+    ft_printf("SUCCESS!!! You have completed the map with %i moves. Good job!\n", game->moves);
+    mlx_terminate(game->mlx);
+    mlx_close_window(game->mlx);
+    ft_free_vector(game->data->map, game->data->rows);
+    exit (EXIT_SUCCESS);    
+}
+
 void    ft_free_exit(t_game_data *game)
 {
     mlx_close_window(game->mlx);
     mlx_terminate(game->mlx);
     ft_free_vector(game->data->map, game->data->rows);
-    ft_free_instances(game, game->data->collectibles);
+    ft_free_collectibles(game, game->data->collectibles);
+    ft_free_images_list(game, game->data->images_count);    
+    exit(ft_printf("Error! Failed to allocate memory!\n"));
+}
+
+void    ft_free_images_list(t_game_data *game, int len)
+{
     int i = 0;
-    while (i < game->data->images_count)
+
+    while (i < len)
     {
         free(game->image_list[i++]->img);
     }
     free(game->image_list);
-    exit(ft_printf("Error! Failed to allocate memory!\n"));
+}
+
+
+void    ft_free_collectibles(t_game_data *game, int len)
+{
+    int i;
+
+    i = 0;
+    while (i < len)
+    {
+        free(game->collectibles_list[i]->img);
+        free(game->collectibles_list[i]);
+        i++;
+    }
+    free(game->collectibles_list);
+}
+
+void    ft_collectible_failed_free(t_game_data *game, int len)
+{
+    ft_free_vector(game->data->map, game->data->rows);
+    ft_free_collectibles(game, len);            
+    exit(ft_printf("Collectibles list malloc failed! Error\n"));
+}
+
+void    ft_init_mlx_failed(t_game_data *game)
+{
+    int i;
+    
+    i = 0;
+    ft_free_vector(game->data->map, game->data->rows);
+    ft_free_collectibles(game, game->data->collectibles);    
+    while (i < game->data->images_count)
+        free(game->image_list[i++]->img);
+    free(game->image_list);        
+    exit(ft_printf("Window initialization failed! Error\n"));
 }

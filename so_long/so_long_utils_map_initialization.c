@@ -10,9 +10,6 @@ int ft_validate_map(char *map_path, t_map_data *board)
         return (-1);
     if ((ft_validate_path(board) == -1))
         return (-1);
-    int i = 0;
-    while(i < board->rows)
-        ft_printf("%s\n", board->map[i++]);
     return (0);
 }
 
@@ -122,7 +119,5 @@ int     ft_validate_amount(t_map_data *b)
         }
         i++;
     }
-    ft_printf("Exits: %i\tStarts: %i\tCollectibles: %i\tRows: %i\tLine len:%i\n", b->exit_count, b->start_count, b->collectibles, b->rows, b->line_len);
-    ft_printf("Player pos: x = %i and y = %i\n", b->player_x, b->player_y);
     return (0);
 }
