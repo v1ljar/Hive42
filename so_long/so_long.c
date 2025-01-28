@@ -1,17 +1,35 @@
 #include "so_long.h"
 
 void    ft_adjust_images(void *param);
-void    ft_game_loop(t_game_data *game);
+void    ft_adjust_image_w(t_game_data *game);
+void    ft_adjust_image_s(t_game_data *game);
+void    ft_adjust_image_a(t_game_data *game);
+void    ft_adjust_image_d(t_game_data *game);
+
+void    ft_game_loop_exit(t_game_data *game);
+
 void    my_keyhook(t_mlx_key_data keydata, void *param);
+void    ft_keypress_w(t_game_data *game);
+void    ft_keypress_s(t_game_data *game);
+void    ft_keypress_a(t_game_data *game);
+void    ft_keypress_d(t_game_data *game);
+void    ft_delete_collectable(t_game_data *game);
+void    ft_escape_exit(t_game_data *game);
+
 void    ft_map_on_window(t_game_data *game);
 void    ft_declare_game_data(t_game_data *game, t_map_data *board);
 void    ft_init_mlx_and_textures(t_game_data *game);
 void    ft_init_images(t_game_data *game);
 void    ft_free_exit(t_game_data *game);
-void    ft_delete_collectable(t_game_data *game);
+
 void    ft_free_collectibles(t_game_data *game, int len);
-void    ft_count_offset(t_game_data *game, int *offset_y, int *offset_x);
+
 void    ft_map_correct_pos(t_game_data *game);
+void    ft_count_offset(t_game_data *game);
+void    ft_horizontal_offset(t_game_data *game);
+void    ft_vertical_offset(t_game_data *game);
+
+
 void    ft_fill_images_list(t_game_data *game);
 void    ft_free_images_list(t_game_data *game, int len);
 
@@ -23,6 +41,9 @@ void    ft_init_mlx_failed(t_game_data *game);
 void    ft_init_image_list(t_game_data *game);
 void    ft_fill_wall_images(t_game_data *game, int *count);
 void    ft_fill_images_ex_wall(t_game_data *game, int i, int j, int *count);
+
+void    ft_draw_map(t_game_data *game, int y, int x, int *index);
+void    ft_init_exit_pos(t_game_data *game, int x, int y);
 
 int main(int argc, char **argv)
 {
@@ -45,8 +66,10 @@ int main(int argc, char **argv)
     mlx_key_hook(game.mlx, (void *)my_keyhook, &game);
 
     mlx_loop(game.mlx);
-    ft_free_exit(&game);
-    return (EXIT_SUCCESS);
+    mlx_close_window(game.mlx);
+    mlx_terminate(game.mlx);
+    ft_free_vector(game.data->map, game.data->rows);
+    return(ft_printf("Exited the game!\n"));
 }
 
 void    ft_declare_game_data(t_game_data *game, t_map_data *board)
@@ -176,26 +199,26 @@ void    ft_init_image_list(t_game_data *game)
 void    ft_fill_images_list(t_game_data *game)
 {
     int count;
-    int i;
-    int j;
+    int y;
+    int x;
     
     count = 1;
-    i = 0;    
+    y = 0;    
     if (!(game->image_list[0]->img = mlx_texture_to_image(game->mlx, game->bg_texture)))
         ft_free_exit(game);
     //mlx_resize_image(game->image_list[0]->img, (64 * game->data->line_len), (64 * game->data->rows));
-    while (i < game->data->rows)
+    while (y < game->data->rows)
     {        
-        j = 0;
-        while (j < game->data->line_len)
+        x = 0;
+        while (x < game->data->line_len)
         {
-            if (game->data->map[i][j] == '1')
+            if (game->data->map[y][x] == '1')
                 ft_fill_wall_images(game, &count);
             else
-                ft_fill_images_ex_wall(game, i, j, &count);
-            j++;            
+                ft_fill_images_ex_wall(game, y, x, &count);
+            x++;            
         }
-        i++;
+        y++;
     }    
     if (!(game->image_list[count++]->img = mlx_texture_to_image(game->mlx, game->player_texture)))
         ft_free_exit(game);
@@ -211,17 +234,17 @@ void    ft_fill_wall_images(t_game_data *game, int *count)
     *count = len;
 }
 
-void    ft_fill_images_ex_wall(t_game_data *game, int i, int j, int *count)
+void    ft_fill_images_ex_wall(t_game_data *game, int y, int x, int *count)
 {
     int len;
 
     len = *count;
     if (!(game->image_list[len++]->img = mlx_texture_to_image(game->mlx, game->free_texture)))
         ft_free_exit(game);
-    if (game->data->map[i][j] == 'C')
+    if (game->data->map[y][x] == 'C')
         if (!(game->image_list[len++]->img = mlx_texture_to_image(game->mlx, game->collectible_texture)))
             ft_free_exit(game);
-    if (game->data->map[i][j] == 'E')
+    if (game->data->map[y][x] == 'E')
     {
         if (!(game->finish_opened_image = mlx_texture_to_image(game->mlx, game->finish_opened_texture)))
             ft_free_exit(game);
@@ -233,53 +256,63 @@ void    ft_fill_images_ex_wall(t_game_data *game, int i, int j, int *count)
     *count = len;
 }
 
-void    ft_map_on_window(t_game_data *game)
+void    ft_init_exit_pos(t_game_data *game, int x, int y)
 {
-    int i;
-    int j;
-    int col_count;
+    game->exit_x = x;
+    game->exit_y = y; 
+}
+
+void    ft_draw_map(t_game_data *game, int y, int x, int *index)
+{
     int img_index;
 
-    i = 0;
+    img_index = *index;
+    if (game->data->map[y][x] == '1')
+        mlx_image_to_window(game->mlx, game->image_list[img_index++]->img, x * 64, y * 64);
+    else
+    {
+        mlx_image_to_window(game->mlx, game->image_list[img_index++]->img, x * 64, y * 64);
+        if (game->data->map[y][x] == 'C')
+        {            
+            mlx_image_to_window(game->mlx, game->collectibles_list[game->col_count]->img, x * 64, y * 64);
+            game->image_list[img_index++]->img = game->collectibles_list[game->col_count]->img;
+            game->collectibles_list[game->col_count]->x = x;
+            game->collectibles_list[game->col_count++]->y = y;
+        }
+        if (game->data->map[y][x] == 'E')
+        {
+            ft_init_exit_pos(game, x, y);
+            mlx_image_to_window(game->mlx, game->image_list[img_index++]->img, x * 64, y * 64);
+            mlx_image_to_window(game->mlx, game->image_list[img_index++]->img, x * 64, y * 64);
+        }
+    }
+    *index = img_index;
+}
+
+void    ft_map_on_window(t_game_data *game)
+{
+    int y;
+    int x;
+    int img_index;
+
+    y = 0;
     img_index = 0;
-    col_count = 0;
+    game->col_count = 0;
     if (mlx_image_to_window(game->mlx, game->bg_image, 0, 0) < 0)
     {
         ft_free_collectibles(game, game->data->collectibles);        
         exit(ft_printf("Backround to the window failed! Error\n"));
     }
     game->image_list[img_index++]->img = game->bg_image;
-    while (i < game->data->rows)
+    while (y < game->data->rows)
     {
-        j = 0;
-        while (j < game->data->line_len)
+        x = 0;
+        while (x < game->data->line_len)
         {
-            if (game->data->map[i][j] == '1')
-            {
-                mlx_image_to_window(game->mlx, game->image_list[img_index++]->img, j * 64, i * 64);
-            }
-            else
-            {
-                mlx_image_to_window(game->mlx, game->image_list[img_index++]->img, j * 64, i * 64);
-                if (game->data->map[i][j] == 'C')
-                {
-                    
-                    mlx_image_to_window(game->mlx, game->collectibles_list[col_count]->img, j * 64, i * 64);
-                    game->image_list[img_index++]->img = game->collectibles_list[col_count]->img;
-                    game->collectibles_list[col_count]->x = j;
-                    game->collectibles_list[col_count++]->y = i;
-                }
-                if (game->data->map[i][j] == 'E')
-                {
-                    game->exit_x = j;
-                    game->exit_y = i;
-                    mlx_image_to_window(game->mlx, game->image_list[img_index++]->img, j * 64, i * 64);
-                    mlx_image_to_window(game->mlx, game->image_list[img_index++]->img, j * 64, i * 64);
-                }
-            }
-            j++;
+            ft_draw_map(game, y, x, &img_index);
+            x++;
         }
-        i++;
+        y++;
     }
     mlx_image_to_window(game->mlx, game->player_image, (64 * game->data->player_x), (64 * game->data->player_y));
     game->image_list[img_index++]->img = game->player_image;
@@ -287,45 +320,48 @@ void    ft_map_on_window(t_game_data *game)
 
 void    ft_map_correct_pos(t_game_data *game)
 {
-    int offset_y;
-    int offset_x;
-
-    offset_y = 0;
-    offset_x = 0;
-    ft_count_offset(game, &offset_y, &offset_x);
+    game->offset_y = 0;
+    game->offset_x = 0;
+    ft_count_offset(game);
 }
 
-void ft_count_offset(t_game_data *game, int *offset_y, int *offset_x)
+void    ft_vertical_offset(t_game_data *game)
+{
+    game->offset_y = game->data->player_y - (int)game->win_y / 64;
+    if (game->offset_y + ((int)game->win_y / 64) > game->data->rows)
+        game->offset_y = game->data->rows - ((int)game->win_y / 64);
+}
+
+void    ft_horizontal_offset(t_game_data *game)
+{
+    game->offset_x = game->data->player_x - (int)game->win_x / 64;
+    if (game->offset_x + (int)game->win_x / 64 > game->data->line_len)
+        game->offset_x = game->data->line_len - (int)game->win_x / 64;
+}
+
+void ft_count_offset(t_game_data *game)
 {
     int i;
 
     if (game->data->player_y > (int)game->win_y / 64)
-    {
-        *offset_y = game->data->player_y - (int)game->win_y / 64;
-        if (*offset_y + ((int)game->win_y / 64) > game->data->rows)
-            *offset_y = game->data->rows - ((int)game->win_y / 64);
-    }
-    if (*offset_y < 0)
-        *offset_y = 0;
+        ft_vertical_offset(game);
+    if (game->offset_y < 0)
+        game->offset_y = 0;
     if (game->data->player_x > (int)game->win_x / 64)
-    {
-        *offset_x = game->data->player_x - (int)game->win_x / 64;
-        if (*offset_x + (int)game->win_x / 64 > game->data->line_len)
-            *offset_x = game->data->line_len - (int)game->win_x / 64;
-    }
-    if (*offset_x < 0)
-        *offset_x = 0;
-    game->player_win_y = game->data->player_y - *offset_y;
-    game->player_win_x = game->data->player_x - *offset_x;
-    game->bg_win_y = game->bg_win_y - *offset_y;
-    game->bg_win_x = game->bg_win_x - *offset_x;
+        ft_horizontal_offset(game);
+    if (game->offset_x < 0)
+        game->offset_x = 0;
+    game->player_win_y = game->data->player_y - game->offset_y;
+    game->player_win_x = game->data->player_x - game->offset_x;
+    game->bg_win_y = game->bg_win_y - game->offset_y;
+    game->bg_win_x = game->bg_win_x - game->offset_x;
     i = 0;
     while (i < game->data->images_count)
     {
         if (game->image_list[i] && game->image_list[i]->img)
         {
-            game->image_list[i]->img->instances[0].y -= *offset_y * 64;
-            game->image_list[i]->img->instances[0].x -= *offset_x * 64;
+            game->image_list[i]->img->instances[0].y -= game->offset_y * 64;
+            game->image_list[i]->img->instances[0].x -= game->offset_x * 64;
         }
         i++;
     }
@@ -334,53 +370,72 @@ void ft_count_offset(t_game_data *game, int *offset_y, int *offset_x)
 void    ft_adjust_images(void *param)
 {
     t_game_data *game;
-    int         i;
 
     game = param;
     if (mlx_is_key_down(game->mlx, MLX_KEY_W))
     {
         if ((game->player_win_y < ((game->win_y / 64) / 4)) && (int)game->image_list[0]->img->instances[0].y < 0)
-        {
-            i = 0;
-            while (i < game->data->images_count)
-                game->image_list[i++]->img->instances[0].y += 64;
-            game->player_win_y++;
-            game->bg_win_y++;
-        }
+            ft_adjust_image_w(game);
     }
     if (mlx_is_key_down(game->mlx, MLX_KEY_S))
     {
         if ((game->player_win_y > ((int)game->win_y / 64) * 3 / 4) && !(game->bg_win_y <= (((int)game->win_y / 64) - game->data->rows)))
-        {
-            i = 0;
-            while (i < game->data->images_count)
-                game->image_list[i++]->img->instances[0].y -= 64;
-            game->player_win_y--;
-            game->bg_win_y--;
-        }
+            ft_adjust_image_s(game);
     }
     if (mlx_is_key_down(game->mlx, MLX_KEY_A))
     {
         if ((game->player_win_x < (game->win_x / 64) / 4) && (int)game->image_list[0]->img->instances[0].x < 0)
-        {
-            i = 0;
-            while (i < game->data->images_count)
-                game->image_list[i++]->img->instances[0].x += 64;
-            game->player_win_x++;
-            game->bg_win_x++;
-        }
+            ft_adjust_image_a(game);
     }
     if (mlx_is_key_down(game->mlx, MLX_KEY_D))
     {
         if ((game->player_win_x > ((int)game->win_x / 64) * 3 / 4) && !(game->bg_win_x <= (((int)game->win_x / 64) - game->data->line_len)))
-        {
-            i = 0;
-            while (i < game->data->images_count)
-                game->image_list[i++]->img->instances[0].x -= 64;
-            game->player_win_x--;
-            game->bg_win_x--;
-        }
+            ft_adjust_image_d(game);
     }
+}
+
+void    ft_adjust_image_w(t_game_data *game)
+{
+    int i;
+
+    i = 0;
+    while (i < game->data->images_count)
+        game->image_list[i++]->img->instances[0].y += 64;
+    game->player_win_y++;
+    game->bg_win_y++;
+}
+
+void    ft_adjust_image_s(t_game_data *game)
+{
+    int i;
+
+    i = 0;
+    while (i < game->data->images_count)
+        game->image_list[i++]->img->instances[0].y -= 64;
+    game->player_win_y--;
+    game->bg_win_y--;
+}
+
+void    ft_adjust_image_a(t_game_data *game)
+{
+    int i;
+
+    i = 0;
+    while (i < game->data->images_count)
+        game->image_list[i++]->img->instances[0].x += 64;
+    game->player_win_x++;
+    game->bg_win_x++;
+}
+
+void    ft_adjust_image_d(t_game_data *game)
+{
+    int i;
+
+    i = 0;
+    while (i < game->data->images_count)
+        game->image_list[i++]->img->instances[0].x -= 64;
+    game->player_win_x--;
+    game->bg_win_x--;
 }
 
 void    my_keyhook(t_mlx_key_data keydata, void *param)
@@ -391,100 +446,105 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
     game = param;
     temp_moves = game->moves;   
     if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-    {
-        mlx_close_window(game->mlx);
-        mlx_terminate(game->mlx);
-        ft_free_vector(game->data->map, game->data->rows);
-        //ft_free_collectibles(game, game->data->collectibles);
-        //ft_free_images_list(game, game->data->images_count);
-        exit(ft_printf("Game was closed with ESC!\n"));
-    }
-        
-    //if (keydata.key == MLX_KEY_W && keydata.action == MLX_RELEASE)
+        ft_escape_exit(game);    
     if (mlx_is_key_down(game->mlx, MLX_KEY_W))
-    {
-        if (game->data->map[game->data->player_y - 1][game->data->player_x] != '1' && (!(game->data->map[game->data->player_y - 1][game->data->player_x] == 'E' && game->exit_valid == 0)))
-        {
-            if (game->data->map[game->data->player_y - 1][game->data->player_x] == 'C')
-                {
-                    game->data->map[game->data->player_y - 1][game->data->player_x] = '0';                    
-                    game->collected_cols++;
-                }
-		    game->player_image->instances[0].y -= 64;
-            game->player_win_y--;
-            game->data->player_y--;
-            game->moves++;
-            if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
-                ft_game_loop(game);
-        }
-    }
-    //if (keydata.key == MLX_KEY_S && keydata.action == MLX_RELEASE)
+        ft_keypress_w(game);
     if (mlx_is_key_down(game->mlx, MLX_KEY_S))
     {
-        if (game->data->map[game->data->player_y + 1][game->data->player_x] != '1' && (!(game->data->map[game->data->player_y + 1][game->data->player_x] == 'E' && game->exit_valid == 0)))
-        {
-            if (game->data->map[game->data->player_y + 1][game->data->player_x] == 'C')
-                {
-                    game->data->map[game->data->player_y + 1][game->data->player_x] = '0';                   
-                    game->collected_cols++;
-                }
-		    game->player_image->instances[0].y += 64;
-            game->player_win_y++;
-            game->data->player_y++;
-            game->moves++;
-            if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
-                ft_game_loop(game);
-        }
+        ft_keypress_s(game);
     }
-    //if (keydata.key == MLX_KEY_A && keydata.action == MLX_RELEASE)
 	if (mlx_is_key_down(game->mlx, MLX_KEY_A))
-    {
-        if (game->data->map[game->data->player_y][game->data->player_x - 1] != '1' && (!(game->data->map[game->data->player_y][game->data->player_x - 1] == 'E' && game->exit_valid == 0)))
-        {
-            if (game->data->map[game->data->player_y][game->data->player_x - 1] == 'C')
-                {
-                    game->data->map[game->data->player_y][game->data->player_x - 1] = '0';                    
-                    game->collected_cols++;
-                }
-		    game->player_image->instances[0].x -= 64;
-            game->player_win_x--;
-            game->data->player_x--;
-            game->moves++;
-            if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
-                ft_game_loop(game);
-        }
-    }
-    //if (keydata.key == MLX_KEY_D && keydata.action == MLX_RELEASE)
+        ft_keypress_a(game);
 	if (mlx_is_key_down(game->mlx, MLX_KEY_D))
-    {
-        if (game->data->map[game->data->player_y][game->data->player_x + 1] != '1' && (!(game->data->map[game->data->player_y][game->data->player_x + 1] == 'E' && game->exit_valid == 0)))
-        {
-            if (game->data->map[game->data->player_y][game->data->player_x + 1] == 'C')
-                {
-                    game->data->map[game->data->player_y][game->data->player_x + 1] = '0';                    
-                    game->collected_cols++;
-                }
-		    game->player_image->instances[0].x += 64;
-            game->player_win_x++;
-            game->data->player_x++;
-            game->moves++;
-            
-            if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
-                ft_game_loop(game);
-        }
-    }
-    ft_delete_collectable(game);
-    //ft_adjust_screen(game);
+        ft_keypress_d(game);    
     if (game->data->collectibles == game->collected_cols)
         {
             mlx_delete_image(game->mlx, game->finish_locked_image);
             game->exit_valid = 1;
         }
     if (temp_moves != game->moves)
-    {
         ft_printf("You have made %i moves.\n", game->moves);
-        //ft_map_on_window(game);
+    ft_delete_collectable(game);
+}
+
+void    ft_keypress_w(t_game_data *game)
+{
+    if (game->data->map[game->data->player_y - 1][game->data->player_x] != '1' && (!(game->data->map[game->data->player_y - 1][game->data->player_x] == 'E' && game->exit_valid == 0)))
+    {
+        if (game->data->map[game->data->player_y - 1][game->data->player_x] == 'C')
+            {
+                game->data->map[game->data->player_y - 1][game->data->player_x] = '0';                    
+                game->collected_cols++;
+            }
+        game->player_image->instances[0].y -= 64;
+        game->player_win_y--;
+        game->data->player_y--;
+        game->moves++;
+        if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
+            ft_game_loop_exit(game);
     }
+}
+
+void    ft_keypress_s(t_game_data *game)
+{
+    if (game->data->map[game->data->player_y + 1][game->data->player_x] != '1' && (!(game->data->map[game->data->player_y + 1][game->data->player_x] == 'E' && game->exit_valid == 0)))
+    {
+        if (game->data->map[game->data->player_y + 1][game->data->player_x] == 'C')
+            {
+                game->data->map[game->data->player_y + 1][game->data->player_x] = '0';                   
+                game->collected_cols++;
+            }
+        game->player_image->instances[0].y += 64;
+        game->player_win_y++;
+        game->data->player_y++;
+        game->moves++;
+        if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
+            ft_game_loop_exit(game);
+    }
+}
+
+void    ft_keypress_a(t_game_data *game)
+{
+    if (game->data->map[game->data->player_y][game->data->player_x - 1] != '1' && (!(game->data->map[game->data->player_y][game->data->player_x - 1] == 'E' && game->exit_valid == 0)))
+    {
+        if (game->data->map[game->data->player_y][game->data->player_x - 1] == 'C')
+            {
+                game->data->map[game->data->player_y][game->data->player_x - 1] = '0';                    
+                game->collected_cols++;
+            }
+        game->player_image->instances[0].x -= 64;
+        game->player_win_x--;
+        game->data->player_x--;
+        game->moves++;
+        if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
+            ft_game_loop_exit(game);
+    }
+}
+
+void    ft_keypress_d(t_game_data *game)
+{
+    if (game->data->map[game->data->player_y][game->data->player_x + 1] != '1' && (!(game->data->map[game->data->player_y][game->data->player_x + 1] == 'E' && game->exit_valid == 0)))
+    {
+        if (game->data->map[game->data->player_y][game->data->player_x + 1] == 'C')
+            {
+                game->data->map[game->data->player_y][game->data->player_x + 1] = '0';                    
+                game->collected_cols++;
+            }
+        game->player_image->instances[0].x += 64;
+        game->player_win_x++;
+        game->data->player_x++;
+        game->moves++;        
+        if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
+            ft_game_loop_exit(game);
+    }
+}
+
+void    ft_escape_exit(t_game_data *game)
+{
+    mlx_close_window(game->mlx);
+    mlx_terminate(game->mlx);
+    ft_free_vector(game->data->map, game->data->rows);
+    exit(ft_printf("Game was closed with ESC!\n"));
 }
 
 void    ft_delete_collectable(t_game_data *game)
@@ -506,14 +566,12 @@ void    ft_delete_collectable(t_game_data *game)
     }
 }
 
-void    ft_game_loop(t_game_data *game)
+void    ft_game_loop_exit(t_game_data *game)
 {
     mlx_close_window(game->mlx);
     mlx_terminate(game->mlx);
-    ft_free_vector(game->data->map, game->data->rows);
-    //ft_free_collectibles(game, game->data->collectibles);
-    //ft_free_images_list(game, game->data->images_count - 1); 
-    
+    ft_printf("Collectibles collected: %i\n", game->data->collectibles);
+    ft_free_vector(game->data->map, game->data->rows);   
     exit(ft_printf("SUCCESS!!! You have completed the map with %i moves. Good job!\n", game->moves));    
 }
 

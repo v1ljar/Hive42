@@ -71,6 +71,9 @@ typedef struct s_game_data
     int             player_win_x;
     int             bg_win_y;
     int             bg_win_x;
+    int             col_count;
+    int             offset_y;
+    int             offset_x;
 }   t_game_data;
 
 
