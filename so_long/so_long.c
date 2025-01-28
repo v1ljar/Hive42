@@ -45,7 +45,6 @@ int main(int argc, char **argv)
     mlx_key_hook(game.mlx, (void *)my_keyhook, &game);
 
     mlx_loop(game.mlx);
-    mlx_terminate(game.mlx);
     ft_free_exit(&game);
     return (EXIT_SUCCESS);
 }
@@ -93,9 +92,6 @@ void    ft_allocate_collectibles_list(t_game_data *game)
     {
         game->collectibles_list[i] = malloc(sizeof(t_collectible));
         if (!(game->collectibles_list[i]))
-            ft_collectible_failed_free(game, i);
-        game->collectibles_list[i]->img = malloc(sizeof(mlx_image_t *));
-        if (!(game->collectibles_list[i]->img))
             ft_collectible_failed_free(game, i);
         game->collectibles_list[i]->enabled = 1;
         i++;
@@ -172,13 +168,7 @@ void    ft_init_image_list(t_game_data *game)
     i = 0;
     while (i < game->data->images_count)
     {
-        game->image_list[i] = malloc(sizeof(t_image_list *));
-        game->image_list[i]->img = malloc(sizeof(mlx_image_t));
-        if (!(game->image_list[i])->img)
-        {
-            ft_free_exit(game);
-            exit(ft_printf("Images list malloc failed! Error\n"));
-        }
+        game->image_list[i] = malloc(sizeof(t_image_list));
         i++;
     }
 }
@@ -193,7 +183,7 @@ void    ft_fill_images_list(t_game_data *game)
     i = 0;    
     if (!(game->image_list[0]->img = mlx_texture_to_image(game->mlx, game->bg_texture)))
         ft_free_exit(game);
-    mlx_resize_image(game->image_list[0]->img, (64 * game->data->line_len), (64 * game->data->rows));
+    //mlx_resize_image(game->image_list[0]->img, (64 * game->data->line_len), (64 * game->data->rows));
     while (i < game->data->rows)
     {        
         j = 0;
@@ -329,7 +319,6 @@ void ft_count_offset(t_game_data *game, int *offset_y, int *offset_x)
     game->player_win_x = game->data->player_x - *offset_x;
     game->bg_win_y = game->bg_win_y - *offset_y;
     game->bg_win_x = game->bg_win_x - *offset_x;
-    // adjust image positions based on offsets
     i = 0;
     while (i < game->data->images_count)
     {
@@ -402,7 +391,15 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
     game = param;
     temp_moves = game->moves;   
     if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-        mlx_close_window(game->mlx); 
+    {
+        mlx_close_window(game->mlx);
+        mlx_terminate(game->mlx);
+        ft_free_vector(game->data->map, game->data->rows);
+        //ft_free_collectibles(game, game->data->collectibles);
+        //ft_free_images_list(game, game->data->images_count);
+        exit(ft_printf("Game was closed with ESC!\n"));
+    }
+        
     //if (keydata.key == MLX_KEY_W && keydata.action == MLX_RELEASE)
     if (mlx_is_key_down(game->mlx, MLX_KEY_W))
     {
@@ -511,20 +508,22 @@ void    ft_delete_collectable(t_game_data *game)
 
 void    ft_game_loop(t_game_data *game)
 {
-    ft_printf("SUCCESS!!! You have completed the map with %i moves. Good job!\n", game->moves);
-    mlx_terminate(game->mlx);
     mlx_close_window(game->mlx);
+    mlx_terminate(game->mlx);
     ft_free_vector(game->data->map, game->data->rows);
-    exit (EXIT_SUCCESS);    
+    //ft_free_collectibles(game, game->data->collectibles);
+    //ft_free_images_list(game, game->data->images_count - 1); 
+    
+    exit(ft_printf("SUCCESS!!! You have completed the map with %i moves. Good job!\n", game->moves));    
 }
 
 void    ft_free_exit(t_game_data *game)
 {
     mlx_close_window(game->mlx);
-    mlx_terminate(game->mlx);
+    mlx_terminate(game->mlx); 
     ft_free_vector(game->data->map, game->data->rows);
-    ft_free_collectibles(game, game->data->collectibles);
-    ft_free_images_list(game, game->data->images_count);    
+    //ft_free_collectibles(game, game->data->collectibles);
+    //ft_free_images_list(game, game->data->images_count);       
     exit(ft_printf("Error! Failed to allocate memory!\n"));
 }
 
@@ -534,9 +533,11 @@ void    ft_free_images_list(t_game_data *game, int len)
 
     while (i < len)
     {
-        free(game->image_list[i++]->img);
+        free(game->image_list[i]->img);
+        game->image_list[i++]->img = NULL;
     }
     free(game->image_list);
+    game->image_list = NULL;
 }
 
 
@@ -549,9 +550,12 @@ void    ft_free_collectibles(t_game_data *game, int len)
     {
         free(game->collectibles_list[i]->img);
         free(game->collectibles_list[i]);
+        game->collectibles_list[i] = NULL;
+        game->collectibles_list[i]->img = NULL;
         i++;
     }
     free(game->collectibles_list);
+    game->collectibles_list = NULL;
 }
 
 void    ft_collectible_failed_free(t_game_data *game, int len)
