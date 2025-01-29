@@ -31,7 +31,7 @@ void    ft_vertical_offset(t_game_data *game);
 
 
 void    ft_fill_images_list(t_game_data *game);
-void    ft_free_images_list(t_game_data *game, int len);
+void    ft_free_lists(t_game_data *game, int nbr_images, int nbr_coll);
 
 void    ft_allocate_collectibles_list(t_game_data *game);
 void    ft_collectible_failed_free(t_game_data *game, int len);
@@ -45,6 +45,8 @@ void    ft_fill_images_ex_wall(t_game_data *game, int i, int j, int *count);
 void    ft_draw_map(t_game_data *game, int y, int x, int *index);
 void    ft_init_exit_pos(t_game_data *game, int x, int y);
 
+void    ft_free_game_data(t_game_data *game);
+
 int main(int argc, char **argv)
 {
     t_map_data          board;
@@ -54,7 +56,7 @@ int main(int argc, char **argv)
     {
         ft_free_vector(board.map, board.rows);
         ft_free_vector(board.map_dup, board.rows);
-        return (ft_printf("Map is not valid! Error\n"), 1);
+        return (ft_printf("Error! Map is not valid!\n"), 1);
     }
     ft_declare_game_data(&game, &board);    
     ft_init_mlx_and_textures(&game);
@@ -69,7 +71,7 @@ int main(int argc, char **argv)
     mlx_close_window(game.mlx);
     mlx_terminate(game.mlx);
     ft_free_vector(game.data->map, game.data->rows);
-    return(ft_printf("Exited the game!\n"));
+    return(ft_printf("Exited the game without compiting the game!\n"));
 }
 
 void    ft_declare_game_data(t_game_data *game, t_map_data *board)
@@ -100,6 +102,26 @@ void    ft_declare_game_data(t_game_data *game, t_map_data *board)
     ft_allocate_collectibles_list(game);
 }
 
+void    ft_free_game_data(t_game_data *game)
+{
+    /*if (game->mlx != NULL)
+        free(game->mlx);*/
+    if (game->bg_texture != NULL)
+        mlx_delete_texture(game->bg_texture);
+    if (game->player_texture != NULL)
+        mlx_delete_texture(game->player_texture);
+    if (game->wall_texture != NULL)
+        mlx_delete_texture(game->wall_texture);
+    if (game->free_texture != NULL)
+        mlx_delete_texture(game->free_texture);
+    if (game->collectible_texture != NULL)
+        mlx_delete_texture(game->collectible_texture);
+    if (game->finish_locked_texture != NULL)
+        mlx_delete_texture(game->finish_locked_texture);
+    if (game->finish_opened_texture != NULL)
+        mlx_delete_texture(game->finish_opened_texture);
+}
+
 void    ft_allocate_collectibles_list(t_game_data *game)
 {
     int i;
@@ -109,7 +131,7 @@ void    ft_allocate_collectibles_list(t_game_data *game)
     if (!(game->collectibles_list))
     {
         ft_free_vector(game->data->map, game->data->rows);        
-        exit(ft_printf("Collectibles list malloc failed! Error\n"));
+        exit(ft_printf("Error! Collectibles list malloc failed!\n"));
     }
     while (i < game->data->collectibles)
     {
@@ -186,12 +208,12 @@ void    ft_init_image_list(t_game_data *game)
     if (!(game->image_list))
     {
         ft_free_exit(game);
-        exit(ft_printf("Images list malloc failed! Error\n"));
+        exit(ft_printf("Error! Images list malloc failed!\n"));
     }
     i = 0;
     while (i < game->data->images_count)
     {
-        game->image_list[i] = malloc(sizeof(t_image_list));
+        game->image_list[i] = malloc(sizeof(t_image_list *));
         i++;
     }
 }
@@ -206,7 +228,6 @@ void    ft_fill_images_list(t_game_data *game)
     y = 0;    
     if (!(game->image_list[0]->img = mlx_texture_to_image(game->mlx, game->bg_texture)))
         ft_free_exit(game);
-    //mlx_resize_image(game->image_list[0]->img, (64 * game->data->line_len), (64 * game->data->rows));
     while (y < game->data->rows)
     {        
         x = 0;
@@ -301,7 +322,7 @@ void    ft_map_on_window(t_game_data *game)
     if (mlx_image_to_window(game->mlx, game->bg_image, 0, 0) < 0)
     {
         ft_free_collectibles(game, game->data->collectibles);        
-        exit(ft_printf("Backround to the window failed! Error\n"));
+        exit(ft_printf("Error! Backround to the window failed!\n"));
     }
     game->image_list[img_index++]->img = game->bg_image;
     while (y < game->data->rows)
@@ -447,15 +468,15 @@ void    my_keyhook(t_mlx_key_data keydata, void *param)
     temp_moves = game->moves;   
     if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
         ft_escape_exit(game);    
-    if (mlx_is_key_down(game->mlx, MLX_KEY_W))
+    else if (mlx_is_key_down(game->mlx, MLX_KEY_W))
         ft_keypress_w(game);
-    if (mlx_is_key_down(game->mlx, MLX_KEY_S))
+    else if (mlx_is_key_down(game->mlx, MLX_KEY_S))
     {
         ft_keypress_s(game);
     }
-	if (mlx_is_key_down(game->mlx, MLX_KEY_A))
+	else if (mlx_is_key_down(game->mlx, MLX_KEY_A))
         ft_keypress_a(game);
-	if (mlx_is_key_down(game->mlx, MLX_KEY_D))
+	else if (mlx_is_key_down(game->mlx, MLX_KEY_D))
         ft_keypress_d(game);    
     if (game->data->collectibles == game->collected_cols)
         {
@@ -543,6 +564,8 @@ void    ft_escape_exit(t_game_data *game)
 {
     mlx_close_window(game->mlx);
     mlx_terminate(game->mlx);
+    ft_free_game_data(game);
+    ft_free_lists(game, game->data->images_count, game->data->collectibles);
     ft_free_vector(game->data->map, game->data->rows);
     exit(ft_printf("Game was closed with ESC!\n"));
 }
@@ -570,6 +593,7 @@ void    ft_game_loop_exit(t_game_data *game)
 {
     mlx_close_window(game->mlx);
     mlx_terminate(game->mlx);
+    ft_free_lists(game, game->data->images_count, game->data->collectibles);
     ft_printf("Collectibles collected: %i\n", game->data->collectibles);
     ft_free_vector(game->data->map, game->data->rows);   
     exit(ft_printf("SUCCESS!!! You have completed the map with %i moves. Good job!\n", game->moves));    
@@ -578,24 +602,24 @@ void    ft_game_loop_exit(t_game_data *game)
 void    ft_free_exit(t_game_data *game)
 {
     mlx_close_window(game->mlx);
-    mlx_terminate(game->mlx); 
-    ft_free_vector(game->data->map, game->data->rows);
-    //ft_free_collectibles(game, game->data->collectibles);
-    //ft_free_images_list(game, game->data->images_count);       
+    mlx_terminate(game->mlx);
+    ft_free_lists(game, game->data->images_count, game->data->collectibles);
+    ft_free_vector(game->data->map, game->data->rows);   
     exit(ft_printf("Error! Failed to allocate memory!\n"));
 }
 
-void    ft_free_images_list(t_game_data *game, int len)
+void    ft_free_lists(t_game_data *game, int nbr_images, int nbr_coll)
 {
-    int i = 0;
-
-    while (i < len)
-    {
-        free(game->image_list[i]->img);
-        game->image_list[i++]->img = NULL;
-    }
+    int i;
+    
+    i = 0;
+    while (i < nbr_images)
+        free(game->image_list[i++]);
     free(game->image_list);
-    game->image_list = NULL;
+    i = 0;
+    while (i < nbr_coll)
+        free(game->collectibles_list[i++]);
+    free(game->collectibles_list);
 }
 
 
@@ -608,19 +632,16 @@ void    ft_free_collectibles(t_game_data *game, int len)
     {
         free(game->collectibles_list[i]->img);
         free(game->collectibles_list[i]);
-        game->collectibles_list[i] = NULL;
-        game->collectibles_list[i]->img = NULL;
         i++;
     }
     free(game->collectibles_list);
-    game->collectibles_list = NULL;
 }
 
 void    ft_collectible_failed_free(t_game_data *game, int len)
 {
     ft_free_vector(game->data->map, game->data->rows);
     ft_free_collectibles(game, len);            
-    exit(ft_printf("Collectibles list malloc failed! Error\n"));
+    exit(ft_printf("Error! Collectibles list malloc failed!\n"));
 }
 
 void    ft_init_mlx_failed(t_game_data *game)
@@ -633,5 +654,5 @@ void    ft_init_mlx_failed(t_game_data *game)
     while (i < game->data->images_count)
         free(game->image_list[i++]->img);
     free(game->image_list);        
-    exit(ft_printf("Window initialization failed! Error\n"));
+    exit(ft_printf("Error! Window initialization failed!\n"));
 }

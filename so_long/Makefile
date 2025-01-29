@@ -10,12 +10,12 @@ LIBFT = libft.a
 
 LIBFTDIR = ./libft/
 
-all: $(LIBFT) $(NAME)
+all: $(NAME)
 
 $(LIBFT): $(LIBFTDIR)
 		$(MAKE) -C $<
 
-$(NAME):
+$(NAME): $(LIBFT)
 		$(CC) $(WFLAGS) -o $@ $(SRC) -L./libft -lft ./MLX42/build/libmlx42.a -ldl -lglfw -pthread -lm -O3  -msse4.2 -mavx2
 
 clean:

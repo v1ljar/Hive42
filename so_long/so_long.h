@@ -76,8 +76,6 @@ typedef struct s_game_data
     int             offset_x;
 }   t_game_data;
 
-
-//typedef void (*mlx_keyfunc)(t_mlx_key_data keydata, void *param);
 // Map initilizaton
 int     ft_validate_map(char *map_path, t_map_data *board);
 int     ft_initialize_board(char *map_path, t_map_data *board);
