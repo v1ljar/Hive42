@@ -93,7 +93,7 @@ void	ft_update_movement(void *param)
 	if (g->is_moving == 1)
 	{
 		if (g->player_left_image->instances[0].x > g->player_right_image->instances[0].x)
-			g->player_left_image->instances[0].x -= 8;
+			g->player_left_image->instances[0].x -= 16;
 		else
 		{
 			g->is_moving = 0;
@@ -105,7 +105,7 @@ void	ft_update_movement(void *param)
 	if (g->is_moving == 2)
 	{
 		if (g->player_right_image->instances[0].x < g->player_left_image->instances[0].x)
-			g->player_right_image->instances[0].x += 8;
+			g->player_right_image->instances[0].x += 16;
 		else
 		{
 			g->is_moving = 0;

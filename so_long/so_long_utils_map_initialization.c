@@ -115,7 +115,7 @@ int	ft_validate_parts(t_map_data *board)
 			}
 			else
 				break ;
-		}
+		}		
 		if (j != board->line_len)
 			return (-1);
 		i++;

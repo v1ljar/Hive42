@@ -93,6 +93,8 @@ typedef struct s_game_data
 	int				target_x;
 	int				target_y;
 	int				is_moving;
+	mlx_image_t		*coll_amount;
+	int				coll_decrement;
 }	t_game_data;
 
 // Map initilizaton

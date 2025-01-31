@@ -12,6 +12,8 @@
 
 #include "so_long.h"
 
+void	ft_update_collectables_amount(void *param);
+
 int	main(int argc, char **argv)
 {
 	t_map_data	board;
@@ -28,6 +30,7 @@ int	main(int argc, char **argv)
 	ft_init_images(&game);
 	ft_map_on_window(&game);
 	ft_map_correct_pos(&game);
+	mlx_loop_hook(game.mlx, ft_update_collectables_amount, &game);
 	mlx_loop_hook(game.mlx, ft_update_movement, &game);
 	mlx_loop_hook(game.mlx, ft_adjust_images, &game);
 	mlx_key_hook(game.mlx, (void *)my_keyhook, &game);
@@ -36,4 +39,20 @@ int	main(int argc, char **argv)
 	mlx_terminate(game.mlx);
 	ft_free_vector(game.data->map, game.data->rows);
 	return (ft_printf("Exited the game without completing the game!\n"));
+}
+
+void	ft_update_collectables_amount(void *param)
+{
+	t_game_data *g;
+	int			reminder;
+
+	g = param;
+	if (g->coll_decrement < g->collected_cols)
+	{
+		reminder = g->data->collectibles - g->collected_cols;
+		mlx_delete_image(g->mlx, g->coll_amount);
+		g->coll_amount = mlx_put_string(g->mlx, ft_itoa(reminder), 12, 12);
+		mlx_resize_image(g->coll_amount, 40, 40);
+		g->coll_decrement++;
+	}
 }

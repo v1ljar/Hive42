@@ -30,7 +30,7 @@ void	ft_flood_fill(t_map_data *b, int y, int x, char prev)
 	char	new;
 
 	new = '1';
-	if (b->map_dup[y][x] == '1')
+	if (b->map_dup[y][x] == '1' || b->map_dup[y][x] == 'E')
 		return ;
 	b->map_dup[y][x] = (char)new;
 	if (y - 1 >= 0)
@@ -54,7 +54,7 @@ int	ft_path_is_valid(t_map_data *b)
 		j = 0;
 		while (b->map_dup[i][j] != '\0')
 		{
-			if (b->map_dup[i][j] == '1' || b->map_dup[i][j] == '0')
+			if (b->map_dup[i][j] == '1' || b->map_dup[i][j] == '0' || b->map_dup[i][j] == 'E')
 				j++;
 			else
 				return (-1);

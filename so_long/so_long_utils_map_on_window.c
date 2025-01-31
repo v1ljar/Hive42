@@ -12,23 +12,28 @@
 
 #include "so_long.h"
 
-void	ft_draw_player_images(t_game_data *game, int count)
+void	ft_draw_player_images(t_game_data *g, int count)
 {
 	int	img_index;
 	int	width;
 	int	height;
+	int	nbr_colls;
 
 	img_index = count;
-	width = 64 * game->data->player_x;
-	height = 64 * game->data->player_y;
-	mlx_image_to_window(game->mlx, game->player_image, width, height);
-	game->image_list[img_index++]->img = game->player_image;
-	mlx_image_to_window(game->mlx, game->player_left_image, width, height);
-	game->image_list[img_index++]->img = game->player_left_image;
-	game->player_left_image->instances[0].enabled = false;
-	mlx_image_to_window(game->mlx, game->player_right_image, width, height);
-	game->image_list[img_index++]->img = game->player_right_image;
-	game->player_right_image->instances[0].enabled = false;
+	width = 64 * g->data->player_x;
+	height = 64 * g->data->player_y;
+	mlx_image_to_window(g->mlx, g->player_image, width, height);
+	g->image_list[img_index++]->img = g->player_image;
+	mlx_image_to_window(g->mlx, g->player_left_image, width, height - 32);
+	g->image_list[img_index++]->img = g->player_left_image;
+	g->player_left_image->instances[0].enabled = false;
+	mlx_image_to_window(g->mlx, g->player_right_image, width, height - 32);
+	g->image_list[img_index++]->img = g->player_right_image;
+	g->player_right_image->instances[0].enabled = false;
+	nbr_colls = g->data->collectibles;
+	g->coll_amount = mlx_put_string(g->mlx, ft_itoa(nbr_colls), 12, 12);
+	mlx_resize_image(g->coll_amount, 40, 40);
+	g->coll_decrement = 0;
 }
 
 void	ft_map_on_window(t_game_data *game)
