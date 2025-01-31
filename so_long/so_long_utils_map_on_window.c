@@ -39,6 +39,12 @@ void	ft_map_on_window(t_game_data *game)
 	}
 	mlx_image_to_window(game->mlx, game->player_image, (64 * game->data->player_x), (64 * game->data->player_y));
 	game->image_list[img_index++]->img = game->player_image;
+	mlx_image_to_window(game->mlx, game->player_left_image, (64 * game->data->player_x), (64 * game->data->player_y - 30));
+	game->image_list[img_index++]->img = game->player_left_image;
+	game->player_left_image->instances[0].enabled = false;
+	mlx_image_to_window(game->mlx, game->player_right_image, (64 * game->data->player_x), (64 * game->data->player_y - 30));
+	game->image_list[img_index++]->img = game->player_right_image;
+	game->player_right_image->instances[0].enabled = false;
 }
 
 void	ft_draw_map(t_game_data *game, int y, int x, int *index)

@@ -92,7 +92,7 @@ int	ft_validate_parts(t_map_data *board)
 				board->player_x = j;
 				board->player_y = i;
 				j++;
-				board->images_count += 2;
+				board->images_count += 4;
 			}
 			else if (board->map[i][j] == 'E')
 			{

@@ -54,17 +54,21 @@ typedef struct s_image_list
 
 typedef struct s_game_data
 {
-	mlx_image_t		*player_image;
 	mlx_t			*mlx;
 	t_map_data		*data;
 	mlx_texture_t	*bg_texture;
 	mlx_texture_t	*player_texture;
+	mlx_texture_t	*player_left_texture;
+	mlx_texture_t	*player_right_texture;
 	mlx_texture_t	*wall_texture;
 	mlx_texture_t	*free_texture;
 	mlx_texture_t	*collectible_texture;
 	mlx_texture_t	*finish_locked_texture;
 	mlx_texture_t	*finish_opened_texture;
 	mlx_image_t		*bg_image;
+	mlx_image_t		*player_image;
+	mlx_image_t		*player_left_image;
+	mlx_image_t		*player_right_image;
 	mlx_image_t		*wall_image;
 	mlx_image_t		*free_image;
 	mlx_image_t		*collectible_image;
@@ -86,6 +90,9 @@ typedef struct s_game_data
 	int				col_count;
 	int				offset_y;
 	int				offset_x;
+	int				target_x;
+	int				target_y;
+	int				is_moving;
 }	t_game_data;
 
 // Map initilizaton
@@ -137,6 +144,8 @@ void	ft_keypress_w(t_game_data *game);
 void	ft_keypress_s(t_game_data *game);
 void	ft_keypress_a(t_game_data *game);
 void	ft_keypress_d(t_game_data *game);
+
+void	ft_update_movement(void *param);
 
 // Free delete
 void	ft_delete_collectable(t_game_data *game);

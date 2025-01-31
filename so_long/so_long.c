@@ -28,6 +28,7 @@ int	main(int argc, char **argv)
 	ft_init_images(&game);
 	ft_map_on_window(&game);
 	ft_map_correct_pos(&game);
+	mlx_loop_hook(game.mlx, ft_update_movement, &game);
 	mlx_loop_hook(game.mlx, ft_adjust_images, &game);
 	mlx_key_hook(game.mlx, (void *)my_keyhook, &game);
 	mlx_loop(game.mlx);
