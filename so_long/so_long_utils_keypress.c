@@ -93,26 +93,26 @@ void	ft_update_movement(void *param)
 	if (game->is_moving == 1)
 	{
 
-		if (game->player_left_image->instances[0].x > game->target_x)
+		if (game->player_left_image->instances[0].x > game->player_right_image->instances[0].x)
 			game->player_left_image->instances[0].x -= 8;
 		else
 		{
-			game->player_left_image->instances[0].x = game->target_x;
 			game->is_moving = 0;
 			game->player_left_image->instances[0].enabled = false;
 			game->player_image->instances[0].enabled = true;
+			game->target_x = 0;
 		}
 	}
 	if (game->is_moving == 2)
 	{
-		if (game->player_right_image->instances[0].x < game->target_x)
+		if (game->player_right_image->instances[0].x < game->player_left_image->instances[0].x)
 			game->player_right_image->instances[0].x += 8;
 		else
 		{
-			game->player_right_image->instances[0].x = game->target_x;
 			game->is_moving = 0;
 			game->player_right_image->instances[0].enabled = false;
 			game->player_image->instances[0].enabled = true;
+			game->target_x = 0;
 		}
 	}
 }
