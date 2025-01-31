@@ -74,7 +74,7 @@ typedef struct s_game_data
 	mlx_image_t		*collectible_image;
 	mlx_image_t		*finish_locked_image;
 	mlx_image_t		*finish_opened_image;
-	t_collectible	**collectibles_list;
+	t_collectible	**coll_list;
 	t_image_list	**image_list;
 	int				moves;
 	int				exit_x;

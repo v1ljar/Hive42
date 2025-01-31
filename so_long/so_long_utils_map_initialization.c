@@ -12,6 +12,8 @@
 
 #include "so_long.h"
 
+void	ft_validate_char(t_map_data *board, char c, int i, int j);
+
 int	ft_validate_map(char *map_path, t_map_data *board)
 {
 	int	len;
@@ -40,18 +42,19 @@ int	ft_initialize_board(char *map_path, t_map_data *board)
 	fd = open(map_path, O_RDONLY);
 	lines = 0;
 	whole_map = ft_strdup("");
-	while ((str = get_next_line(fd)) != NULL)
+	str = get_next_line(fd);
+	while (str != NULL)
 	{
+		if (str == NULL)
+			break ;
 		whole_map = ft_strjoin_gnl((const char *)whole_map, (const char *) str);
 		free(str);
 		lines++;
+		str = get_next_line(fd);
 	}
 	close(fd);
 	if (lines < 3 || (ft_strlen(whole_map) < 17))
-	{
-		free(whole_map);
-		return (-1);
-	}
+		return (free(whole_map), -1);
 	ft_initialize_map_data(board, whole_map, lines);
 	return (0);
 }
@@ -65,8 +68,31 @@ void	ft_initialize_map_data(t_map_data *board, char *whole_map, int lines)
 	board->collectibles = 0;
 	board->exit_count = 0;
 	board->start_count = 0;
-	board->images_count = 1;
+	board->images_count = 8;
 	free(whole_map);
+}
+
+void	ft_validate_char(t_map_data *board, char c, int i, int j)
+{
+	if (c == 'C')
+	{
+		board->collectibles++;
+		board->images_count += 2;
+	}
+	else if (c == 'P')
+	{
+		board->start_count++;
+		board->player_x = j;
+		board->player_y = i;
+	}
+	else if (c == 'E')
+	{
+		board->exit_count++;
+	}
+	else if (c == '1' || c == '0')
+	{
+		board->images_count++;
+	}
 }
 
 int	ft_validate_parts(t_map_data *board)
@@ -80,30 +106,12 @@ int	ft_validate_parts(t_map_data *board)
 		j = 0;
 		while (board->map[i][j] != '\0')
 		{
-			if (board->map[i][j] == 'C')
+			if (board->map[i][j] == 'C' || board->map[i][j] == 'P' ||
+				board->map[i][j] == 'E' || board->map[i][j] == '1' ||
+				board->map[i][j] == '0')
 			{
-				board->collectibles++;
+				ft_validate_char(board, board->map[i][j], i, j);
 				j++;
-				board->images_count += 2;
-			}
-			else if (board->map[i][j] == 'P')
-			{
-				board->start_count++;
-				board->player_x = j;
-				board->player_y = i;
-				j++;
-				board->images_count += 4;
-			}
-			else if (board->map[i][j] == 'E')
-			{
-				board->exit_count++;
-				j++;
-				board->images_count += 3;
-			}
-			else if (board->map[i][j] == '1' || board->map[i][j] == '0')
-			{
-				j++;
-				board->images_count++;
 			}
 			else
 				break ;

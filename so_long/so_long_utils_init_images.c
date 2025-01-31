@@ -14,50 +14,50 @@
 
 void	ft_init_coll_texture(t_game_data *game);
 
-void	ft_init_coll_texture(t_game_data *game)
+void	ft_init_coll_texture(t_game_data *g)
 {
 	int	i;
 
 	i = 0;
-	while (i < game->data->collectibles)
+	while (i < g->data->collectibles)
 	{
-		game->collectibles_list[i]->img = mlx_texture_to_image(game->mlx, game->collectible_texture);
-		if (!game->collectibles_list[i]->img)
-			ft_free_exit(game);
+		g->coll_list[i]->img = mlx_texture_to_image(g->mlx, g->collectible_texture);
+		if (!g->coll_list[i]->img)
+			ft_free_exit(g);
 		i++;
 	}
 }
 
-void	ft_init_images(t_game_data *game)
+void	ft_init_images(t_game_data *g)
 {
-	game->bg_image = mlx_texture_to_image(game->mlx, game->bg_texture);
-	if (!(game->bg_image))
-		ft_free_exit(game);
-	mlx_resize_image(game->bg_image, (64 * game->data->line_len), (64 * game->data->rows));
-	game->player_image = mlx_texture_to_image(game->mlx, game->player_texture);
-	if (!(game->player_image))
-		ft_free_exit(game);
-	game->player_left_image = mlx_texture_to_image(game->mlx, game->player_left_texture);
-	if (!(game->player_left_image))
-		ft_free_exit(game);
-	game->player_right_image = mlx_texture_to_image(game->mlx, game->player_right_texture);
-	if (!(game->player_right_image))
-		ft_free_exit(game);
-	game->wall_image = mlx_texture_to_image(game->mlx, game->wall_texture);
-	if (!(game->wall_image))
-		ft_free_exit(game);
-	game->free_image = mlx_texture_to_image(game->mlx, game->free_texture);
-	if (!(game->free_image))
-		ft_free_exit(game);
-	game->finish_opened_image = mlx_texture_to_image(game->mlx, game->finish_opened_texture);
-	if (!(game->finish_opened_image))
-		ft_free_exit(game);
-	game->finish_locked_image = mlx_texture_to_image(game->mlx, game->finish_locked_texture);
-	if (!(game->finish_locked_image))
-		ft_free_exit(game);
-	ft_init_coll_texture(game);
-	ft_init_image_list(game);
-	ft_fill_images_list(game);
+	g->bg_image = mlx_texture_to_image(g->mlx, g->bg_texture);
+	if (!(g->bg_image))
+		ft_free_exit(g);
+	mlx_resize_image(g->bg_image, (64 * g->data->line_len), (64 * g->data->rows));
+	g->player_image = mlx_texture_to_image(g->mlx, g->player_texture);
+	if (!(g->player_image))
+		ft_free_exit(g);
+	g->player_left_image = mlx_texture_to_image(g->mlx, g->player_left_texture);
+	if (!(g->player_left_image))
+		ft_free_exit(g);
+	g->player_right_image = mlx_texture_to_image(g->mlx, g->player_right_texture);
+	if (!(g->player_right_image))
+		ft_free_exit(g);
+	g->wall_image = mlx_texture_to_image(g->mlx, g->wall_texture);
+	if (!(g->wall_image))
+		ft_free_exit(g);
+	g->free_image = mlx_texture_to_image(g->mlx, g->free_texture);
+	if (!(g->free_image))
+		ft_free_exit(g);
+	g->finish_opened_image = mlx_texture_to_image(g->mlx, g->finish_opened_texture);
+	if (!(g->finish_opened_image))
+		ft_free_exit(g);
+	g->finish_locked_image = mlx_texture_to_image(g->mlx, g->finish_locked_texture);
+	if (!(g->finish_locked_image))
+		ft_free_exit(g);
+	ft_init_coll_texture(g);
+	ft_init_image_list(g);
+	ft_fill_images_list(g);
 }
 
 void	ft_init_image_list(t_game_data *game)
@@ -78,7 +78,20 @@ void	ft_init_image_list(t_game_data *game)
 	}
 }
 
-void	ft_fill_images_list(t_game_data *game)
+void	ft_player_tex_to_img(t_game_data *g, int count)
+{
+	g->image_list[count]->img = mlx_texture_to_image(g->mlx, g->player_texture);
+	if (!(g->image_list[count++]->img))
+		ft_free_exit(g);
+	g->image_list[count]->img = mlx_texture_to_image(g->mlx, g->player_left_texture);
+	if (!(g->image_list[count++]->img))
+		ft_free_exit(g);
+	g->image_list[count]->img = mlx_texture_to_image(g->mlx, g->player_right_texture);
+	if (!(g->image_list[count++]->img))
+		ft_free_exit(g);
+}
+
+void	ft_fill_images_list(t_game_data *g)
 {
 	int	count;
 	int	y;
@@ -86,68 +99,60 @@ void	ft_fill_images_list(t_game_data *game)
 
 	count = 1;
 	y = 0;
-	game->image_list[0]->img = mlx_texture_to_image(game->mlx, game->bg_texture);
-	if (!(game->image_list[0]->img))
-		ft_free_exit(game);
-	while (y < game->data->rows)
+	g->image_list[0]->img = mlx_texture_to_image(g->mlx, g->bg_texture);
+	if (!(g->image_list[0]->img))
+		ft_free_exit(g);
+	while (y < g->data->rows)
 	{
 		x = 0;
-		while (x < game->data->line_len)
+		while (x < g->data->line_len)
 		{
-			if (game->data->map[y][x] == '1')
-				ft_fill_wall_images(game, &count);
+			if (g->data->map[y][x] == '1')
+				ft_fill_wall_images(g, &count);
 			else
-				ft_fill_images_ex_wall(game, y, x, &count);
+				ft_fill_images_ex_wall(g, y, x, &count);
 			x++;
 		}
 		y++;
 	}
-	game->image_list[count]->img = mlx_texture_to_image(game->mlx, game->player_texture);
-	if (!(game->image_list[count++]->img))
-		ft_free_exit(game);
-	game->image_list[count]->img = mlx_texture_to_image(game->mlx, game->player_left_texture);
-	if (!(game->image_list[count++]->img))
-		ft_free_exit(game);
-	game->image_list[count]->img = mlx_texture_to_image(game->mlx, game->player_right_texture);
-	if (!(game->image_list[count++]->img))
-		ft_free_exit(game);
+	ft_player_tex_to_img(g, count);
 }
 
-void	ft_fill_wall_images(t_game_data *game, int *count)
+void	ft_fill_wall_images(t_game_data *g, int *count)
 {
 	int	len;
 
 	len = *count;
-	game->image_list[len]->img = mlx_texture_to_image(game->mlx, game->wall_texture);
-	if (!(game->image_list[len++]->img))
-		ft_free_exit(game);
+	g->image_list[len]->img = mlx_texture_to_image(g->mlx, g->wall_texture);
+	if (!(g->image_list[len++]->img))
+		ft_free_exit(g);
 	*count = len;
 }
 
-void	ft_fill_images_ex_wall(t_game_data *game, int y, int x, int *count)
+void	ft_fill_images_ex_wall(t_game_data *g, int y, int x, int *count)
 {
 	int	len;
 
 	len = *count;
-	game->image_list[len]->img = mlx_texture_to_image(game->mlx, game->free_texture);
-	if (!(game->image_list[len++]->img))
-		ft_free_exit(game);
-	if (game->data->map[y][x] == 'C')
+	g->image_list[len]->img = mlx_texture_to_image(g->mlx, g->free_texture);
+	if (!(g->image_list[len++]->img))
+		ft_free_exit(g);
+	if (g->data->map[y][x] == 'C')
 	{
-		game->image_list[len]->img = mlx_texture_to_image(game->mlx, game->collectible_texture);
-		if (!(game->image_list[len++]->img))
-			ft_free_exit(game);
+		g->image_list[len]->img = mlx_texture_to_image(g->mlx, g->collectible_texture);
+		if (!(g->image_list[len++]->img))
+			ft_free_exit(g);
 	}
-	if (game->data->map[y][x] == 'E')
+	if (g->data->map[y][x] == 'E')
 	{
-		game->finish_opened_image = mlx_texture_to_image(game->mlx, game->finish_opened_texture);
-		if (!(game->finish_opened_image))
-			ft_free_exit(game);
-		game->image_list[len++]->img = game->finish_opened_image;
-		game->finish_locked_image = mlx_texture_to_image(game->mlx, game->finish_locked_texture);
-		if (!(game->finish_locked_image))
-			ft_free_exit(game);
-		game->image_list[len++]->img = game->finish_locked_image;
+		g->finish_opened_image = mlx_texture_to_image(g->mlx, g->finish_opened_texture);
+		if (!(g->finish_opened_image))
+			ft_free_exit(g);
+		g->image_list[len++]->img = g->finish_opened_image;
+		g->finish_locked_image = mlx_texture_to_image(g->mlx, g->finish_locked_texture);
+		if (!(g->finish_locked_image))
+			ft_free_exit(g);
+		g->image_list[len++]->img = g->finish_locked_image;
 	}
 	*count = len;
 }

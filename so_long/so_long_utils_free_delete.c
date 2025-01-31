@@ -19,12 +19,12 @@ void	ft_delete_collectable(t_game_data *game)
 	i = 0;
 	while (i < game->data->collectibles)
 	{
-		if (game->collectibles_list[i]->enabled == 1
-			&& game->collectibles_list[i]->x == game->data->player_x
-			&& game->collectibles_list[i]->y == game->data->player_y)
+		if (game->coll_list[i]->enabled == 1
+			&& game->coll_list[i]->x == game->data->player_x
+			&& game->coll_list[i]->y == game->data->player_y)
 		{
-			game->collectibles_list[i]->enabled = 0;
-			game->collectibles_list[i]->img->instances->enabled = false;
+			game->coll_list[i]->enabled = 0;
+			game->coll_list[i]->img->instances->enabled = false;
 			break ;
 		}
 		i++;
@@ -41,8 +41,8 @@ void	ft_free_lists(t_game_data *game, int nbr_images, int nbr_coll)
 	free(game->image_list);
 	i = 0;
 	while (i < nbr_coll)
-		free(game->collectibles_list[i++]);
-	free(game->collectibles_list);
+		free(game->coll_list[i++]);
+	free(game->coll_list);
 }
 
 void	ft_free_collectibles(t_game_data *game, int len)
@@ -52,27 +52,31 @@ void	ft_free_collectibles(t_game_data *game, int len)
 	i = 0;
 	while (i < len)
 	{
-		free(game->collectibles_list[i]->img);
-		free(game->collectibles_list[i]);
+		free(game->coll_list[i]->img);
+		free(game->coll_list[i]);
 		i++;
 	}
-	free(game->collectibles_list);
+	free(game->coll_list);
 }
 
 void	ft_free_textures(t_game_data *game)
 {
-	if (game->bg_texture != NULL)
+	if (game->bg_texture)
 		mlx_delete_texture(game->bg_texture);
-	if (game->player_texture != NULL)
+	if (game->player_texture)
 		mlx_delete_texture(game->player_texture);
-	if (game->wall_texture != NULL)
+	if (game->wall_texture)
 		mlx_delete_texture(game->wall_texture);
-	if (game->free_texture != NULL)
+	if (game->free_texture)
 		mlx_delete_texture(game->free_texture);
-	if (game->collectible_texture != NULL)
+	if (game->collectible_texture)
 		mlx_delete_texture(game->collectible_texture);
-	if (game->finish_locked_texture != NULL)
+	if (game->finish_locked_texture)
 		mlx_delete_texture(game->finish_locked_texture);
-	if (game->finish_opened_texture != NULL)
+	if (game->finish_opened_texture)
 		mlx_delete_texture(game->finish_opened_texture);
+	if (game->player_left_texture)
+		mlx_delete_texture(game->player_left_texture);
+	if (game->player_right_texture)
+		mlx_delete_texture(game->player_right_texture);
 }

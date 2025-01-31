@@ -14,9 +14,9 @@
 
 void	ft_escape_exit(t_game_data *game)
 {
+	ft_free_textures(game);
 	mlx_close_window(game->mlx);
 	mlx_terminate(game->mlx);
-	ft_free_textures(game);
 	ft_free_lists(game, game->data->images_count, game->data->collectibles);
 	ft_free_vector(game->data->map, game->data->rows);
 	exit(ft_printf("Game was closed with ESC!\n"));
@@ -24,20 +24,22 @@ void	ft_escape_exit(t_game_data *game)
 
 void	ft_game_loop_exit(t_game_data *game)
 {
+	ft_free_textures(game);
 	mlx_close_window(game->mlx);
 	mlx_terminate(game->mlx);
-	ft_free_textures(game);
 	ft_free_lists(game, game->data->images_count, game->data->collectibles);
 	ft_printf("Collectibles collected: %i\n", game->data->collectibles);
 	ft_free_vector(game->data->map, game->data->rows);
-	exit(ft_printf("SUCCESS!!! You have completed the map with %i moves. Good job!\n", game->moves));
+	ft_printf("SUCCESS!!! Great job!");
+	ft_printf("You have completed the map with %i moves. \n", game->moves);
+	exit(EXIT_SUCCESS);
 }
 
 void	ft_free_exit(t_game_data *game)
 {
+	ft_free_textures(game);
 	mlx_close_window(game->mlx);
 	mlx_terminate(game->mlx);
-	ft_free_textures(game);
 	ft_free_lists(game, game->data->images_count, game->data->collectibles);
 	ft_free_vector(game->data->map, game->data->rows);
 	exit(ft_printf("Error! Failed to allocate memory!\n"));

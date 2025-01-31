@@ -41,78 +41,77 @@ void	my_keyhook(t_mlx_key_data keydata, void *param)
 	ft_delete_collectable(game);
 }
 
-void	ft_keypress_w(t_game_data *game)
+void	ft_keypress_w(t_game_data *g)
 {
-	if (game->data->map[game->data->player_y - 1][game->data->player_x] != '1' &&
-		(!(game->data->map[game->data->player_y - 1][game->data->player_x] == 'E' &&
-		game->exit_valid == 0)))
+	if (g->data->map[g->data->player_y - 1][g->data->player_x] != '1' &&
+		(!(g->data->map[g->data->player_y - 1][g->data->player_x] == 'E' &&
+		g->exit_valid == 0)))
 	{
-		if (game->data->map[game->data->player_y - 1][game->data->player_x] == 'C')
+		if (g->data->map[g->data->player_y - 1][g->data->player_x] == 'C')
 		{
-			game->data->map[game->data->player_y - 1][game->data->player_x] = '0';
-			game->collected_cols++;
+			g->data->map[g->data->player_y - 1][g->data->player_x] = '0';
+			g->collected_cols++;
 		}
-		game->player_image->instances[0].y -= 64;
-		game->player_left_image->instances[0].y -= 64;
-		game->player_right_image->instances[0].y -= 64;
-		game->player_win_y--;
-		game->data->player_y--;
-		game->moves++;
-		if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
-			ft_game_loop_exit(game);
+		g->player_image->instances[0].y -= 64;
+		g->player_left_image->instances[0].y -= 64;
+		g->player_right_image->instances[0].y -= 64;
+		g->player_win_y--;
+		g->data->player_y--;
+		g->moves++;
+		if (g->data->map[g->data->player_y][g->data->player_x] == 'E')
+			ft_game_loop_exit(g);
 	}
 }
 
-void	ft_keypress_s(t_game_data *game)
+void	ft_keypress_s(t_game_data *g)
 {
-	if (game->data->map[game->data->player_y + 1][game->data->player_x] != '1' &&
-		(!(game->data->map[game->data->player_y + 1][game->data->player_x] == 'E' &&
-		game->exit_valid == 0)))
+	if (g->data->map[g->data->player_y + 1][g->data->player_x] != '1' &&
+		(!(g->data->map[g->data->player_y + 1][g->data->player_x] == 'E' &&
+		g->exit_valid == 0)))
 	{
-		if (game->data->map[game->data->player_y + 1][game->data->player_x] == 'C')
+		if (g->data->map[g->data->player_y + 1][g->data->player_x] == 'C')
 		{
-			game->data->map[game->data->player_y + 1][game->data->player_x] = '0';
-			game->collected_cols++;
+			g->data->map[g->data->player_y + 1][g->data->player_x] = '0';
+			g->collected_cols++;
 		}
-		game->player_image->instances[0].y += 64;
-		game->player_left_image->instances[0].y += 64;
-		game->player_right_image->instances[0].y += 64;
-		game->player_win_y++;
-		game->data->player_y++;
-		game->moves++;
-		if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
-			ft_game_loop_exit(game);
+		g->player_image->instances[0].y += 64;
+		g->player_left_image->instances[0].y += 64;
+		g->player_right_image->instances[0].y += 64;
+		g->player_win_y++;
+		g->data->player_y++;
+		g->moves++;
+		if (g->data->map[g->data->player_y][g->data->player_x] == 'E')
+			ft_game_loop_exit(g);
 	}
 }
 
 void	ft_update_movement(void *param)
 {
-	t_game_data	*game;
+	t_game_data	*g;
 
-	game = param;
-	if (game->is_moving == 1)
+	g = param;
+	if (g->is_moving == 1)
 	{
-
-		if (game->player_left_image->instances[0].x > game->player_right_image->instances[0].x)
-			game->player_left_image->instances[0].x -= 8;
+		if (g->player_left_image->instances[0].x > g->player_right_image->instances[0].x)
+			g->player_left_image->instances[0].x -= 8;
 		else
 		{
-			game->is_moving = 0;
-			game->player_left_image->instances[0].enabled = false;
-			game->player_image->instances[0].enabled = true;
-			game->target_x = 0;
+			g->is_moving = 0;
+			g->player_left_image->instances[0].enabled = false;
+			g->player_image->instances[0].enabled = true;
+			g->target_x = 0;
 		}
 	}
-	if (game->is_moving == 2)
+	if (g->is_moving == 2)
 	{
-		if (game->player_right_image->instances[0].x < game->player_left_image->instances[0].x)
-			game->player_right_image->instances[0].x += 8;
+		if (g->player_right_image->instances[0].x < g->player_left_image->instances[0].x)
+			g->player_right_image->instances[0].x += 8;
 		else
 		{
-			game->is_moving = 0;
-			game->player_right_image->instances[0].enabled = false;
-			game->player_image->instances[0].enabled = true;
-			game->target_x = 0;
+			g->is_moving = 0;
+			g->player_right_image->instances[0].enabled = false;
+			g->player_image->instances[0].enabled = true;
+			g->target_x = 0;
 		}
 	}
 }
@@ -131,55 +130,50 @@ void	ft_animate_movement(t_game_data *game, int way)
 	}
 }
 
-void	ft_keypress_a(t_game_data *game)
+void	ft_keypress_a(t_game_data *g)
 {
-	if (game->data->map[game->data->player_y][game->data->player_x - 1] != '1' &&
-		(!(game->data->map[game->data->player_y][game->data->player_x - 1] == 'E' &&
-		game->exit_valid == 0)))
+	if (g->data->map[g->data->player_y][g->data->player_x - 1] != '1' &&
+		(!(g->data->map[g->data->player_y][g->data->player_x - 1] == 'E' &&
+		g->exit_valid == 0)))
 	{
-		if (game->data->map[game->data->player_y][game->data->player_x - 1] == 'C')
+		if (g->data->map[g->data->player_y][g->data->player_x - 1] == 'C')
 		{
-			game->data->map[game->data->player_y][game->data->player_x - 1] = '0';
-			game->collected_cols++;
+			g->data->map[g->data->player_y][g->data->player_x - 1] = '0';
+			g->collected_cols++;
 		}
-		game->player_image->instances[0].enabled = false;
-		game->player_left_image->instances[0].enabled = true;
-		//game->player_left_image->instances[0].x -= 64;
-		game->player_right_image->instances[0].x -= 64;
-		game->player_image->instances[0].x -= 64;
-		ft_animate_movement(game, 1);
-		
-		game->player_win_x--;
-		game->data->player_x--;
-		game->moves++;
-		if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
-			ft_game_loop_exit(game);
+		g->player_image->instances[0].enabled = false;
+		g->player_left_image->instances[0].enabled = true;
+		g->player_right_image->instances[0].x -= 64;
+		g->player_image->instances[0].x -= 64;
+		ft_animate_movement(g, 1);
+		g->player_win_x--;
+		g->data->player_x--;
+		g->moves++;
+		if (g->data->map[g->data->player_y][g->data->player_x] == 'E')
+			ft_game_loop_exit(g);
 	}
 }
 
-void	ft_keypress_d(t_game_data *game)
+void	ft_keypress_d(t_game_data *g)
 {
-	if (game->data->map[game->data->player_y][game->data->player_x + 1] != '1' &&
-		(!(game->data->map[game->data->player_y][game->data->player_x + 1] == 'E' &&
-		game->exit_valid == 0)))
+	if (g->data->map[g->data->player_y][g->data->player_x + 1] != '1' &&
+		(!(g->data->map[g->data->player_y][g->data->player_x + 1] == 'E' &&
+		g->exit_valid == 0)))
 	{
-		if (game->data->map[game->data->player_y][game->data->player_x + 1] == 'C')
+		if (g->data->map[g->data->player_y][g->data->player_x + 1] == 'C')
 		{
-			game->data->map[game->data->player_y][game->data->player_x + 1] = '0';
-			game->collected_cols++;
+			g->data->map[g->data->player_y][g->data->player_x + 1] = '0';
+			g->collected_cols++;
 		}
-		game->player_image->instances[0].enabled = false;
-		game->player_right_image->instances[0].enabled = true;
-		game->player_left_image->instances[0].x += 64;
-		//game->player_right_image->instances[0].x += 64;
-		game->player_image->instances[0].x += 64;
-		ft_animate_movement(game, 2);
-		//game->player_right_image->instances[0].enabled = false;
-		//game->player_image->instances[0].enabled = true;
-		game->player_win_x++;
-		game->data->player_x++;
-		game->moves++;
-		if (game->data->map[game->data->player_y][game->data->player_x] == 'E')
-			ft_game_loop_exit(game);
+		g->player_image->instances[0].enabled = false;
+		g->player_right_image->instances[0].enabled = true;
+		g->player_left_image->instances[0].x += 64;
+		g->player_image->instances[0].x += 64;
+		ft_animate_movement(g, 2);
+		g->player_win_x++;
+		g->data->player_x++;
+		g->moves++;
+		if (g->data->map[g->data->player_y][g->data->player_x] == 'E')
+			ft_game_loop_exit(g);
 	}
 }
