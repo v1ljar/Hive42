@@ -12,7 +12,7 @@
 
 #include "so_long.h"
 
-void	ft_init_coll_texture(t_game_data *g)
+void	ft_init_coll_player_texture(t_game_data *g)
 {
 	int	i;
 

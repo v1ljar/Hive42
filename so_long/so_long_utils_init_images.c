@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 13:50:36 by vuljas            #+#    #+#             */
-/*   Updated: 2025/01/30 13:50:39 by vuljas           ###   ########.fr       */
+/*   Updated: 2025/02/01 16:34:29 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ void	ft_init_images(t_game_data *g)
 	g->free_image = mlx_texture_to_image(g->mlx, g->free_texture);
 	if (!(g->free_image))
 		ft_free_exit(g);
-	g->exit_open_image = mlx_texture_to_image(g->mlx, g->exit_open_texture);
+	g->exit_open_image = mlx_texture_to_image(g->mlx, g->exit_open_tex);
 	if (!(g->exit_open_image))
 		ft_free_exit(g);
-	g->exit_lock_image = mlx_texture_to_image(g->mlx, g->exit_lock_texture);
+	g->exit_lock_image = mlx_texture_to_image(g->mlx, g->exit_lock_tex);
 	if (!(g->exit_lock_image))
 		ft_free_exit(g);
 	ft_init_coll_player_texture(g);
@@ -108,11 +108,11 @@ void	ft_fill_images_ex_wall(t_game_data *g, int y, int x, int *count)
 	}
 	if (g->data->map[y][x] == 'E')
 	{
-		g->exit_open_image = mlx_texture_to_image(g->mlx, g->exit_open_text);
+		g->exit_open_image = mlx_texture_to_image(g->mlx, g->exit_open_tex);
 		if (!(g->exit_open_image))
 			ft_free_exit(g);
 		g->image_list[len++]->img = g->exit_open_image;
-		g->exit_lock_image = mlx_texture_to_image(g->mlx, g->exit_lock_text);
+		g->exit_lock_image = mlx_texture_to_image(g->mlx, g->exit_lock_tex);
 		if (!(g->exit_lock_image))
 			ft_free_exit(g);
 		g->image_list[len++]->img = g->exit_lock_image;
