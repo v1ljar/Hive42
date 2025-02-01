@@ -69,14 +69,14 @@ void	ft_free_textures(t_game_data *game)
 		mlx_delete_texture(game->wall_texture);
 	if (game->free_texture)
 		mlx_delete_texture(game->free_texture);
-	if (game->collectible_texture)
-		mlx_delete_texture(game->collectible_texture);
-	if (game->finish_locked_texture)
-		mlx_delete_texture(game->finish_locked_texture);
-	if (game->finish_opened_texture)
-		mlx_delete_texture(game->finish_opened_texture);
-	if (game->player_left_texture)
-		mlx_delete_texture(game->player_left_texture);
-	if (game->player_right_texture)
-		mlx_delete_texture(game->player_right_texture);
+	if (game->coll_texture)
+		mlx_delete_texture(game->coll_texture);
+	if (game->exit_lock_tex)
+		mlx_delete_texture(game->exit_lock_tex);
+	if (game->exit_open_tex)
+		mlx_delete_texture(game->exit_open_tex);
+	if (game->pl_left_texture)
+		mlx_delete_texture(game->pl_left_texture);
+	if (game->pl_right_texture)
+		mlx_delete_texture(game->pl_right_texture);
 }

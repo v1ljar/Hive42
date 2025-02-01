@@ -33,7 +33,7 @@ void	my_keyhook(t_mlx_key_data keydata, void *param)
 		ft_keypress_d(game);
 	if (game->data->collectibles == game->collected_cols)
 	{
-		mlx_delete_image(game->mlx, game->finish_locked_image);
+		mlx_delete_image(game->mlx, game->exit_lock_image);
 		game->exit_valid = 1;
 	}
 	if (temp_moves != game->moves)
@@ -53,8 +53,8 @@ void	ft_keypress_w(t_game_data *g)
 			g->collected_cols++;
 		}
 		g->player_image->instances[0].y -= 64;
-		g->player_left_image->instances[0].y -= 64;
-		g->player_right_image->instances[0].y -= 64;
+		g->pl_lef_img->instances[0].y -= 64;
+		g->pl_rig_img->instances[0].y -= 64;
 		g->player_win_y--;
 		g->data->player_y--;
 		g->moves++;
@@ -75,58 +75,13 @@ void	ft_keypress_s(t_game_data *g)
 			g->collected_cols++;
 		}
 		g->player_image->instances[0].y += 64;
-		g->player_left_image->instances[0].y += 64;
-		g->player_right_image->instances[0].y += 64;
+		g->pl_lef_img->instances[0].y += 64;
+		g->pl_rig_img->instances[0].y += 64;
 		g->player_win_y++;
 		g->data->player_y++;
 		g->moves++;
 		if (g->data->map[g->data->player_y][g->data->player_x] == 'E')
 			ft_game_loop_exit(g);
-	}
-}
-
-void	ft_update_movement(void *param)
-{
-	t_game_data	*g;
-
-	g = param;
-	if (g->is_moving == 1)
-	{
-		if (g->player_left_image->instances[0].x > g->player_right_image->instances[0].x)
-			g->player_left_image->instances[0].x -= 16;
-		else
-		{
-			g->is_moving = 0;
-			g->player_left_image->instances[0].enabled = false;
-			g->player_image->instances[0].enabled = true;
-			g->target_x = 0;
-		}
-	}
-	if (g->is_moving == 2)
-	{
-		if (g->player_right_image->instances[0].x < g->player_left_image->instances[0].x)
-			g->player_right_image->instances[0].x += 16;
-		else
-		{
-			g->is_moving = 0;
-			g->player_right_image->instances[0].enabled = false;
-			g->player_image->instances[0].enabled = true;
-			g->target_x = 0;
-		}
-	}
-}
-
-void	ft_animate_movement(t_game_data *game, int way)
-{
-	if (way == 1)
-	{
-		game->target_x = game->player_left_image->instances[0].x - 64;
-		game->is_moving = 1;
-	}
-	if (way == 2)
-	{
-		game->target_x = game->player_right_image->instances[0].x + 64;
-		game->is_moving = 2;
 	}
 }
 
@@ -142,8 +97,8 @@ void	ft_keypress_a(t_game_data *g)
 			g->collected_cols++;
 		}
 		g->player_image->instances[0].enabled = false;
-		g->player_left_image->instances[0].enabled = true;
-		g->player_right_image->instances[0].x -= 64;
+		g->pl_lef_img->instances[0].enabled = true;
+		g->pl_rig_img->instances[0].x -= 64;
 		g->player_image->instances[0].x -= 64;
 		ft_animate_movement(g, 1);
 		g->player_win_x--;
@@ -166,8 +121,8 @@ void	ft_keypress_d(t_game_data *g)
 			g->collected_cols++;
 		}
 		g->player_image->instances[0].enabled = false;
-		g->player_right_image->instances[0].enabled = true;
-		g->player_left_image->instances[0].x += 64;
+		g->pl_rig_img->instances[0].enabled = true;
+		g->pl_lef_img->instances[0].x += 64;
 		g->player_image->instances[0].x += 64;
 		ft_animate_movement(g, 2);
 		g->player_win_x++;

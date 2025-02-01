@@ -43,16 +43,19 @@ int	main(int argc, char **argv)
 
 void	ft_update_collectables_amount(void *param)
 {
-	t_game_data *g;
+	t_game_data	*g;
 	int			reminder;
+	char		*nbr;
 
 	g = param;
 	if (g->coll_decrement < g->collected_cols)
 	{
 		reminder = g->data->collectibles - g->collected_cols;
+		nbr = ft_itoa(reminder);
 		mlx_delete_image(g->mlx, g->coll_amount);
-		g->coll_amount = mlx_put_string(g->mlx, ft_itoa(reminder), 12, 12);
+		g->coll_amount = mlx_put_string(g->mlx, nbr, 12, 12);
 		mlx_resize_image(g->coll_amount, 40, 40);
+		free(nbr);
 		g->coll_decrement++;
 	}
 }

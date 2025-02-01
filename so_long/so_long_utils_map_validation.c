@@ -54,7 +54,8 @@ int	ft_path_is_valid(t_map_data *b)
 		j = 0;
 		while (b->map_dup[i][j] != '\0')
 		{
-			if (b->map_dup[i][j] == '1' || b->map_dup[i][j] == '0' || b->map_dup[i][j] == 'E')
+			if (b->map_dup[i][j] == '1' || b->map_dup[i][j] == '0' ||
+				b->map_dup[i][j] == 'E')
 				j++;
 			else
 				return (-1);
@@ -73,4 +74,28 @@ void	ft_free_vector(char **str, int len)
 	while (i < len)
 		free(str[i++]);
 	free(str);
+}
+
+int	ft_validate_amount(t_map_data *b)
+{
+	int	i;
+	int	j;
+
+	if (b->exit_count != 1 || b->start_count != 1 || b->collectibles == 0)
+		return (-1);
+	i = 0;
+	while (i < b->rows)
+	{
+		j = 0;
+		while (b->map[i][j] != '\0')
+		{
+			if (b->map[0][j] != '1' || b->map[b->rows - 1][j] != '1')
+				return (-1);
+			if (b->map[i][0] != '1' || b->map[1][b->line_len - 1] != '1')
+				return (-1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
 }

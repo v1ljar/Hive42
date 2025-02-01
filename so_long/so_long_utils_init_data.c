@@ -12,8 +12,6 @@
 
 #include "so_long.h"
 
-void	ft_load_player_textures(t_game_data *game);
-
 void	ft_init_game_data(t_game_data *game, t_map_data *board)
 {
 	game->mlx = NULL;
@@ -22,46 +20,24 @@ void	ft_init_game_data(t_game_data *game, t_map_data *board)
 	game->player_texture = NULL;
 	game->wall_texture = NULL;
 	game->free_texture = NULL;
-	game->collectible_texture = NULL;
-	game->finish_locked_texture = NULL;
-	game->finish_opened_texture = NULL;
+	game->coll_texture = NULL;
+	game->exit_lock_tex = NULL;
+	game->exit_open_tex = NULL;
 	game->bg_image = NULL;
 	game->player_image = NULL;
-	game->player_left_image = NULL;
-	game->player_right_image = NULL;
+	game->pl_lef_img = NULL;
+	game->pl_rig_img = NULL;
 	game->wall_image = NULL;
 	game->free_image = NULL;
 	game->collectible_image = NULL;
-	game->finish_locked_image = NULL;
-	game->finish_opened_image = NULL;
+	game->exit_lock_image = NULL;
+	game->exit_open_image = NULL;
 	game->moves = 0;
 	game->exit_x = 0;
 	game->exit_y = 0;
 	game->exit_valid = 0;
 	game->collected_cols = 0;
 	ft_allocate_collectibles_list(game);
-}
-
-void	ft_free_game_data(t_game_data *game)
-{
-	if (game->bg_texture != NULL)
-		mlx_delete_texture(game->bg_texture);
-	if (game->player_texture != NULL)
-		mlx_delete_texture(game->player_texture);
-	if (game->player_left_texture != NULL)
-		mlx_delete_texture(game->player_left_texture);
-	if (game->player_right_texture != NULL)
-		mlx_delete_texture(game->player_right_texture);
-	if (game->wall_texture != NULL)
-		mlx_delete_texture(game->wall_texture);
-	if (game->free_texture != NULL)
-		mlx_delete_texture(game->free_texture);
-	if (game->collectible_texture != NULL)
-		mlx_delete_texture(game->collectible_texture);
-	if (game->finish_locked_texture != NULL)
-		mlx_delete_texture(game->finish_locked_texture);
-	if (game->finish_opened_texture != NULL)
-		mlx_delete_texture(game->finish_opened_texture);
 }
 
 void	ft_allocate_collectibles_list(t_game_data *game)
@@ -90,20 +66,6 @@ void	ft_allocate_collectibles_list(t_game_data *game)
 	game->bg_win_x = 0;
 }
 
-void	ft_load_player_textures(t_game_data *game)
-{
-	game->player_texture = mlx_load_png("./textures/player_64_2.png");
-	if (!game->player_texture)
-		ft_free_exit(game);
-	game->player_left_texture = mlx_load_png("./textures/player_left_64.png");
-	if (!game->player_left_texture)
-		ft_free_exit(game);
-	game->player_right_texture = mlx_load_png("./textures/player_right_64.png");
-	if (!game->player_right_texture)
-		ft_free_exit(game);
-	mlx_get_monitor_size(0, &game->win_x, &game->win_y);
-}
-
 void	ft_init_mlx_and_textures(t_game_data *game)
 {
 	int	width;
@@ -118,17 +80,31 @@ void	ft_init_mlx_and_textures(t_game_data *game)
 	game->wall_texture = mlx_load_png("./textures/wall_fin_64.png");
 	if (!game->wall_texture)
 		ft_free_exit(game);
-	game->free_texture = mlx_load_png("./textures/free_64_2.png");
+	game->free_texture = mlx_load_png("./textures/free_64_4.png");
 	if (!game->free_texture)
 		ft_free_exit(game);
-	game->collectible_texture = mlx_load_png("./textures/collectable_64.png");
-	if (!game->collectible_texture)
+	game->coll_texture = mlx_load_png("./textures/collectable_64.png");
+	if (!game->coll_texture)
 		ft_free_exit(game);
-	game->finish_locked_texture = mlx_load_png("./textures/exit_locked_64.png");
-	if (!game->finish_locked_texture)
+	game->exit_lock_tex = mlx_load_png("./textures/exit_locked_64.png");
+	if (!game->exit_lock_tex)
 		ft_free_exit(game);
-	game->finish_opened_texture = mlx_load_png("./textures/exit_opened_64.png");
-	if (!game->finish_opened_texture)
+	game->exit_open_tex = mlx_load_png("./textures/exit_opened_64.png");
+	if (!game->exit_open_tex)
 		ft_free_exit(game);
 	ft_load_player_textures(game);
+}
+
+void	ft_load_player_textures(t_game_data *game)
+{
+	game->player_texture = mlx_load_png("./textures/player_64_2.png");
+	if (!game->player_texture)
+		ft_free_exit(game);
+	game->pl_left_texture = mlx_load_png("./textures/player_left_64.png");
+	if (!game->pl_left_texture)
+		ft_free_exit(game);
+	game->pl_right_texture = mlx_load_png("./textures/player_right_64.png");
+	if (!game->pl_right_texture)
+		ft_free_exit(game);
+	mlx_get_monitor_size(0, &game->win_x, &game->win_y);
 }

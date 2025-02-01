@@ -58,22 +58,22 @@ typedef struct s_game_data
 	t_map_data		*data;
 	mlx_texture_t	*bg_texture;
 	mlx_texture_t	*player_texture;
-	mlx_texture_t	*player_left_texture;
-	mlx_texture_t	*player_right_texture;
+	mlx_texture_t	*pl_left_texture;
+	mlx_texture_t	*pl_right_texture;
 	mlx_texture_t	*wall_texture;
 	mlx_texture_t	*free_texture;
-	mlx_texture_t	*collectible_texture;
-	mlx_texture_t	*finish_locked_texture;
-	mlx_texture_t	*finish_opened_texture;
+	mlx_texture_t	*coll_texture;
+	mlx_texture_t	*exit_lock_tex;
+	mlx_texture_t	*exit_open_tex;
 	mlx_image_t		*bg_image;
 	mlx_image_t		*player_image;
-	mlx_image_t		*player_left_image;
-	mlx_image_t		*player_right_image;
+	mlx_image_t		*pl_lef_img;
+	mlx_image_t		*pl_rig_img;
 	mlx_image_t		*wall_image;
 	mlx_image_t		*free_image;
 	mlx_image_t		*collectible_image;
-	mlx_image_t		*finish_locked_image;
-	mlx_image_t		*finish_opened_image;
+	mlx_image_t		*exit_lock_image;
+	mlx_image_t		*exit_open_image;
 	t_collectible	**coll_list;
 	t_image_list	**image_list;
 	int				moves;
@@ -102,18 +102,20 @@ int		ft_validate_map(char *map_path, t_map_data *board);
 int		ft_initialize_board(char *map_path, t_map_data *board);
 void	ft_initialize_map_data(t_map_data *board, char *whole_map, int lines);
 int		ft_validate_parts(t_map_data *board);
-int		ft_validate_amount(t_map_data *board);
+void	ft_validate_char(t_map_data *board, char c, int i, int j);
 
 // Map validation
 int		ft_validate_path(t_map_data *board);
 void	ft_flood_fill(t_map_data *b, int x, int y, char prev);
 int		ft_path_is_valid(t_map_data *b);
 void	ft_free_vector(char **str, int len);
+int		ft_validate_amount(t_map_data *board);
 
 // Init data
 void	ft_init_game_data(t_game_data *game, t_map_data *board);
 void	ft_allocate_collectibles_list(t_game_data *game);
 void	ft_init_mlx_and_textures(t_game_data *game);
+void	ft_load_player_textures(t_game_data *game);
 
 // Init images
 void	ft_init_images(t_game_data *game);
@@ -121,6 +123,10 @@ void	ft_init_image_list(t_game_data *game);
 void	ft_fill_images_list(t_game_data *game);
 void	ft_fill_wall_images(t_game_data *game, int *count);
 void	ft_fill_images_ex_wall(t_game_data *game, int i, int j, int *count);
+
+// Assign textures
+void	ft_init_coll_player_texture(t_game_data *game);
+void	ft_player_tex_to_img(t_game_data *g, int count);
 
 // Map on window
 void	ft_map_on_window(t_game_data *game);
@@ -147,7 +153,9 @@ void	ft_keypress_s(t_game_data *game);
 void	ft_keypress_a(t_game_data *game);
 void	ft_keypress_d(t_game_data *game);
 
+// Movement
 void	ft_update_movement(void *param);
+void	ft_animate_movement(t_game_data *game, int way);
 
 // Free delete
 void	ft_delete_collectable(t_game_data *game);

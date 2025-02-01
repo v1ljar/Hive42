@@ -7,7 +7,8 @@ WFLAGS = -Werror -Wextra -Wall -g
 SRC = so_long.c so_long_utils_map_initialization.c so_long_utils_map_validation.c \
 	so_long_utils_adjust_image.c so_long_utils_exit.c so_long_utils_free_delete.c \
 	so_long_utils_init_data.c so_long_utils_init_images.c so_long_utils_keypress.c \
-	so_long_utils_map_pos.c so_long_utils_map_on_window.c
+	so_long_utils_map_pos.c so_long_utils_map_on_window.c so_long_utils_movement.c \
+	so_long_utils_assign_textures.c
 
 LIBFT = libft.a
 
@@ -30,7 +31,7 @@ $(MLX42):
 		else \
 				echo "MLX42 library already created!"; \
 		fi
-		
+
 
 $(NAME): $(LIBFT) $(MLX42)
 		$(CC) $(WFLAGS) -o $@ $(SRC) -L./libft -lft $(MLX42) -ldl -lglfw -pthread -lm -O3  -msse4.2 -mavx2

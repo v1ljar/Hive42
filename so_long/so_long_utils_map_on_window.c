@@ -14,25 +14,28 @@
 
 void	ft_draw_player_images(t_game_data *g, int count)
 {
-	int	img_index;
-	int	width;
-	int	height;
-	int	nbr_colls;
+	int		img_index;
+	int		width;
+	int		height;
+	int		nbr_colls;
+	char	*nr;
 
 	img_index = count;
 	width = 64 * g->data->player_x;
 	height = 64 * g->data->player_y;
 	mlx_image_to_window(g->mlx, g->player_image, width, height);
 	g->image_list[img_index++]->img = g->player_image;
-	mlx_image_to_window(g->mlx, g->player_left_image, width, height - 32);
-	g->image_list[img_index++]->img = g->player_left_image;
-	g->player_left_image->instances[0].enabled = false;
-	mlx_image_to_window(g->mlx, g->player_right_image, width, height - 32);
-	g->image_list[img_index++]->img = g->player_right_image;
-	g->player_right_image->instances[0].enabled = false;
+	mlx_image_to_window(g->mlx, g->pl_lef_img, width, height - 32);
+	g->image_list[img_index++]->img = g->pl_lef_img;
+	g->pl_lef_img->instances[0].enabled = false;
+	mlx_image_to_window(g->mlx, g->pl_rig_img, width, height - 32);
+	g->image_list[img_index++]->img = g->pl_rig_img;
+	g->pl_rig_img->instances[0].enabled = false;
 	nbr_colls = g->data->collectibles;
-	g->coll_amount = mlx_put_string(g->mlx, ft_itoa(nbr_colls), 12, 12);
+	nr = ft_itoa(nbr_colls);
+	g->coll_amount = mlx_put_string(g->mlx, nr, 12, 12);
 	mlx_resize_image(g->coll_amount, 40, 40);
+	free(nr);
 	g->coll_decrement = 0;
 }
 
