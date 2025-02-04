@@ -13,8 +13,8 @@
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
-# include "./libft/libft.h"
 # include <fcntl.h>
+# include "./libft/libft.h"
 # include "./MLX42/include/MLX42/MLX42.h"
 
 typedef struct s_map_data
@@ -95,12 +95,13 @@ typedef struct s_game_data
 	int				is_moving;
 	mlx_image_t		*coll_amount;
 	int				coll_decrement;
+	int				move_size;
 }	t_game_data;
 
 // Map initilizaton
 int		ft_validate_map(char *map_path, t_map_data *board);
 int		ft_initialize_board(char *map_path, t_map_data *board);
-void	ft_initialize_map_data(t_map_data *board, char *whole_map, int lines);
+int		ft_join_whole_map(int fd, char **whole_map, char **str);
 int		ft_validate_parts(t_map_data *board);
 void	ft_validate_char(t_map_data *board, char c, int i, int j);
 
@@ -116,6 +117,8 @@ void	ft_init_game_data(t_game_data *game, t_map_data *board);
 void	ft_allocate_collectibles_list(t_game_data *game);
 void	ft_init_mlx_and_textures(t_game_data *game);
 void	ft_load_player_textures(t_game_data *game);
+void	ft_initialize_map_data(t_map_data *board, char *whole_map, int lines,
+			char *map_path);
 
 // Init images
 void	ft_init_images(t_game_data *game);

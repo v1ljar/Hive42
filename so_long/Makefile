@@ -2,7 +2,9 @@ NAME = so_long
 
 CC = cc
 
-WFLAGS = -Werror -Wextra -Wall -g
+WFLAGS = -Werror -Wextra -Wall
+
+MLXFLAGS = -ldl -lglfw -pthread -lm -O3  -msse4.2 -mavx2
 
 SRC = so_long.c so_long_utils_map_initialization.c so_long_utils_map_validation.c \
 	so_long_utils_adjust_image.c so_long_utils_exit.c so_long_utils_free_delete.c \
@@ -34,7 +36,7 @@ $(MLX42):
 
 
 $(NAME): $(LIBFT) $(MLX42)
-		$(CC) $(WFLAGS) -o $@ $(SRC) -L./libft -lft $(MLX42) -ldl -lglfw -pthread -lm -O3  -msse4.2 -mavx2
+		$(CC) $(WFLAGS) -o $@ $(SRC) -L./libft -lft $(MLX42) $(MLXFLAGS)
 
 clean:
 		$(MAKE) -C $(LIBFTDIR) clean

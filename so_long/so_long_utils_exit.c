@@ -19,7 +19,7 @@ void	ft_escape_exit(t_game_data *game)
 	mlx_terminate(game->mlx);
 	ft_free_lists(game, game->data->images_count, game->data->collectibles);
 	ft_free_vector(game->data->map, game->data->rows);
-	exit(ft_printf("Game was closed with ESC!\n"));
+	exit(ft_printf("Error!\nGame was closed with ESC!\n"));
 }
 
 void	ft_game_loop_exit(t_game_data *game)
@@ -42,14 +42,14 @@ void	ft_free_exit(t_game_data *game)
 	mlx_terminate(game->mlx);
 	ft_free_lists(game, game->data->images_count, game->data->collectibles);
 	ft_free_vector(game->data->map, game->data->rows);
-	exit(ft_printf("Error! Failed to allocate memory!\n"));
+	exit(ft_printf("Error!\nFailed to allocate memory!\n"));
 }
 
 void	ft_collectible_failed_free(t_game_data *game, int len)
 {
 	ft_free_vector(game->data->map, game->data->rows);
 	ft_free_collectibles(game, len);
-	exit(ft_printf("Error! Collectibles list malloc failed!\n"));
+	exit(ft_printf("Error!\nCollectibles list malloc failed!\n"));
 }
 
 void	ft_init_mlx_failed(t_game_data *game)
@@ -62,5 +62,5 @@ void	ft_init_mlx_failed(t_game_data *game)
 	while (i < game->data->images_count)
 		free(game->image_list[i++]->img);
 	free(game->image_list);
-	exit(ft_printf("Error! Window initialization failed!\n"));
+	exit(ft_printf("Error!\nWindow initialization failed!\n"));
 }

@@ -18,7 +18,7 @@ int	ft_validate_map(char *map_path, t_map_data *board)
 
 	len = ft_strlen(map_path);
 	if (ft_memcmp((map_path + len - 4), ".ber", 4) != 0)
-		return (-1);
+		exit(ft_printf("Error\nOnly '.ber' files accepted!\n"));
 	if ((ft_initialize_board(map_path, board) == -1))
 		return (-1);
 	if ((ft_validate_parts(board) == -1))
@@ -38,36 +38,42 @@ int	ft_initialize_board(char *map_path, t_map_data *board)
 	int		lines;
 
 	fd = open(map_path, O_RDONLY);
-	lines = 0;
+	if (fd < 0)
+		exit(ft_printf("Error\nFailed to open '%s'.\n", map_path));
 	whole_map = ft_strdup("");
+	if (!whole_map)
+		exit(ft_printf("Error\nFailed to allocate whole_map.\n"));
 	str = get_next_line(fd);
-	while (str != NULL)
+	if (!str)
 	{
-		if (str == NULL)
-			break ;
-		whole_map = ft_strjoin_gnl((const char *)whole_map, (const char *) str);
-		free(str);
-		lines++;
-		str = get_next_line(fd);
+		free(whole_map);
+		exit(ft_printf("Error\nFailed to allocate first line from fd.\n"));
 	}
+	lines = ft_join_whole_map(fd, &whole_map, &str);
 	close(fd);
-	if (lines < 3 || (ft_strlen(whole_map) < 17))
-		return (free(whole_map), -1);
-	ft_initialize_map_data(board, whole_map, lines);
+	ft_initialize_map_data(board, whole_map, lines, map_path);
 	return (0);
 }
 
-void	ft_initialize_map_data(t_map_data *board, char *whole_map, int lines)
+int	ft_join_whole_map(int fd, char **whole_map, char **str)
 {
-	board->map = ft_split(whole_map, '\n');
-	board->map_dup = ft_split(whole_map, '\n');
-	board->line_len = (int)ft_strlen(whole_map) / lines;
-	board->rows = lines;
-	board->collectibles = 0;
-	board->exit_count = 0;
-	board->start_count = 0;
-	board->images_count = 8;
-	free(whole_map);
+	int	lines;
+
+	lines = 0;
+	while (*str != NULL)
+	{
+		*whole_map = ft_strjoin_gnl((const char *)*whole_map,
+				(const char *)*str);
+		if (!*whole_map)
+		{
+			free(*whole_map);
+			exit(ft_printf("Error\nFailed to allocate joined map.\n"));
+		}
+		free(*str);
+		lines++;
+		*str = get_next_line(fd);
+	}
+	return (lines);
 }
 
 void	ft_validate_char(t_map_data *board, char c, int i, int j)

@@ -12,7 +12,7 @@
 
 #include "so_long.h"
 
-void	ft_update_collectables_amount(void *param);
+static void	ft_update_collectables_amount(void *param);
 
 int	main(int argc, char **argv)
 {
@@ -23,7 +23,7 @@ int	main(int argc, char **argv)
 	{
 		ft_free_vector(board.map, board.rows);
 		ft_free_vector(board.map_dup, board.rows);
-		return (ft_printf("Error! Map is not valid!\n"), 1);
+		return (ft_printf("Error!\nMap is not valid!\n"), 1);
 	}
 	ft_init_game_data(&game, &board);
 	ft_init_mlx_and_textures(&game);
@@ -37,6 +37,8 @@ int	main(int argc, char **argv)
 	mlx_loop(game.mlx);
 	mlx_close_window(game.mlx);
 	mlx_terminate(game.mlx);
+	ft_free_textures(&game);
+	ft_free_lists(&game, game.data->images_count, game.data->collectibles);
 	ft_free_vector(game.data->map, game.data->rows);
 	return (ft_printf("Exited the game without completing the game!\n"));
 }

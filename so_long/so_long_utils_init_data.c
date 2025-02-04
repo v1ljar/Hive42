@@ -51,7 +51,7 @@ void	ft_allocate_collectibles_list(t_game_data *game)
 	if (!(game->coll_list))
 	{
 		ft_free_vector(game->data->map, game->data->rows);
-		exit(ft_printf("Error! Collectibles list malloc failed!\n"));
+		exit(ft_printf("Error!\nCollectibles list malloc failed!\n"));
 	}
 	while (i < game->data->collectibles)
 	{
@@ -80,7 +80,7 @@ void	ft_init_mlx_and_textures(t_game_data *game)
 	game->wall_texture = mlx_load_png("./textures/wall_fin_64.png");
 	if (!game->wall_texture)
 		ft_free_exit(game);
-	game->free_texture = mlx_load_png("./textures/free_64_4.png");
+	game->free_texture = mlx_load_png("./textures/free_64.png");
 	if (!game->free_texture)
 		ft_free_exit(game);
 	game->coll_texture = mlx_load_png("./textures/collectable_64.png");
@@ -97,7 +97,7 @@ void	ft_init_mlx_and_textures(t_game_data *game)
 
 void	ft_load_player_textures(t_game_data *game)
 {
-	game->player_texture = mlx_load_png("./textures/player_64_2.png");
+	game->player_texture = mlx_load_png("./textures/player_64.png");
 	if (!game->player_texture)
 		ft_free_exit(game);
 	game->pl_left_texture = mlx_load_png("./textures/player_left_64.png");
@@ -107,4 +107,23 @@ void	ft_load_player_textures(t_game_data *game)
 	if (!game->pl_right_texture)
 		ft_free_exit(game);
 	mlx_get_monitor_size(0, &game->win_x, &game->win_y);
+}
+
+void	ft_initialize_map_data(t_map_data *board, char *whole_map, int lines,
+	char *map_path)
+{
+	if (lines < 3 || (ft_strlen(whole_map) < 17))
+	{
+		free(whole_map);
+		exit(ft_printf("Error\n'%s' is not valid map.\n", map_path));
+	}
+	board->map = ft_split(whole_map, '\n');
+	board->map_dup = ft_split(whole_map, '\n');
+	board->line_len = (int)ft_strlen(whole_map) / lines;
+	board->rows = lines;
+	board->collectibles = 0;
+	board->exit_count = 0;
+	board->start_count = 0;
+	board->images_count = 8;
+	free(whole_map);
 }

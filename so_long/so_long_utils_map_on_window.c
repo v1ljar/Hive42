@@ -51,7 +51,7 @@ void	ft_map_on_window(t_game_data *game)
 	if (mlx_image_to_window(game->mlx, game->bg_image, 0, 0) < 0)
 	{
 		ft_free_collectibles(game, game->data->collectibles);
-		exit(ft_printf("Error! Background to the window failed!\n"));
+		exit(ft_printf("Error!\nBackground to the window failed!\n"));
 	}
 	game->image_list[img_index++]->img = game->bg_image;
 	while (y < game->data->rows)

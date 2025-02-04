@@ -44,7 +44,7 @@ void	ft_init_image_list(t_game_data *g)
 	if (!(g->image_list))
 	{
 		ft_free_exit(g);
-		exit(ft_printf("Error! Images list malloc failed!\n"));
+		exit(ft_printf("Error!\nImages list malloc failed!\n"));
 	}
 	i = 0;
 	while (i < g->data->images_count)

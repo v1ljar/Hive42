@@ -12,11 +12,19 @@
 
 #include "so_long.h"
 
-void	ft_map_correct_pos(t_game_data *game)
+void	ft_map_correct_pos(t_game_data *g)
 {
-	game->offset_y = 0;
-	game->offset_x = 0;
-	ft_count_offset(game);
+	g->offset_y = 0;
+	g->offset_x = 0;
+	ft_count_offset(g);
+	if ((g->data->line_len * 64 + g->data->rows * 64) < (g
+			->win_x + g->win_y) / 4)
+		g->move_size = 8;
+	else if ((g->data->line_len * 64 + g->data->rows * 64) < (g
+			->win_x + g->win_y) / 2)
+		g->move_size = 16;
+	else
+		g->move_size = 32;
 }
 
 void	ft_count_offset(t_game_data *game)

@@ -20,7 +20,7 @@ void	ft_update_movement(void *param)
 	if (g->is_moving == 1)
 	{
 		if (g->pl_lef_img->instances[0].x > g->pl_rig_img->instances[0].x)
-			g->pl_lef_img->instances[0].x -= 16;
+			g->pl_lef_img->instances[0].x -= g->move_size;
 		else
 		{
 			g->is_moving = 0;
@@ -31,7 +31,7 @@ void	ft_update_movement(void *param)
 	if (g->is_moving == 2)
 	{
 		if (g->pl_rig_img->instances[0].x < g->pl_lef_img->instances[0].x)
-			g->pl_rig_img->instances[0].x += 16;
+			g->pl_rig_img->instances[0].x += g->move_size;
 		else
 		{
 			g->is_moving = 0;
