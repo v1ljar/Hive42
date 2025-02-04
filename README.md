@@ -1,10 +1,6 @@
-Hive42 Helsinki School Projects
-
 Welcome to my Hive42 Helsinki project repository! 🎓🚀
 
-About Me
-
-I am a passionate and determined coding student at Hive Helsinki. My journey in Hive began in 2024 and this repository is a reflection of my growth, skills, and accomplishments throughout the program.
+My journey in Hive began in 2024 and this repository is a reflection of my growth, skills, and accomplishments throughout the program.
 
 
                                 Opportunity | Virtue | Resilience | Amor Fati
