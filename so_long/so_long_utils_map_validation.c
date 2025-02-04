@@ -30,7 +30,7 @@ void	ft_flood_fill(t_map_data *b, int y, int x, char prev)
 	char	new;
 
 	new = '1';
-	if (b->map_dup[y][x] == '1')
+	if (b->map_dup[y][x] == '1' || b->map_dup[y][x] == '2')
 		return ;
 	if (b->map_dup[y][x] == 'E')
 	{
@@ -71,16 +71,6 @@ int	ft_path_is_valid(t_map_data *b)
 	return (0);
 }
 
-void	ft_free_vector(char **str, int len)
-{
-	int	i;
-
-	i = 0;
-	while (i < len)
-		free(str[i++]);
-	free(str);
-}
-
 int	ft_validate_amount(t_map_data *b)
 {
 	int	i;
@@ -96,7 +86,7 @@ int	ft_validate_amount(t_map_data *b)
 		{
 			if (b->map[0][j] != '1' || b->map[b->rows - 1][j] != '1')
 				return (-1);
-			if (b->map[i][0] != '1' || b->map[1][b->line_len - 1] != '1')
+			if (b->map[i][0] != '1' || b->map[i][b->line_len - 1] != '1')
 				return (-1);
 			j++;
 		}

@@ -12,6 +12,10 @@
 
 #include "so_long.h"
 
+static void	ft_count_offset(t_game_data *game);
+static void	ft_horizontal_offset(t_game_data *game);
+static void	ft_vertical_offset(t_game_data *game);
+
 void	ft_map_correct_pos(t_game_data *g)
 {
 	g->offset_y = 0;
@@ -27,7 +31,7 @@ void	ft_map_correct_pos(t_game_data *g)
 		g->move_size = 32;
 }
 
-void	ft_count_offset(t_game_data *game)
+static void	ft_count_offset(t_game_data *game)
 {
 	int	i;
 
@@ -55,14 +59,14 @@ void	ft_count_offset(t_game_data *game)
 	}
 }
 
-void	ft_vertical_offset(t_game_data *game)
+static void	ft_vertical_offset(t_game_data *game)
 {
 	game->offset_y = game->data->player_y - (int)game->win_y / 64;
 	if (game->offset_y + ((int)game->win_y / 64) > game->data->rows)
 		game->offset_y = game->data->rows - ((int)game->win_y / 64);
 }
 
-void	ft_horizontal_offset(t_game_data *game)
+static void	ft_horizontal_offset(t_game_data *game)
 {
 	game->offset_x = game->data->player_x - (int)game->win_x / 64;
 	if (game->offset_x + (int)game->win_x / 64 > game->data->line_len)

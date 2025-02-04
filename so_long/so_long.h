@@ -100,32 +100,21 @@ typedef struct s_game_data
 
 // Map initilizaton
 int		ft_validate_map(char *map_path, t_map_data *board);
-int		ft_initialize_board(char *map_path, t_map_data *board);
-int		ft_join_whole_map(int fd, char **whole_map, char **str);
-int		ft_validate_parts(t_map_data *board);
-void	ft_validate_char(t_map_data *board, char c, int i, int j);
 
 // Map validation
 int		ft_validate_path(t_map_data *board);
 void	ft_flood_fill(t_map_data *b, int x, int y, char prev);
 int		ft_path_is_valid(t_map_data *b);
-void	ft_free_vector(char **str, int len);
 int		ft_validate_amount(t_map_data *board);
 
 // Init data
 void	ft_init_game_data(t_game_data *game, t_map_data *board);
-void	ft_allocate_collectibles_list(t_game_data *game);
 void	ft_init_mlx_and_textures(t_game_data *game);
-void	ft_load_player_textures(t_game_data *game);
 void	ft_initialize_map_data(t_map_data *board, char *whole_map, int lines,
 			char *map_path);
 
 // Init images
 void	ft_init_images(t_game_data *game);
-void	ft_init_image_list(t_game_data *game);
-void	ft_fill_images_list(t_game_data *game);
-void	ft_fill_wall_images(t_game_data *game, int *count);
-void	ft_fill_images_ex_wall(t_game_data *game, int i, int j, int *count);
 
 // Assign textures
 void	ft_init_coll_player_texture(t_game_data *game);
@@ -133,28 +122,15 @@ void	ft_player_tex_to_img(t_game_data *g, int count);
 
 // Map on window
 void	ft_map_on_window(t_game_data *game);
-void	ft_draw_map(t_game_data *game, int y, int x, int *index);
-void	ft_init_exit_pos(t_game_data *game, int x, int y);
 
 // Map position
 void	ft_map_correct_pos(t_game_data *game);
-void	ft_count_offset(t_game_data *game);
-void	ft_horizontal_offset(t_game_data *game);
-void	ft_vertical_offset(t_game_data *game);
 
 // Adjust image
 void	ft_adjust_images(void *param);
-void	ft_adjust_image_w(t_game_data *game);
-void	ft_adjust_image_s(t_game_data *game);
-void	ft_adjust_image_a(t_game_data *game);
-void	ft_adjust_image_d(t_game_data *game);
 
 // Keypress
 void	my_keyhook(t_mlx_key_data keydata, void *param);
-void	ft_keypress_w(t_game_data *game);
-void	ft_keypress_s(t_game_data *game);
-void	ft_keypress_a(t_game_data *game);
-void	ft_keypress_d(t_game_data *game);
 
 // Movement
 void	ft_update_movement(void *param);
@@ -165,6 +141,7 @@ void	ft_delete_collectable(t_game_data *game);
 void	ft_free_lists(t_game_data *game, int nbr_images, int nbr_coll);
 void	ft_free_collectibles(t_game_data *game, int len);
 void	ft_free_textures(t_game_data *game);
+void	ft_free_vector(char **str, int len);
 
 // Exit
 void	ft_escape_exit(t_game_data *game);

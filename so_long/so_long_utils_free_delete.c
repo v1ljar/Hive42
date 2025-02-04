@@ -80,3 +80,13 @@ void	ft_free_textures(t_game_data *game)
 	if (game->pl_right_texture)
 		mlx_delete_texture(game->pl_right_texture);
 }
+
+void	ft_free_vector(char **str, int len)
+{
+	int	i;
+
+	i = 0;
+	while (i < len)
+		free(str[i++]);
+	free(str);
+}

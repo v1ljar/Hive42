@@ -22,7 +22,6 @@ int	main(int argc, char **argv)
 	if (argc != 2 || ft_validate_map(argv[1], &board) == -1)
 	{
 		ft_free_vector(board.map, board.rows);
-		ft_free_vector(board.map_dup, board.rows);
 		return (ft_printf("Error!\nMap is not valid!\n"), 1);
 	}
 	ft_init_game_data(&game, &board);
@@ -43,7 +42,7 @@ int	main(int argc, char **argv)
 	return (ft_printf("Exited the game without completing the game!\n"));
 }
 
-void	ft_update_collectables_amount(void *param)
+static void	ft_update_collectables_amount(void *param)
 {
 	t_game_data	*g;
 	int			reminder;

@@ -12,6 +12,11 @@
 
 #include "so_long.h"
 
+static void	ft_init_image_list(t_game_data *game);
+static void	ft_fill_images_list(t_game_data *game);
+static void	ft_fill_wall_images(t_game_data *game, int *count);
+static void	ft_fill_images_ex_wall(t_game_data *game, int i, int j, int *count);
+
 void	ft_init_images(t_game_data *g)
 {
 	g->bg_image = mlx_texture_to_image(g->mlx, g->bg_texture);
@@ -36,7 +41,7 @@ void	ft_init_images(t_game_data *g)
 	ft_fill_images_list(g);
 }
 
-void	ft_init_image_list(t_game_data *g)
+static void	ft_init_image_list(t_game_data *g)
 {
 	int	i;
 
@@ -54,7 +59,7 @@ void	ft_init_image_list(t_game_data *g)
 	}
 }
 
-void	ft_fill_images_list(t_game_data *g)
+static void	ft_fill_images_list(t_game_data *g)
 {
 	int	count;
 	int	y;
@@ -81,7 +86,7 @@ void	ft_fill_images_list(t_game_data *g)
 	ft_player_tex_to_img(g, count);
 }
 
-void	ft_fill_wall_images(t_game_data *g, int *count)
+static void	ft_fill_wall_images(t_game_data *g, int *count)
 {
 	int	len;
 
@@ -92,7 +97,7 @@ void	ft_fill_wall_images(t_game_data *g, int *count)
 	*count = len;
 }
 
-void	ft_fill_images_ex_wall(t_game_data *g, int y, int x, int *count)
+static void	ft_fill_images_ex_wall(t_game_data *g, int y, int x, int *count)
 {
 	int	len;
 

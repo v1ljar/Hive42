@@ -12,6 +12,9 @@
 
 #include "so_long.h"
 
+static void	ft_allocate_collectibles_list(t_game_data *game);
+static void	ft_load_player_textures(t_game_data *game);
+
 void	ft_init_game_data(t_game_data *game, t_map_data *board)
 {
 	game->mlx = NULL;
@@ -40,7 +43,7 @@ void	ft_init_game_data(t_game_data *game, t_map_data *board)
 	ft_allocate_collectibles_list(game);
 }
 
-void	ft_allocate_collectibles_list(t_game_data *game)
+static void	ft_allocate_collectibles_list(t_game_data *game)
 {
 	int	i;
 	int	amount;
@@ -95,7 +98,7 @@ void	ft_init_mlx_and_textures(t_game_data *game)
 	ft_load_player_textures(game);
 }
 
-void	ft_load_player_textures(t_game_data *game)
+static void	ft_load_player_textures(t_game_data *game)
 {
 	game->player_texture = mlx_load_png("./textures/player_64.png");
 	if (!game->player_texture)

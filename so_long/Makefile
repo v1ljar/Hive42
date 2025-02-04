@@ -12,16 +12,26 @@ SRC = so_long.c so_long_utils_map_initialization.c so_long_utils_map_validation.
 	so_long_utils_map_pos.c so_long_utils_map_on_window.c so_long_utils_movement.c \
 	so_long_utils_assign_textures.c
 
+OBJ = $(SRC:%.c=obj/%.o)
+
 LIBFT = libft.a
 
 LIBFTDIR = ./libft/
 
 MLX42 = ./MLX42/build/libmlx42.a
 
-all: $(NAME)
+all: $(MLX42) $(LIBFT) $(NAME)
 
-$(LIBFT): $(LIBFTDIR)
-		$(MAKE) -C $<
+obj/%.o: %.c
+		mkdir -p obj
+		$(CC) $(WFLAGS) -c $< -o $@
+
+$(LIBFT): 
+		@if [ ! -f $(LIBFT) ]; then \
+			$(MAKE) -C $(LIBFTDIR); \
+		else \
+			echo "Libft up to date!"; \
+		fi
 
 $(MLX42):
 		@if [ ! -f $(MLX42) ]; then \
@@ -35,11 +45,20 @@ $(MLX42):
 		fi
 
 
-$(NAME): $(LIBFT) $(MLX42)
-		$(CC) $(WFLAGS) -o $@ $(SRC) -L./libft -lft $(MLX42) $(MLXFLAGS)
+$(NAME): $(OBJ)  
+		@if [ ! -f $(NAME) ] || [ -n "$(OBJ)" ]; then \
+			$(CC) $(WFLAGS) -o $@ $(OBJ) -L./libft -lft $(MLX42) $(MLXFLAGS); \
+		else \
+			echo "make: Nothing to be done for 'make'"; \
+		fi
 
 clean:
 		$(MAKE) -C $(LIBFTDIR) clean
+		@if [ -d obj ]; then \
+			rm -rf obj; \
+		else \
+			echo "make: Nothing to be done for 'make clean'"; \
+		fi
 
 fclean:
 		@if [ ! -f $(NAME) ]; then \
@@ -49,6 +68,9 @@ fclean:
 		fi
 		@if [ -d "MLX42" ]; then \
 				rm -rf MLX42; \
+		fi
+		@if [ -d obj ]; then \
+			rm -rf obj; \
 		fi
 		$(MAKE) -C $(LIBFTDIR) fclean
 

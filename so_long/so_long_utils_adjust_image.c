@@ -12,6 +12,11 @@
 
 #include "so_long.h"
 
+static void	ft_adjust_image_w(t_game_data *game);
+static void	ft_adjust_image_s(t_game_data *game);
+static void	ft_adjust_image_a(t_game_data *game);
+static void	ft_adjust_image_d(t_game_data *game);
+
 void	ft_adjust_images(void *param)
 {
 	t_game_data	*g;
@@ -39,7 +44,7 @@ void	ft_adjust_images(void *param)
 	}
 }
 
-void	ft_adjust_image_w(t_game_data *game)
+static void	ft_adjust_image_w(t_game_data *game)
 {
 	int	i;
 
@@ -54,7 +59,7 @@ void	ft_adjust_image_w(t_game_data *game)
 	}
 }
 
-void	ft_adjust_image_s(t_game_data *game)
+static void	ft_adjust_image_s(t_game_data *game)
 {
 	int	i;
 
@@ -65,7 +70,7 @@ void	ft_adjust_image_s(t_game_data *game)
 	game->bg_win_y--;
 }
 
-void	ft_adjust_image_a(t_game_data *game)
+static void	ft_adjust_image_a(t_game_data *game)
 {
 	int	i;
 
@@ -76,7 +81,7 @@ void	ft_adjust_image_a(t_game_data *game)
 	game->bg_win_x++;
 }
 
-void	ft_adjust_image_d(t_game_data *game)
+static void	ft_adjust_image_d(t_game_data *game)
 {
 	int	i;
 

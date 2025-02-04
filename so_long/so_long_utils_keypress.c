@@ -12,6 +12,11 @@
 
 #include "so_long.h"
 
+static void	ft_keypress_w(t_game_data *game);
+static void	ft_keypress_s(t_game_data *game);
+static void	ft_keypress_a(t_game_data *game);
+static void	ft_keypress_d(t_game_data *game);
+
 void	my_keyhook(t_mlx_key_data keydata, void *param)
 {
 	t_game_data	*game;
@@ -41,7 +46,7 @@ void	my_keyhook(t_mlx_key_data keydata, void *param)
 	ft_delete_collectable(game);
 }
 
-void	ft_keypress_w(t_game_data *g)
+static void	ft_keypress_w(t_game_data *g)
 {
 	if (g->data->map[g->data->player_y - 1][g->data->player_x] != '1' &&
 		(!(g->data->map[g->data->player_y - 1][g->data->player_x] == 'E' &&
@@ -63,7 +68,7 @@ void	ft_keypress_w(t_game_data *g)
 	}
 }
 
-void	ft_keypress_s(t_game_data *g)
+static void	ft_keypress_s(t_game_data *g)
 {
 	if (g->data->map[g->data->player_y + 1][g->data->player_x] != '1' &&
 		(!(g->data->map[g->data->player_y + 1][g->data->player_x] == 'E' &&
@@ -85,7 +90,7 @@ void	ft_keypress_s(t_game_data *g)
 	}
 }
 
-void	ft_keypress_a(t_game_data *g)
+static void	ft_keypress_a(t_game_data *g)
 {
 	if (g->data->map[g->data->player_y][g->data->player_x - 1] != '1' &&
 		(!(g->data->map[g->data->player_y][g->data->player_x - 1] == 'E' &&
@@ -109,7 +114,7 @@ void	ft_keypress_a(t_game_data *g)
 	}
 }
 
-void	ft_keypress_d(t_game_data *g)
+static void	ft_keypress_d(t_game_data *g)
 {
 	if (g->data->map[g->data->player_y][g->data->player_x + 1] != '1' &&
 		(!(g->data->map[g->data->player_y][g->data->player_x + 1] == 'E' &&
