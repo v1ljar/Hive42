@@ -15,7 +15,7 @@
 static int		ft_initialize_board(char *map_path, t_map_data *board);
 static int		ft_join_whole_map(int fd, char **whole_map, char **str);
 static int		ft_validate_parts(t_map_data *board);
-static void	ft_validate_char(t_map_data *board, char c, int i, int j);
+static void		ft_validate_char(t_map_data *board, char c, int i, int j);
 
 int	ft_validate_map(char *map_path, t_map_data *board)
 {

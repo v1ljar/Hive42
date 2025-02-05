@@ -71,7 +71,6 @@ static void	ft_draw_player_images(t_game_data *g, int count)
 	g->coll_decrement = 0;
 }
 
-
 static void	ft_draw_map(t_game_data *g, int y, int x, int *index)
 {
 	int	img_index;
