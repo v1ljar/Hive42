@@ -121,7 +121,18 @@ void	ft_initialize_map_data(t_map_data *board, char *whole_map, int lines,
 		exit(ft_printf("Error\n'%s' is not valid map.\n", map_path));
 	}
 	board->map = ft_split(whole_map, '\n');
+	if (!board->map)
+	{
+		free(whole_map);
+		exit(ft_printf("Error\nFailed to allocate map memory.\n"));
+	}
 	board->map_dup = ft_split(whole_map, '\n');
+	if (!board->map_dup)
+	{
+		free(whole_map);
+		ft_free_vector(board->map, board->rows);
+		exit(ft_printf("Error\nFailed to allocate map_dup memory.\n"));
+	}
 	board->line_len = (int)ft_strlen(whole_map) / lines;
 	board->rows = lines;
 	board->collectibles = 0;

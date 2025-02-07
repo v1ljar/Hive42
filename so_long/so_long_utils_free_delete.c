@@ -86,7 +86,8 @@ void	ft_free_vector(char **str, int len)
 	int	i;
 
 	i = 0;
-	while (i < len)
+	while (i < len && str[i] != NULL)
 		free(str[i++]);
-	free(str);
+	if (str)
+		free(str);
 }
