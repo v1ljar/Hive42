@@ -45,7 +45,7 @@ $(MLX42):
 		fi
 
 
-$(NAME): $(OBJ)  
+$(NAME): $(MLX42) $(LIBFT) $(OBJ)  
 		@if [ ! -f $(NAME) ] || [ -n "$(OBJ)" ]; then \
 			$(CC) $(WFLAGS) -o $@ $(OBJ) -L./libft -lft $(MLX42) $(MLXFLAGS); \
 		else \

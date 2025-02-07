@@ -16,8 +16,8 @@ static void	ft_update_collectables_amount(void *param);
 
 int	main(int argc, char **argv)
 {
-	t_map_data	board;
-	t_game_data	game;
+	static t_map_data	board;
+	static t_game_data	game;
 
 	if (argc != 2 || ft_validate_map(argv[1], &board) == -1)
 	{

@@ -67,6 +67,11 @@ static int	ft_join_whole_map(int fd, char **whole_map, char **str)
 	lines = 0;
 	while (*str != NULL)
 	{
+		if (*str[0] != '1')
+		{
+			free(*whole_map);
+			exit(ft_printf("Error\nLine %d is wrong!\n", lines + 1));
+		}
 		*whole_map = ft_strjoin_gnl((const char *)*whole_map,
 				(const char *)*str);
 		if (!*whole_map)
