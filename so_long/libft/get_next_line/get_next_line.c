@@ -18,7 +18,7 @@ char	*ft_extract_line(char **buffer)
 	char	*new_line;
 	char	*line;
 
-	if (!*buffer || !**buffer)
+	if (!*buffer || !**buffer || *buffer[0] != '1')
 	{
 		free(*buffer);
 		*buffer = NULL;

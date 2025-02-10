@@ -49,9 +49,11 @@ static int	ft_initialize_board(char *map_path, t_map_data *board)
 	if (!whole_map)
 		exit(ft_printf("Error\nFailed to allocate whole_map.\n"));
 	str = get_next_line(fd);
-	if (!str)
+	if (!str || str[0] != '1')
 	{
 		free(whole_map);
+		free(str);
+		close(fd);
 		exit(ft_printf("Error\nFailed to allocate first line from fd.\n"));
 	}
 	lines = ft_join_whole_map(fd, &whole_map, &str);
@@ -67,11 +69,6 @@ static int	ft_join_whole_map(int fd, char **whole_map, char **str)
 	lines = 0;
 	while (*str != NULL)
 	{
-		if (*str[0] != '1')
-		{
-			free(*whole_map);
-			exit(ft_printf("Error\nLine %d is wrong!\n", lines + 1));
-		}
 		*whole_map = ft_strjoin_gnl((const char *)*whole_map,
 				(const char *)*str);
 		if (!*whole_map)
