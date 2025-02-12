@@ -13,6 +13,10 @@
 #include "so_long.h"
 
 static void	ft_update_collectables_amount(void *param);
+void	ft_enemies_loop(void *param);
+void	ft_spawn_enemy(t_game_data *game);
+void	ft_animate_enemies(t_game_data *game);
+void	ft_move_enemies(t_game_data *game);
 
 int	main(int argc, char **argv)
 {
@@ -34,6 +38,7 @@ int	main(int argc, char **argv)
 	mlx_loop_hook(game.mlx, ft_update_movement, &game);
 	mlx_loop_hook(game.mlx, ft_adjust_images, &game);
 	mlx_key_hook(game.mlx, (void *)my_keyhook, &game);
+	//mlx_loop_hook(game.mlx, ft_enemies_loop, &game);
 	mlx_loop(game.mlx);
 	mlx_close_window(game.mlx);
 	mlx_terminate(game.mlx);
@@ -59,5 +64,161 @@ static void	ft_update_collectables_amount(void *param)
 		mlx_resize_image(g->coll_amount, 40, 40);
 		free(nbr);
 		g->coll_decrement++;
+	}
+}
+
+void	ft_enemies_loop(void *param)
+{
+	t_game_data *g;
+	static int spawn_timer;
+
+	ft_printf("Hello\n");
+	spawn_timer = 0;
+	g = param;
+	if (++spawn_timer > 300)
+	{
+		ft_spawn_enemy(g);
+		spawn_timer = 0;
+	}
+	//ft_animate_enemies(g);
+	//ft_move_enemies(g);
+}
+
+void	ft_spawn_enemy(t_game_data *game)
+{
+	int empty_count = 0;
+	int spawn_x = 0;
+	int spawn_y = 0;
+	int i, j;
+
+	i = 0;
+	while (i < game->data->rows)
+	{
+		j = 0;
+		while (j < game->data->line_len)
+		{
+			if (game->data->map[i][j] == '0' && (i <= game->player_win_y - 5 || i >= game->player_win_y + 5) &&
+					(j <= game->player_win_x - 5 || j >= game->player_win_x + 5))
+			{
+				empty_count++;
+				if (rand() % empty_count == 0)
+				{
+					spawn_x = j;
+					spawn_y = i;
+				}
+			}
+			j++;
+		}
+		i++;
+	}
+	if (empty_count >= 5)
+	{
+		t_enemy *new_enemy;
+
+		new_enemy = malloc(sizeof(t_enemy));
+		if (!new_enemy)
+			ft_escape_exit(game);
+		new_enemy->x = spawn_x;
+		new_enemy->y = spawn_y;
+		new_enemy->alive = 1;
+		new_enemy->move_delay = 50;
+		new_enemy->frame = 0;
+		new_enemy->action = 0;
+		i = 0;
+		while (i < 2)
+		{
+			if (i == 0)
+			{
+				new_enemy->sprites[i] = mlx_texture_to_image(game->mlx, game->enemy_texture[i]);
+				mlx_image_to_window(game->mlx, new_enemy->sprites[i], spawn_x * 64, spawn_y * 64);
+				new_enemy->sprites[i]->instances[0].enabled = true;
+			}
+			else
+			{
+				new_enemy->sprites[i] = mlx_texture_to_image(game->mlx, game->enemy_texture[i]);
+				mlx_image_to_window(game->mlx, new_enemy->sprites[i], (spawn_x - 1) * 64, (spawn_y - 1) * 64);
+				new_enemy->sprites[i]->instances[0].enabled = false;
+			}
+			if (!new_enemy->sprites[i])
+            {
+                // Handle texture loading failure
+                free(new_enemy);
+				ft_printf("Malloc failed!\n");
+                ft_escape_exit(game);
+            }
+			i++;
+		}
+		new_enemy->next = game->enemies;
+		game->enemies = new_enemy;
+	}
+}
+
+void	ft_animate_enemies(t_game_data *game)
+{
+	static t_enemy *enemy;
+	int		i;
+
+	enemy = game->enemies;
+	while (enemy)
+	{
+		if (enemy->alive)
+		{
+			enemy->frame = (enemy->frame + 1) % 2;
+			i = 0;
+			while (i < 2)
+			{
+				enemy->sprites[i]->instances[0].enabled = (i == enemy->frame);
+				i++;
+			}			
+		}
+		enemy = enemy->next;
+	}
+}
+
+void	ft_move_enemies(t_game_data *game)
+{
+	t_enemy	*enemy;
+	int		i;
+
+	enemy = game->enemies;
+	while (enemy)
+	{
+		if (enemy->alive && --enemy->move_delay <= 0)
+		{
+			enemy->move_delay = 50;
+			int move_dir = rand() % 4;
+			int new_x = enemy->x;
+			int new_y = enemy->y;
+
+			if (move_dir == 0 && game->data->map[enemy->y - 1][enemy->x] == '0')
+				new_y--;
+			if (move_dir == 1 && game->data->map[enemy->y + 1][enemy->x] == '0')
+				new_y++;
+			if (move_dir == 2 && game->data->map[enemy->y] [enemy->x - 1] == '0')
+				new_x--;
+			if (move_dir == 3 && game->data->map[enemy->y][enemy->x + 1] == '0')
+				new_x++;
+			if (game->data->map[new_y][new_x] == '0')
+			{
+				enemy->x = new_x;
+				enemy->y = new_y;
+			}
+			i = 0;
+			while (i < 2)
+			{
+				if (i == 0)
+				{
+					enemy->sprites[i]->instances[0].x = new_x * 64;
+					enemy->sprites[i]->instances[0].y = new_y * 64;
+				}
+				else
+				{
+					enemy->sprites[i]->instances[0].x = (new_x - 1) * 64;
+					enemy->sprites[i]->instances[0].y = (new_y - 1) * 64;
+				}
+				i++;
+			}
+		}
+		enemy = enemy->next;
 	}
 }

@@ -52,6 +52,18 @@ typedef struct s_image_list
 	mlx_image_t	*img;
 }	t_image_list;
 
+typedef struct s_enemy
+{
+	int	x;
+	int	y;
+	int	alive;
+	int	move_delay;
+	int	frame;	// Frame index for animation
+	int	action;	// 0 = flying, 1 = spitting fame
+	mlx_image_t *sprites[2];
+	struct s_enemy	*next;
+}	t_enemy;
+
 typedef struct s_game_data
 {
 	mlx_t			*mlx;
@@ -65,6 +77,7 @@ typedef struct s_game_data
 	mlx_texture_t	*coll_texture;
 	mlx_texture_t	*exit_lock_tex;
 	mlx_texture_t	*exit_open_tex;
+	mlx_texture_t	*enemy_texture[2];
 	mlx_image_t		*bg_image;
 	mlx_image_t		*player_image;
 	mlx_image_t		*pl_lef_img;
@@ -96,6 +109,7 @@ typedef struct s_game_data
 	mlx_image_t		*coll_amount;
 	int				coll_decrement;
 	int				move_size;
+	t_enemy			*enemies;
 }	t_game_data;
 
 // Map initilizaton

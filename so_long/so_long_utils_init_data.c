@@ -100,6 +100,7 @@ void	ft_init_mlx_and_textures(t_game_data *game)
 
 static void	ft_load_player_textures(t_game_data *game)
 {
+
 	game->player_texture = mlx_load_png("./textures/player_64.png");
 	if (!game->player_texture)
 		ft_free_exit(game);
@@ -110,6 +111,11 @@ static void	ft_load_player_textures(t_game_data *game)
 	if (!game->pl_right_texture)
 		ft_free_exit(game);
 	mlx_get_monitor_size(0, &game->win_x, &game->win_y);
+	
+	game->enemy_texture[0] = mlx_load_png("./textures/enemy_64.png");
+	game->enemy_texture[1] = mlx_load_png("./textures/enemy_128.png");
+	if (!game->enemy_texture[0] || !game->enemy_texture[1])
+		ft_free_exit(game);
 }
 
 void	ft_initialize_map_data(t_map_data *board, char *whole_map, int lines,
