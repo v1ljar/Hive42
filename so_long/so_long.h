@@ -110,7 +110,11 @@ typedef struct s_game_data
 	int				coll_decrement;
 	int				move_size;
 	t_enemy			*enemies;
+	int				nbr_enemy;
 }	t_game_data;
+
+void	ft_dragon_exit(t_game_data *game);
+void	ft_free_dragons(t_game_data *game);
 
 // Map initilizaton
 int		ft_validate_map(char *map_path, t_map_data *board);

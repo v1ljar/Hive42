@@ -20,13 +20,13 @@ LIBFTDIR = ./libft/
 
 MLX42 = ./MLX42/build/libmlx42.a
 
-all: $(MLX42) $(LIBFT) $(NAME)
+all: $(NAME)
 
 obj/%.o: %.c
 		mkdir -p obj
 		$(CC) $(WFLAGS) -c $< -o $@
 
-$(LIBFT): 
+$(LIBFT):
 		@if [ ! -f $(LIBFT) ]; then \
 			$(MAKE) -C $(LIBFTDIR); \
 		else \
@@ -45,7 +45,7 @@ $(MLX42):
 		fi
 
 
-$(NAME): $(MLX42) $(LIBFT) $(OBJ)  
+$(NAME): $(MLX42) $(LIBFT) $(OBJ)
 		@if [ ! -f $(NAME) ] || [ -n "$(OBJ)" ]; then \
 			$(CC) $(WFLAGS) -o $@ $(OBJ) -L./libft -lft $(MLX42) $(MLXFLAGS); \
 		else \

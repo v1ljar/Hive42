@@ -36,6 +36,8 @@ void	my_keyhook(t_mlx_key_data keydata, void *param)
 		ft_keypress_a(game);
 	else if (mlx_is_key_down(game->mlx, MLX_KEY_D) && game->is_moving == 0)
 		ft_keypress_d(game);
+	else if (mlx_is_key_down(game->mlx, MLX_KEY_D) && game->is_moving == 0)
+		ft_keypress_d(game);
 	if (game->data->collectibles == game->collected_cols)
 	{
 		mlx_delete_image(game->mlx, game->exit_lock_image);

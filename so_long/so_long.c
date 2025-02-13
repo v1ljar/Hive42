@@ -15,7 +15,7 @@
 static void	ft_update_collectables_amount(void *param);
 void	ft_enemies_loop(void *param);
 void	ft_spawn_enemy(t_game_data *game);
-void	ft_animate_enemies(t_game_data *game);
+void	ft_animate_enemies(t_game_data *game, int spawn_timer);
 void	ft_move_enemies(t_game_data *game);
 
 int	main(int argc, char **argv)
@@ -38,7 +38,7 @@ int	main(int argc, char **argv)
 	mlx_loop_hook(game.mlx, ft_update_movement, &game);
 	mlx_loop_hook(game.mlx, ft_adjust_images, &game);
 	mlx_key_hook(game.mlx, (void *)my_keyhook, &game);
-	//mlx_loop_hook(game.mlx, ft_enemies_loop, &game);
+	mlx_loop_hook(game.mlx, ft_enemies_loop, &game);
 	mlx_loop(game.mlx);
 	mlx_close_window(game.mlx);
 	mlx_terminate(game.mlx);
@@ -72,16 +72,14 @@ void	ft_enemies_loop(void *param)
 	t_game_data *g;
 	static int spawn_timer;
 
-	ft_printf("Hello\n");
-	spawn_timer = 0;
 	g = param;
-	if (++spawn_timer > 300)
+	if (++spawn_timer > 50)
 	{
 		ft_spawn_enemy(g);
 		spawn_timer = 0;
 	}
-	//ft_animate_enemies(g);
-	//ft_move_enemies(g);
+	ft_animate_enemies(g, spawn_timer);
+	ft_move_enemies(g);
 }
 
 void	ft_spawn_enemy(t_game_data *game)
@@ -97,8 +95,7 @@ void	ft_spawn_enemy(t_game_data *game)
 		j = 0;
 		while (j < game->data->line_len)
 		{
-			if (game->data->map[i][j] == '0' && (i <= game->player_win_y - 5 || i >= game->player_win_y + 5) &&
-					(j <= game->player_win_x - 5 || j >= game->player_win_x + 5))
+			if (game->data->map[i][j] == '0' && (j <= game->player_win_x - 5 || j >= game->player_win_x + 5))
 			{
 				empty_count++;
 				if (rand() % empty_count == 0)
@@ -111,9 +108,9 @@ void	ft_spawn_enemy(t_game_data *game)
 		}
 		i++;
 	}
-	if (empty_count >= 5)
+	if (empty_count >= 3 && game->nbr_enemy < game->data->rows)
 	{
-		t_enemy *new_enemy;
+		static t_enemy *new_enemy;
 
 		new_enemy = malloc(sizeof(t_enemy));
 		if (!new_enemy)
@@ -124,6 +121,7 @@ void	ft_spawn_enemy(t_game_data *game)
 		new_enemy->move_delay = 50;
 		new_enemy->frame = 0;
 		new_enemy->action = 0;
+		game->nbr_enemy++;
 		i = 0;
 		while (i < 2)
 		{
@@ -136,7 +134,7 @@ void	ft_spawn_enemy(t_game_data *game)
 			else
 			{
 				new_enemy->sprites[i] = mlx_texture_to_image(game->mlx, game->enemy_texture[i]);
-				mlx_image_to_window(game->mlx, new_enemy->sprites[i], (spawn_x - 1) * 64, (spawn_y - 1) * 64);
+				mlx_image_to_window(game->mlx, new_enemy->sprites[i], (spawn_x - 0.5) * 64, (spawn_y - 0.5) * 64);
 				new_enemy->sprites[i]->instances[0].enabled = false;
 			}
 			if (!new_enemy->sprites[i])
@@ -153,15 +151,15 @@ void	ft_spawn_enemy(t_game_data *game)
 	}
 }
 
-void	ft_animate_enemies(t_game_data *game)
+void	ft_animate_enemies(t_game_data *game, int spawn_timer)
 {
-	static t_enemy *enemy;
+	t_enemy *enemy;
 	int		i;
 
 	enemy = game->enemies;
 	while (enemy)
 	{
-		if (enemy->alive)
+		if (enemy->alive && spawn_timer == 13)
 		{
 			enemy->frame = (enemy->frame + 1) % 2;
 			i = 0;
@@ -169,7 +167,7 @@ void	ft_animate_enemies(t_game_data *game)
 			{
 				enemy->sprites[i]->instances[0].enabled = (i == enemy->frame);
 				i++;
-			}			
+			}
 		}
 		enemy = enemy->next;
 	}
@@ -190,15 +188,15 @@ void	ft_move_enemies(t_game_data *game)
 			int new_x = enemy->x;
 			int new_y = enemy->y;
 
-			if (move_dir == 0 && game->data->map[enemy->y - 1][enemy->x] == '0')
+			if (move_dir == 0 && game->data->map[enemy->y - 1][enemy->x] != '1')
 				new_y--;
-			if (move_dir == 1 && game->data->map[enemy->y + 1][enemy->x] == '0')
+			if (move_dir == 1 && game->data->map[enemy->y + 1][enemy->x] != '1')
 				new_y++;
-			if (move_dir == 2 && game->data->map[enemy->y] [enemy->x - 1] == '0')
+			if (move_dir == 2 && game->data->map[enemy->y] [enemy->x - 1] != '1')
 				new_x--;
-			if (move_dir == 3 && game->data->map[enemy->y][enemy->x + 1] == '0')
+			if (move_dir == 3 && game->data->map[enemy->y][enemy->x + 1] != '1')
 				new_x++;
-			if (game->data->map[new_y][new_x] == '0')
+			if (game->data->map[new_y][new_x] != '1')
 			{
 				enemy->x = new_x;
 				enemy->y = new_y;
@@ -213,12 +211,43 @@ void	ft_move_enemies(t_game_data *game)
 				}
 				else
 				{
-					enemy->sprites[i]->instances[0].x = (new_x - 1) * 64;
-					enemy->sprites[i]->instances[0].y = (new_y - 1) * 64;
+					enemy->sprites[i]->instances[0].x = (new_x - 0.5) * 64;
+					enemy->sprites[i]->instances[0].y = (new_y - 0.5) * 64;
 				}
 				i++;
 			}
 		}
+		if (enemy->x == game->player_win_x && enemy->y == game->player_win_y)
+			ft_dragon_exit(game);
 		enemy = enemy->next;
 	}
+}
+
+void	ft_free_dragons(t_game_data *game)
+{
+	t_enemy *enemy;
+	t_enemy *temp;
+
+	if (game->enemies)
+	{
+		enemy = game->enemies;
+		while (enemy)
+		{
+			temp = enemy->next;
+			free(enemy);
+			enemy = temp;
+			temp = NULL;
+		}
+	}
+}
+
+void	ft_dragon_exit(t_game_data *game)
+{
+	ft_free_textures(game);
+	mlx_close_window(game->mlx);
+	mlx_terminate(game->mlx);
+	ft_free_dragons(game);
+	ft_free_lists(game, game->data->images_count, game->data->collectibles);
+	ft_free_vector(game->data->map, game->data->rows);
+	exit(ft_printf("You are dead! Dragon has eaten you!\n"));
 }

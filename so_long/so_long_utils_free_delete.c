@@ -80,9 +80,9 @@ void	ft_free_textures(t_game_data *game)
 	if (game->pl_right_texture)
 		mlx_delete_texture(game->pl_right_texture);
 	if (game->enemy_texture[1])
-		mlx_delete_texture(game->enemy_texture[2]);
+		mlx_delete_texture(game->enemy_texture[1]);
 	if (game->enemy_texture[0])
-		mlx_delete_texture(game->enemy_texture[1]);	
+		mlx_delete_texture(game->enemy_texture[0]);
 }
 
 void	ft_free_vector(char **str, int len)

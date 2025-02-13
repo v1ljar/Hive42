@@ -17,6 +17,7 @@ void	ft_escape_exit(t_game_data *game)
 	ft_free_textures(game);
 	mlx_close_window(game->mlx);
 	mlx_terminate(game->mlx);
+	ft_free_dragons(game);
 	ft_free_lists(game, game->data->images_count, game->data->collectibles);
 	ft_free_vector(game->data->map, game->data->rows);
 	exit(ft_printf("Error!\nGame was closed with ESC!\n"));
@@ -27,6 +28,7 @@ void	ft_game_loop_exit(t_game_data *game)
 	ft_free_textures(game);
 	mlx_close_window(game->mlx);
 	mlx_terminate(game->mlx);
+	ft_free_dragons(game);
 	ft_free_lists(game, game->data->images_count, game->data->collectibles);
 	ft_printf("Collectibles collected: %i\n", game->data->collectibles);
 	ft_free_vector(game->data->map, game->data->rows);
@@ -40,6 +42,7 @@ void	ft_free_exit(t_game_data *game)
 	ft_free_textures(game);
 	mlx_close_window(game->mlx);
 	mlx_terminate(game->mlx);
+	ft_free_dragons(game);
 	ft_free_lists(game, game->data->images_count, game->data->collectibles);
 	ft_free_vector(game->data->map, game->data->rows);
 	exit(ft_printf("Error!\nFailed to allocate memory!\n"));
