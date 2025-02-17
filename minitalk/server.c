@@ -1,56 +1,49 @@
-#include "./libft/libft.h"
-#include <signal.h>
-#include <stdio.h>
-#include <unistd.h>
+#include "minitalk.h"
 
-void bit_write(int x)
+static void	handler(int sig, siginfo_t *info, void *context);
+static void handle_sig(int sig);
+
+int	main(int argc, char **argv)
 {
-    static int bit = 7;
-    static unsigned char set = 0;
+	struct sigaction sa;
 
-    set += (x << bit);
+	if (argc != 1)
+		return(ft_printf("Server program do NOT accept arguments!\n"));
+	ft_printf("PID: %i\n", getpid());
 
-    if (bit == 0)
-    {
-        write(1, &set, 1);
-        set = 0;
-        bit = 7;
-    }
-    else
-    {
-        bit--;
-    }
-}
-void handle_signal(int signum, siginfo_t *info, void *context)
-{
-    if(signum == SIGUSR1)
-        bit_write(1);
-    else
-        bit_write(0);
-    (void)info;
-    (void)context;
+	sa.sa_sigaction = handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_ONSTACK;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
+	while (1)
+	{
+		pause();
+	}
 }
 
-int main()
+static void	handler(int sig, siginfo_t *info, void *context)
 {
-    struct sigaction sa;
-    
-    sa.sa_flags = SA_SIGINFO;
-    sa.sa_sigaction = handle_signal;
-    sigemptyset(&sa.sa_mask);
+	if (sig == SIGUSR1)
+		handle_sig(1);
+	else
+		handle_sig(0);
+	(void)info;
+	(void)context;
+}
 
-    if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) == -1)
-    {
-        perror("sigaction failed");
-        return 1;
-    }
+static void handle_sig(int sig)
+{
+	static int				pos = 7;
+	static unsigned char	c = 0;
 
-    printf("Server running. PID: %d\n", getpid());
-
-    while (1)
-    {
-        pause();
-    }
-
-    return 0;
+	c += (sig << pos);
+	if (pos == 0)
+	{
+		write(1, &c, 1);
+		pos = 7;
+		c = 0;
+	}
+	else
+		pos--;
 }

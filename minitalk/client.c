@@ -1,49 +1,37 @@
-#include "./libft/libft.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <signal.h>
+#include "minitalk.h"
 
+static void	ft_send_bits(int pid, char *str);
 
-void send_bits(int pid, char *str)
+int	main(int argc, char **argv)
 {
-    int i;
-    unsigned char octet;
+	int pid;
 
-    while (*str)
-    {
-        i = 8;
-        octet = *str++;
-        while (i--)
-        {
-            if (octet >> i & 1)
-            {
-                kill(pid, SIGUSR1);
-            }
-            else
-            {
-                kill(pid, SIGUSR2);
-            }
-            usleep(500);
-        }
-    }
+	if (argc != 3)
+		return (ft_printf("Invalid amount of arguments!\n"));
+	pid = ft_atoi(argv[1]);
+	if (pid <= 0)
+		return (ft_printf("Invalid PID!\n"));
+	ft_send_bits(pid, argv[2]);
+	ft_printf("Signal sent to %i.\n", pid);
+	return (0);
 }
 
-int main(int argc, char *argv[])
+static void	ft_send_bits(int pid, char *str)
 {
-    if (argc != 3)
-    {
-        printf("Usage: %s <PID> <0 or 1>\n", argv[0]);
-        return 1;
-    }
+	int				pos;
+	unsigned char	c;
 
-    int sig = atoi(argv[1]);
-    if (sig <= 0)
-    {
-        printf("Invalid PID.\n");
-        return 1;
-    }
-
-    send_bits(sig, argv[2]);
-    printf("Signal sent to PID %d\n", sig);
-    return 0;
+	while (*str)
+	{
+		pos = 8;
+		c = *str++;
+		while (pos--)
+		{
+			if (c >> pos & 1)
+				kill(pid, SIGUSR1);
+			else
+				kill(pid, SIGUSR2);
+			usleep(1000);
+		}
+	}
 }
