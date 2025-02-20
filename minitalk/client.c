@@ -31,7 +31,13 @@ static void	ft_send_bits(int pid, char *str)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(1000);
+			usleep(100);
 		}
+	}
+	pos = 8;
+	while (pos--)
+	{
+		kill(pid, SIGUSR2);
+		usleep(100);
 	}
 }
