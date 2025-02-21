@@ -1,7 +1,19 @@
-#ifndef MINITALK_H
-#define MINITALK_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minitalk.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/21 13:46:32 by vuljas            #+#    #+#             */
+/*   Updated: 2025/02/21 13:46:36 by vuljas           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include <signal.h>
-#include "./libft/libft.h"
+#ifndef MINITALK_H
+# define MINITALK_H
+
+# include <signal.h>
+# include "./libft/libft.h"
 
 #endif

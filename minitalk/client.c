@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/21 13:46:15 by vuljas            #+#    #+#             */
+/*   Updated: 2025/02/21 13:46:19 by vuljas           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "minitalk.h"
 
 static void	ft_send_bits(int pid, char *str);
@@ -31,13 +42,13 @@ static void	ft_send_bits(int pid, char *str)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(100);
+			usleep(250);
 		}
 	}
 	pos = 8;
 	while (pos--)
 	{
 		kill(pid, SIGUSR2);
-		usleep(100);
+		usleep(250);
 	}
 }
