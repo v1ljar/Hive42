@@ -1,0 +1,21 @@
+PRINTF
+
+Prototype:
+		int ft_printf(const char *, ... );
+
+Allowed functions:
+		malloc
+		free
+		write
+		va_start
+		va_arg
+		va_copy
+		va_end
+
+Conversions to manage:
+		s	(char string)
+		d	(BASE10 intiger)
+		x	(BASE16 hexadecimal)
+
+I need to parse through the printf char* and if occurs '%' and after that is identifier,
+then need to check the variadic argument and print on the screen the conversion of it.
