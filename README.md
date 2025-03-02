@@ -1,6 +1,6 @@
 Welcome to my Hive42 Helsinki project repository! 🎓🚀
 
-My journey in Hive began in 2024 and this repository is a reflection of my growth, skills, and accomplishments throughout the program.
+My journey in Hive began in 2024 and this repository is a reflection of my growth, skills and accomplishments throughout the program.
 
 Every challenge is an opportunity to grow, every line of code is written with purpose and resilience drives my learning process.
 
