@@ -32,15 +32,14 @@ int	main(int argc, char **argv)
 	sigaction(SIGUSR2, &sa, NULL);
 	while (1)
 	{
+		pause();
 	}
 }
 
 static void	handler(int sig, siginfo_t *info, void *context)
 {
-	static unsigned int 	v_pid;
+	static unsigned int 	v_pid = -1;
 
-	if (!v_pid)
-		v_pid = -1;
 	if (v_pid == -1)
 		v_pid = info->si_pid;
 	if (info->si_pid != v_pid)
@@ -55,7 +54,7 @@ static void	handler(int sig, siginfo_t *info, void *context)
 static void handle_sig(int sig, unsigned int *pid)
 {
 	static unsigned int		pos = 7;
-	static unsigned char	c;
+	static unsigned char	c = 0;
 	static char				str[200000];
 
 	c += (sig << pos);
