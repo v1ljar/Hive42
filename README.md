@@ -29,5 +29,11 @@ This repository contains my projects from Hive42, categorized by their respectiv
 
 📂 minitalk/ – A small data exchange program using UNIX signals. It is an introductory project for the bigger UNIX projects 
                - Project state: Mandatory part done (103/100)
+               
+📂 minishell/ - The objective of this project is for you to create a simple shell.
+		- Project state: all built, needs evaluation
+		
+📂 philosophers/ - Aims to teach concurrent programming, focusing on multithreading and multiprocessing.
+		   - Project state: developing
 
 Thank you for visiting my repository! Happy coding! 💻🔥
