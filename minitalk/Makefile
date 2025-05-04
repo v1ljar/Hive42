@@ -63,7 +63,6 @@ fclean: clean
 	rm -f $(NAME)
 	rm -f $(NAME_S)
 
-re: fclean
-	all
+re: fclean all
 
-
+.PHONY: all $(NAME) $(NAME_S) clean fclean re

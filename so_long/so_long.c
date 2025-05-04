@@ -45,6 +45,7 @@ int	main(int argc, char **argv)
 	ft_free_textures(&game);
 	ft_free_lists(&game, game.data->images_count, game.data->collectibles);
 	ft_free_vector(game.data->map, game.data->rows);
+	ft_free_dragons(&game);
 	return (ft_printf("Exited the game without completing the game!\n"));
 }
 
