@@ -1,0 +1,8 @@
+.vscode
+*.o
+*.a
+*.out
+minishell
+tags
+valgrind.log
+*.swp
