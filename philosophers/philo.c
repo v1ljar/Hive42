@@ -1,12 +1,14 @@
 #include "philo.h"
 
-int	init_master(t_master *master, int ac, char **av);
-int	validate_args(int ac, char **av, int i, int j);
-int	init_values(int ac, char **av, t_master *master, int i);
-int	create_philo_thread(t_master *master, int *i);
+int		init_master(t_master *master, int ac, char **av);
+int		validate_args(int ac, char **av, int i, int j);
+int		init_values(int ac, char **av, t_master *master, int i);
+int		create_philo_thread(t_master *master, int *i);
 void	lock_fork(t_philo *info);
 void	unlock_fork(t_philo *info);
 void	print_msg(t_philo *info, char *str);
+void	*philo_routine(void *data);
+void	*monitoring_routine(void *data);
 
 int	main(int ac, char **av)
 {
@@ -22,7 +24,7 @@ int	main(int ac, char **av)
 	}
 	free(master.forks);
 	i = 0;
-	usleep(20000);
+	usleep(2000);
 	while (i < master.philos)
 	{
 		if (master.arr_philos[i])
@@ -40,22 +42,64 @@ void	*philo_routine(void *data)
 	info = (t_philo *)data;
 
 	while(get_time() < info->master->start)
-		usleep(200);
-	while (info->master->meals == -1 || info->courses <= info->master->meals)
+		usleep(100);
+	while (info->master->meals == -1 || info->courses < info->master->meals)
 	{
 		lock_fork(info);
 		print_msg(info, "is eating");
-		usleep(info->master->eat_time);
-		unlock_fork(info);
 		info->last_meal = get_time();
+		while (get_time() < info->last_meal + info->master->eat_time)
+			usleep(100);
+		unlock_fork(info);
 		if (info->master->meals != -1)
+		{
 			info->courses++;
+			if (info->courses == info->master->meals)
+			{
+				print_msg(info, "is full");
+				return (NULL);
+			}
+		}
 		print_msg(info, "is sleeping");
-		usleep(info->master->sleep_time);
+		while (get_time() < info->last_meal + info->master->sleep_time + info->master->eat_time)
+			usleep(100);
 		print_msg(info, "is thinking");
-		usleep(info->master->think_time);
+		//usleep(info->master->time_to_die);
 	}
-	return NULL;
+	return (NULL);
+}
+
+void	*monitoring_routine(void *data)
+{
+	t_master	*master;
+	int			i;
+	int			full;
+
+	master = (t_master *)data;
+	while(get_time() < master->start)
+		usleep(100);
+	while (!master->dead)
+	{
+		full = 0;
+		i = 0;
+		while (i < master->philos)
+		{
+			if (master->meals != -1 || master->arr_philos[i]->courses == master->meals)
+				full++;
+			if ((master->meals == -1 || master->arr_philos[i]->courses < master->meals)
+					&& get_time() - master->arr_philos[i]->last_meal > master->time_to_die)
+			{
+				master->dead = true;
+				printf("%li %i is dead\n", get_time() - master->start, i + 1);
+				return (0);
+			}
+			i++;
+		}
+		if (master->meals != -1 && full == master->philos)
+			return (NULL);
+		usleep(100);
+	}
+	return (NULL);
 }
 
 void	lock_fork(t_philo *info)
@@ -94,8 +138,11 @@ void	print_msg(t_philo *info, char *str)
 {
 	long	time_atm;
 
-	time_atm = get_time();
-	printf("%li %i %s\n", time_atm-info->master->start, info->id, str);
+	if (!info->master->dead)
+	{
+		time_atm = get_time();
+		printf("%li %i %s\n", time_atm - info->master->start, info->id, str);
+	}
 }
 
 int	init_master(t_master *master, int ac, char **av)
@@ -110,7 +157,7 @@ int	init_master(t_master *master, int ac, char **av)
 	if (init_values(ac, av, master, 0))
 		return (-1);
 
-	printf("Todays crew:\n\tStart time: %li\n\tPhilos: %li\n\tTime_to die: %li\n\tTime_to eat: %li\n\tTime_to sleep: %li\n\tMeals amount: %li\n", master->start, master->philos, master->think_time, master->eat_time, master->sleep_time, master->meals);
+	printf("Todays crew:\n\tStart time: %li\n\tPhilos: %li\n\tTime_to die: %li\n\tTime_to eat: %li\n\tTime_to sleep: %li\n\tMeals amount: %li\n", master->start, master->philos, master->time_to_die, master->eat_time, master->sleep_time, master->meals);
 	return (0);
 }
 
@@ -137,15 +184,16 @@ int	init_values(int ac, char **av, t_master *master, int i)
 {
 	master->philos = p_atol(av[1]);
 	master->start = get_time() + (62 * master->philos);
-	master->think_time = p_atol(av[2]);
+	master->time_to_die = p_atol(av[2]);
 	master->eat_time = p_atol(av[3]);
 	master->sleep_time = p_atol(av[4]);
 	if (ac == 6)
 		master->meals = p_atol(av[5]);
 	else
 		master->meals = -1;
-	if (master->think_time < 60 || master->eat_time < 60 || master->sleep_time < 60)
+	if (master->time_to_die < 60 || master->eat_time < 60 || master->sleep_time < 60)
 		return (printf("Time values must be creater than 60\n"));
+	master->dead = 0;
 	master->arr_philos = malloc(sizeof(t_philo*) * master->philos);
 	if (!master->arr_philos)
 		return (printf("Philos array allocation failed\n"));
@@ -173,9 +221,11 @@ int	init_values(int ac, char **av, t_master *master, int i)
 		if (create_philo_thread(master, &i))
 			return (-1);
 	}
+	pthread_create(&master->monitoring, NULL, monitoring_routine, master);
 	i = 0;
 	while (i < master->philos)
 		pthread_join(master->arr_philos[i++]->phil, NULL);
+	pthread_join(master->monitoring, NULL);
 	return (0);
 }
 
@@ -198,13 +248,11 @@ int	create_philo_thread(t_master *master, int *i)
 	phil_data->id = *i + 1;
 	phil_data->left_fork = &master->forks[*i];
 	phil_data->right_fork = &master->forks[(*i + 1) % master->philos];
-	phil_data->last_meal = get_time();
+	phil_data->last_meal = master->start;
 	phil_data->courses = 0;
 	phil_data->master = master;
 	master->arr_philos[*i] = phil_data;
 	pthread_create(&master->arr_philos[*i]->phil, NULL, philo_routine, master->arr_philos[*i]);
-	printf("Yes\n");
-	printf("Created philo nr %i\nTime: %li\n", *i, get_time());
 	(*i)++;
 	return (0);
 }

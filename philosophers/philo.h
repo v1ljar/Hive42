@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <sys/time.h>
+#include <stdbool.h>
 
 typedef struct s_master	t_master;
 
@@ -25,12 +26,14 @@ typedef struct s_master
 {
 	long			start;
 	long			philos;
-	long			think_time;
+	long			time_to_die;
 	long			eat_time;
 	long			sleep_time;
 	long			meals;
 	t_philo			**arr_philos;
 	pthread_mutex_t	*forks;
+	pthread_t		monitoring;
+	bool			dead;
 }	t_master;
 
 long	p_atol(const char *str);
