@@ -8,16 +8,32 @@
 #include <pthread.h>
 #include <sys/time.h>
 
+typedef struct s_master	t_master;
+
+typedef struct s_philo
+{
+	pthread_t		phil;
+	int				id;
+	long			last_meal;
+	long			courses;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+	t_master		*master;
+}	t_philo;
+
 typedef struct s_master
 {
-	time_t	start;
-	int		philos;
-	int		think_time;
-	int		eat_time;
-	int		sleep_time;
-	int		meals;
+	long			start;
+	long			philos;
+	long			think_time;
+	long			eat_time;
+	long			sleep_time;
+	long			meals;
+	t_philo			**arr_philos;
+	pthread_mutex_t	*forks;
 }	t_master;
 
-int	p_atoi(const char *str);
+long	p_atol(const char *str);
+long	get_time(void);
 
 #endif

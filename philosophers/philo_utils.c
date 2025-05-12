@@ -1,6 +1,6 @@
 #include "philo.h"
 
-int	p_atoi(const char *str)
+long	p_atol(const char *str)
 {
 	long	result;
 	int		i;
@@ -13,4 +13,15 @@ int	p_atoi(const char *str)
 			i++;
 	}
 	return (result);
+}
+
+long	get_time(void)
+{
+	struct timeval	tv;
+	long			res;
+
+	gettimeofday(&tv, NULL);
+	res = 0;
+	res = (long)((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	return (res);
 }
