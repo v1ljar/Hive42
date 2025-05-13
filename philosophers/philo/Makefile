@@ -4,7 +4,7 @@ CC = cc
 
 WFLAGS = -Werror -Wextra -Wall -pthread -g
 
-SRC = philo.c philo_utils.c
+SRC = philo.c philo_utils.c routines.c philo_actions.c
 
 OBJPATH = obj/
 
