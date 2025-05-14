@@ -12,57 +12,91 @@
 
 #include "philo.h"
 
-void	lock_fork(t_philo *info)
+int	lock_first_fork(t_philo *info)
 {
 	if (info->master->dead)
-		return ;
+		return (-1);
 	if (info->master->philos == 1)
 	{
 		if (pthread_mutex_lock(info->right_fork) == 0)
 			print_msg(info, "has taken right_fork");
-		return ;
+		return (0);
 	}
 	if (info->id % 2 != 0)
 	{
 		if (pthread_mutex_lock(info->right_fork) == 0)
 			print_msg(info, "has taken right_fork");
-		if (pthread_mutex_lock(info->left_fork) == 0)
-			print_msg(info, "has taken left_fork");
 	}
 	else
 	{
  		if (pthread_mutex_lock(info->left_fork) == 0)
 			print_msg(info, "has taken left_fork");
-		if (pthread_mutex_lock(info->right_fork) == 0)
-			print_msg(info, "has taken right_fork");
 	}
+	if (info->master->dead)
+		return (-1);
+	return (0);
 }
 
-void	unlock_fork(t_philo *info)
+int	lock_second_fork(t_philo *info)
 {
 	if (info->master->dead)
-		return ;
+		return (-1);
 	if (info->master->philos == 1)
-	{
-		pthread_mutex_unlock(info->right_fork);
-		return ;
-	}
+		return (0);
 	if (info->id % 2 != 0)
 	{
-		pthread_mutex_unlock(info->right_fork);
-		pthread_mutex_unlock(info->left_fork);
+		if (pthread_mutex_lock(info->left_fork) == 0 && !info->master->dead)
+			print_msg(info, "has taken left_fork");
 	}
 	else
 	{
-		pthread_mutex_unlock(info->left_fork);
-		pthread_mutex_unlock(info->right_fork);
+		if (pthread_mutex_lock(info->right_fork) == 0 && !info->master->dead)
+			print_msg(info, "has taken right_fork");
 	}
+	if (info->master->dead)
+		return (-1);
+	return (0);
+}
+
+int	unlock_first_fork(t_philo *info)
+{
+	if (info->master->dead)
+		return (-1);
+	if (info->master->philos == 1)
+	{
+		pthread_mutex_unlock(info->right_fork);
+		return (0);
+	}
+	if (info->id % 2 != 0)
+		pthread_mutex_unlock(info->right_fork);
+	else
+		pthread_mutex_unlock(info->left_fork);
+	if (info->master->dead)
+		return (-1);
+	return (0);
+}
+
+int	unlock_second_fork(t_philo *info)
+{
+	if (info->master->dead)
+		return (-1);
+	if (info->master->philos == 1)
+		return (0);
+	if (info->id % 2 != 0)
+		pthread_mutex_unlock(info->left_fork);
+	else
+		pthread_mutex_unlock(info->right_fork);
+	if (info->master->dead)
+		return (-1);
+	return (0);
 }
 
 void	print_msg(t_philo *info, char *str)
 {
 	long	time_atm;
 
+	if (info->master->dead)
+		return ;
 	pthread_mutex_lock(info->master->write_lock);
 	if (!info->master->dead)
 	{

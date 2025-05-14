@@ -23,16 +23,22 @@ void	*philo_routine(void *data)
 		usleep(info->master->eat_time * 900);
 	while (info->master->meals == -1 || info->courses < info->master->meals)
 	{
-		lock_fork(info);
+		if (lock_first_fork(info))
+			return (NULL);
+		if (lock_second_fork(info))
+			return (NULL);
 		print_msg(info, "is eating");
 		info->last_meal = get_time();
 		while (get_time() < info->last_meal + info->master->eat_time)
 		{
-			if (info->master->dead == true)
+			if (info->master->dead)
 				return (NULL);
 			usleep(100);
 		}
-		unlock_fork(info);
+		if (unlock_first_fork(info))
+			return (NULL);
+		if (unlock_second_fork(info))
+			return (NULL);
 		if (info->master->meals != -1)
 		{
 			info->courses++;
@@ -42,11 +48,11 @@ void	*philo_routine(void *data)
 		print_msg(info, "is sleeping");
 		while (get_time() < info->last_meal + info->master->sleep_time + info->master->eat_time)
 		{
-			if (info->master->dead == true)
+			if (info->master->dead)
 				return (NULL);
-			usleep(100);
 		}
 		print_msg(info, "is thinking");
+		usleep(100);
 	}
 	return (NULL);
 }
@@ -71,8 +77,10 @@ void	*monitoring_routine(void *data)
 			if ((master->meals == -1 || master->arr_philos[i]->courses < master->meals)
 					&& get_time() - master->arr_philos[i]->last_meal > master->time_to_die)
 			{
+				pthread_mutex_lock(master->write_lock);
 				master->dead = true;
 				printf("%li %i died\n", get_time() - master->start, i + 1);
+				pthread_mutex_lock(master->write_lock);
 				return (NULL);
 			}
 			i++;
