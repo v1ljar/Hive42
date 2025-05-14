@@ -47,7 +47,13 @@ void	handle_redirection_error(t_master *mini, t_cmd **last_cmd)
 {
 	if (!mini->tokens->value || mini->tokens->value[0] == '\0')
 	{
-		if (mini->tokens->type == INFILE)
+		if (mini->input)
+		{
+			mini_error(NULL, NULL, mini->input, 2);
+			free(mini->input);
+			mini->input = NULL;
+		}
+		else if (mini->tokens->type == INFILE)
 			mini_error(NULL, NULL, "syntax error near token `<'", 2);
 		else if (mini->tokens->type == OUTFILE)
 			mini_error(NULL, NULL, "syntax error near token `>'", 2);
@@ -60,9 +66,7 @@ void	handle_redirection_error(t_master *mini, t_cmd **last_cmd)
 		if (mini->root_cmd)
 			free_cmds(mini);
 		else
-		{
 			free(*last_cmd);
-			*last_cmd = NULL;
-		}
+		*last_cmd = NULL;
 	}
 }

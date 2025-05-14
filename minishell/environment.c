@@ -6,30 +6,32 @@
 /*   By: jpiensal <jpiensal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:19:33 by jpiensal          #+#    #+#             */
-/*   Updated: 2025/04/29 12:55:07 by jpiensal         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:44:12 by jpiensal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-char	*find_envv(t_list *env, const char *var)
+char	*find_envv(t_list **env, const char *var)
 {
 	size_t	i;
+	t_list	*temp;
 
-	if (!var || !env)
+	if (!var || !*env)
 		return (NULL);
 	i = 0;
+	temp = *env;
 	while (var[i])
 		i++;
-	while (env)
+	while (temp)
 	{
-		if (!ft_strncmp((char *)env->content, var, i))
+		if (!ft_strncmp((char *)temp->content, var, i))
 		{
-			if (*((char *)env->content + i) == '=')
-				return ((char *)(env->content + i + 1));
+			if (*((char *)temp->content + i) == '=')
+				return ((char *)(temp->content + i + 1));
 			return (NULL);
 		}
-		env = env->next;
+		temp = temp->next;
 	}
 	return (NULL);
 }
@@ -44,51 +46,61 @@ t_list	*envcpy(char **envp)
 	while (*envp)
 	{
 		temp = ft_strdup(*envp);
+		if (!temp)
+		{
+			ft_lstclear(&env, del_content);
+			return (NULL);
+		}
 		ft_lstadd_back(&env, ft_lstnew(temp));
 		envp++;
 	}
 	return (env);
 }
 
-t_list	*find_envp(t_list *env, const char *parameter)
+t_list	*find_envp(t_list **env, const char *parameter)
 {
 	size_t	i;
+	t_list	*temp;
 
 	if (!parameter || !env)
 		return (NULL);
 	i = 0;
 	while (parameter[i])
 		i++;
-	while (env)
+	temp = *env;
+	while (temp)
 	{
-		if (!ft_strncmp((char *)env->content, parameter, i))
-			return (env);
-		env = env->next;
+		if (!ft_strncmp((char *)temp->content, parameter, i))
+			return (temp);
+		temp = temp->next;
 	}
 	return (NULL);
 }
 
-int	update_shlvl(t_list *env)
+int	update_shlvl(t_list *env, int new_lvl)
 {
 	char	*temp_var;
 	char	*new_variable;
-	int		new_lvl;
 	t_list	*temp_lst;
 
-	temp_lst = find_envp(env, "SHLVL");
+	temp_lst = find_envp(&env, "SHLVL");
 	if (!temp_lst)
 		return (-1);
-	temp_var = find_envv(env, "SHLVL");
+	temp_var = find_envv(&env, "SHLVL");
 	if (!temp_var)
 		return (-1);
 	new_lvl = ft_atoi(temp_var) + 1;
 	temp_var = ft_itoa(new_lvl);
+	if (!temp_var)
+		return (mini_error(NULL, NULL, NULL, 0));
 	new_variable = ft_strjoin("SHLVL=", temp_var);
-	if (!new_variable)
-		return (-1);
 	free(temp_var);
-	modify_envlist(env, temp_lst, new_variable, true);
+	if (!new_variable)
+		return (mini_error(NULL, NULL, NULL, 0));
+	new_lvl = modify_envlist(env, temp_lst, new_variable, true);
 	free(new_variable);
+	if (new_lvl)
+		return (errno);
 	return (0);
 }
 
@@ -99,11 +111,9 @@ char	*find_path(t_list *env, char *cmd)
 	char	*cmd_path;
 	int		i;
 
-	if (!access(cmd, F_OK | X_OK))
-		return (ft_strdup(cmd));
-	paths = ft_split(find_envv(env, "PATH"), ':');
+	paths = ft_split(find_envv(&env, "PATH"), ':');
 	i = 0;
-	while (*cmd && paths && paths[i])
+	while (*cmd && cmd[0] != '/' && cmd[0] != '.' && paths && paths[i])
 	{
 		path = ft_strjoin(paths[i], "/");
 		cmd_path = ft_strjoin(path, cmd);
@@ -117,5 +127,7 @@ char	*find_path(t_list *env, char *cmd)
 		i++;
 	}
 	ft_delarray(paths);
+	if (!access(cmd, F_OK | X_OK))
+		return (ft_strdup(cmd));
 	return (ft_strdup(""));
 }

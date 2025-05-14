@@ -6,14 +6,14 @@
 #    By: jpiensal <jpiensal@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/20 10:49:58 by jpiensal          #+#    #+#              #
-#    Updated: 2025/04/11 13:53:17 by jpiensal         ###   ########.fr        #
+#    Updated: 2025/05/08 17:48:14 by jpiensal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= minishell
 LIBFT		= libft/libft.a
 CC			= cc
-CFLAGS		= -Wall -Werror -Wextra -g
+CFLAGS		= -Wall -Werror -Wextra
 HEADERS		= -I./inc -I./libft/inc/
 
 OBJ_PATH	= obj/
@@ -22,16 +22,18 @@ BUILTIN_PATH= built-in/
 
 SRC			= environment.c update_env.c \
 			  exec.c exec_utils.c \
-			  redirections.c heredoc.c \
+			  redirections.c heredoc.c io.c \
 			  minishell_utils.c \
 			  signals.c \
-			  main.c
+			  main.c build_environment.c
 
 SRC_PARSER	= preprocess_input.c lexing.c lexing_checkers.c \
-			lexing_token_action.c lexing_handle_word.c lexing_handle_envv.c \
-			parser.c parser_helpers.c parser_free.c preprocess_utils.c \
+			lexing_token_action.c lexing_handle_word.c lexing_handle_env_var.c \
+			parser.c parser_helpers.c parser_free.c preprocess_utils.c
 
 SRC_BUILTIN	= export.c env.c pwd.c unset.c echo.c cd.c exit.c
+
+SRC_HEADER	= ./inc/exec.h ./inc/minishell.h
 
 OBJ			= $(SRC:%.c=$(OBJ_PATH)%.o)
 PARSER_OBJ	= $(SRC_PARSER:%.c=$(OBJ_PATH)%.o)
@@ -39,7 +41,7 @@ BUILTIN_OBJ	= $(SRC_BUILTIN:%.c=$(OBJ_PATH)%.o)
 
 all:		$(NAME)
 
-$(NAME):	$(LIBFT) $(OBJ_PATH) $(OBJ) $(PARSER_OBJ) $(BUILTIN_OBJ)
+$(NAME):	$(LIBFT) $(OBJ_PATH) $(OBJ) $(PARSER_OBJ) $(BUILTIN_OBJ) $(SRC_HEADER)
 			$(CC) $(OBJ) $(PARSER_OBJ) $(BUILTIN_OBJ) -o $(NAME) $(LIBFT) -lreadline
 
 $(LIBFT):

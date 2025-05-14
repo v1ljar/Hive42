@@ -6,7 +6,7 @@
 /*   By: jpiensal <jpiensal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 10:54:56 by jpiensal          #+#    #+#             */
-/*   Updated: 2025/04/29 14:28:51 by jpiensal         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:04:22 by jpiensal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ int	dup_fd(t_cmd *cmd)
 	if (cmd->fdin != -1)
 	{
 		if (dup2(cmd->fdin, STDIN_FILENO) == -1)
-			return (mini_error(NULL, NULL, "Dup2 failure", 0));
+			return (mini_error(NULL, NULL, "Duplication error", 0));
 		close(cmd->fdin);
 	}
 	if (cmd->fdout != -1)
 	{
 		if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
-			return (mini_error(NULL, NULL, "Dup2 failure", 0));
+			return (mini_error(NULL, NULL, "Duplication error", 0));
 		close(cmd->fdout);
 	}
 	return (0);
@@ -87,7 +87,7 @@ int	create_pipe(t_cmd *cmd)
 	int		fd[2];
 
 	if (pipe(fd) == -1)
-		return (mini_error(NULL, NULL, NULL, errno));
+		return (mini_error(NULL, NULL, NULL, 0));
 	if (cmd->fdout == -1)
 		cmd->fdout = fd[1];
 	else
@@ -96,26 +96,5 @@ int	create_pipe(t_cmd *cmd)
 		cmd->next->fdin = fd[0];
 	else
 		close(fd[0]);
-	return (0);
-}
-
-int	set_io(t_cmd *cmd, int *temp_io, bool is_in)
-{
-	if (is_in == true)
-	{
-		if (cmd->fdin == -1)
-			cmd->fdin = dup(temp_io[0]);
-		if (dup2(cmd->fdin, STDIN_FILENO) == -1)
-			return (mini_error(NULL, NULL, "Dup2 error", 0));
-		close(cmd->fdin);
-	}
-	else
-	{
-		if (cmd->fdout == -1)
-			cmd->fdout = dup(temp_io[1]);
-		if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
-			return (mini_error(NULL, NULL, "Dup2 error", 0));
-		close(cmd->fdout);
-	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jpiensal <jpiensal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 11:40:09 by jpiensal          #+#    #+#             */
-/*   Updated: 2025/04/29 14:59:56 by jpiensal         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:49:24 by jpiensal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "exec.h"
 
 static int	handle_args(t_list *env, char *arg, bool *export_error);
-static void	print_export(t_list *env);
+static int	print_export(t_list **env);
 static void	sort_env(char **env_cpy);
 static void	print(char *str);
 
@@ -24,13 +24,16 @@ int	mini_export(t_list *env, char **args)
 	bool	export_error;
 
 	if (!args || *args == NULL)
-		print_export(env);
+	{
+		if (print_export(&env))
+			return (-1);
+	}
 	ret = 0;
 	export_error = false;
 	while (*args)
 	{
 		ret = handle_args(env, *args, &export_error);
-		if (export_error)
+		if (export_error || ret > 1)
 			break ;
 		args++;
 	}
@@ -55,24 +58,23 @@ static int	handle_args(t_list *env, char *arg, bool *export_error)
 		return (mini_error("export", NULL, "Argument too long", 1));
 	}
 	ft_strlcpy(temp_par, arg, i + 1);
-	temp_lst = find_envp(env, temp_par);
+	temp_lst = find_envp(&env, temp_par);
 	if (temp_lst)
-		modify_envlist(env, temp_lst, arg, true);
+		return (modify_envlist(env, temp_lst, arg, true));
 	else
-		modify_envlist(env, temp_lst, arg, false);
-	return (0);
+		return (modify_envlist(env, temp_lst, arg, false));
 }
 
-static void	print_export(t_list *env)
+static int	print_export(t_list **env)
 {
 	char	**env_cpy;
 	size_t	i;
 
-	if (!env)
-		return ;
+	if (!*env)
+		return (0);
 	env_cpy = cpy_lst_to_arr(env);
 	if (!env_cpy)
-		return ;
+		return (mini_error(NULL, NULL, NULL, 0));
 	sort_env(env_cpy);
 	i = 0;
 	while (env_cpy[i])
@@ -82,6 +84,7 @@ static void	print_export(t_list *env)
 		i++;
 	}
 	ft_delarray(env_cpy);
+	return (0);
 }
 
 static void	sort_env(char **env)

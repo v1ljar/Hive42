@@ -6,7 +6,7 @@
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:03:30 by vuljas            #+#    #+#             */
-/*   Updated: 2025/03/12 16:03:34 by vuljas           ###   ########.fr       */
+/*   Updated: 2025/05/09 13:52:35 by jpiensal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,29 @@ void	add_token(t_token **tokens_list, t_token *new)
 	while (temp->next != NULL)
 		temp = temp->next;
 	temp->next = new;
+}
+
+int	check_tilde_add_to_buf(char *buf, char *str, int *i, t_master *mini)
+{
+	int		j;
+	char	*temp;
+
+	j = ft_strlen(buf);
+	if ((*i == 0 && str[*i] == '~' && (str[*i + 1] == '/' || str[*i + 1] == ' '
+				|| str[*i + 1] == '\0')) || (*i > 0 && str[*i - 1] == ' '
+			&& str[*i] == '~' && (str[*i + 1] == '/' || str[*i + 1] == ' '
+				|| str[*i + 1] == '\0')))
+	{
+		while (str[*i] != '~')
+			(*i)++;
+		(*i)++;
+		temp = find_envv(&mini->env, "HOME");
+		if (!temp)
+			return (0);
+		while (*temp)
+			buf[j++] = *temp++;
+	}
+	else
+		buf[j++] = str[(*i)++];
+	return (j);
 }

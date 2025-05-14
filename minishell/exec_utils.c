@@ -6,15 +6,15 @@
 /*   By: jpiensal <jpiensal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 12:42:53 by jpiensal          #+#    #+#             */
-/*   Updated: 2025/04/29 12:02:51 by jpiensal         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:51:22 by jpiensal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-size_t	count_commands(t_cmd *cmd)
+int	count_commands(t_cmd *cmd)
 {
-	size_t	count;
+	int	count;
 
 	count = 0;
 	while (cmd)
@@ -25,21 +25,25 @@ size_t	count_commands(t_cmd *cmd)
 	return (count);
 }
 
-char	**cpy_lst_to_arr(t_list *lst)
+char	**cpy_lst_to_arr(t_list **lst)
 {
 	size_t	len;
 	size_t	i;
 	char	**arr;
+	t_list	*temp;
 
 	if (!lst)
 		return (NULL);
-	len = ft_lstsize(lst);
+	len = ft_lstsize(*lst);
 	arr = ft_calloc(len + 1, sizeof(char *));
+	if (!arr)
+		return (NULL);
 	i = 0;
-	while (lst)
+	temp = *lst;
+	while (temp)
 	{
-		arr[i++] = ft_strdup((char *)lst->content);
-		lst = lst->next;
+		arr[i++] = ft_strdup((char *)temp->content);
+		temp = temp->next;
 	}
 	arr[i] = NULL;
 	return (arr);
@@ -54,9 +58,8 @@ void	swap_ptrs(char **s1, char **s2)
 	*s2 = temp;
 }
 
-void	wait_loop(t_master *mini)
+void	wait_loop(t_master *mini, bool flag, int pid)
 {
-	int	pid;
 	int	status;
 
 	signal(SIGQUIT, SIG_IGN);
@@ -68,12 +71,15 @@ void	wait_loop(t_master *mini)
 			status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 		{
-			write(STDOUT_FILENO, "\n", 1);
 			status = WTERMSIG(status) + 128;
-			if (pid == mini->pid)
-				mini->wstatus = status;
-			return ;
+			if (!flag && status == 131)
+				ft_putendl_fd("Quit (core dumped)", 2);
+			else if (!flag && status == 130)
+				ft_putendl_fd("", 2);
+			flag = true;
 		}
+		if (status == ENOMEM)
+			mini->is_exit_set = true;
 		if (pid == mini->pid)
 			mini->wstatus = status;
 		if (pid == -1)
@@ -81,17 +87,24 @@ void	wait_loop(t_master *mini)
 	}
 }
 
-int	is_heredoc_signal(t_master *mini, int *fd, char *line)
+int	print_warning(char *limiter, t_master *mini, int *fd, bool flag)
 {
-	if (g_signal == SIGINT)
+	char	*temp;
+
+	if (flag)
 	{
-		close(fd[0]);
-		close(fd[1]);
-		if (line)
-			free(line);
-		mini->wstatus = 130;
-		g_signal = 0;
-		return (-2);
+		ft_putstr_fd("Minishell: warning: here-document ", 2);
+		ft_putstr_fd("delimited by end-of-file (wanted '", 2);
+		ft_putstr_fd(limiter, 2);
+		ft_putendl_fd("')", 2);
+	}
+	else
+	{
+		temp = ft_itoa(mini->wstatus);
+		if (!temp)
+			return (mini_error(NULL, NULL, NULL, 0));
+		write(fd[1], temp, ft_strlen(temp));
+		free(temp);
 	}
 	return (0);
 }

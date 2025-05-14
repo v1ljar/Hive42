@@ -6,14 +6,14 @@
 #    By: jpiensal <jpiensal@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/30 10:27:08 by jpiensal          #+#    #+#              #
-#    Updated: 2025/04/01 11:54:30 by jpiensal         ###   ########.fr        #
+#    Updated: 2025/05/08 18:49:09 by jpiensal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= libft.a
 
 CC 			= cc
-CFLAGS		= -Werror -Wextra -Wall -g
+CFLAGS		= -Werror -Wextra -Wall
 
 HEADERS		= -I inc/
 

@@ -12,17 +12,14 @@
 
 #include "minishell.h"
 
-/* init_strs is for initializing the strings to lower the number of lines in
+/* init_strings is for initializing the strings to lower the number of lines in
  preprocessing_input function */
-static int	init_strs(char *input, char **buf, char **res, t_master *mini);
+static int	init_strings(char **input, char **buf, char **res, t_master *mini);
 /* handle_open_pipe is handleing opened pipe, gives prompt back */
 static int	handle_open_pipe(char **buf, char **res, t_master *mini);
 /* clear_extra_scpaces changes 't', '\n', '\r' into space and cleans the
 consecutive spaces */
 static int	clear_extra_spaces(char **res, char *buf, int *i, int *j);
-/* Fill in the result string from the temporary string and if quotes are not
-closed, then print error message */
-static int	handle_quote(char **res, char *buf, int *i, int *j);
 
 int	preprocessing_input(t_master *mini, int i)
 {
@@ -30,7 +27,7 @@ int	preprocessing_input(t_master *mini, int i)
 	char	*res;
 	int		j;
 
-	if (init_strs(mini->input, &buf, &res, mini) == -2)
+	if (init_strings(&mini->input, &buf, &res, mini) == -2)
 		return (-2);
 	if (!buf || !res)
 		return (-1);
@@ -52,17 +49,18 @@ int	preprocessing_input(t_master *mini, int i)
 	return (0);
 }
 
-static int	init_strs(char *input, char **buf, char **res, t_master *mini)
+static int	init_strings(char **input, char **buf, char **res, t_master *mini)
 {
 	int	open_pipe_res;
 
-	*buf = ft_strtrim(input, " ");
-	free(input);
+	*buf = ft_strtrim(*input, " ");
+	free(*input);
+	*input = NULL;
 	if (!*buf)
 		return (-1);
 	if (buf[0][0] != '|' && valid_open_pipe(*buf, 0, mini, 0) == 1)
 	{
-		rl_event_hook = (void *)exec_signals_handler;
+		rl_event_hook = (void *)signal_handler_rl;
 		open_pipe_res = handle_open_pipe(buf, res, mini);
 		if (open_pipe_res != 0)
 			return (open_pipe_res);
@@ -102,14 +100,14 @@ static int	handle_open_pipe(char **buf, char **res, t_master *mini)
 		free(str);
 		if (!full_str)
 			return (-1);
-		init_strs(full_str, buf, res, mini);
+		init_strings(&full_str, buf, res, mini);
 	}
 	return (0);
 }
 
 static int	clear_extra_spaces(char **res, char *buf, int *i, int *j)
 {
-	if (buf[*i] == '"' || buf[*i] == 39)
+	if (buf[*i] == '"' || buf[*i] == '\'')
 	{
 		if (handle_quote(res, buf, i, j) == -1)
 			return (-1);
@@ -118,8 +116,8 @@ static int	clear_extra_spaces(char **res, char *buf, int *i, int *j)
 		buf[*i] = ' ';
 	else if (buf[*i] == ' ' && (*j > 0 && (*res)[(*j) - 1] == ' '))
 		(*i)++;
-	else if ((buf[*i] == '|' && (*res)[*j - 1] == '|') || (*j > 1 && buf[*i]
-		== '|' && (*res)[*j - 1] == ' ' && (*res)[*j - 2] == '|'))
+	else if ((*j > 0 && buf[*i] == '|' && (*res)[*j - 1] == '|') || (*j > 1
+		&& buf[*i] == '|' && (*res)[*j - 1] == ' ' && (*res)[*j - 2] == '|'))
 	{
 		free(buf);
 		free(*res);
@@ -131,7 +129,7 @@ static int	clear_extra_spaces(char **res, char *buf, int *i, int *j)
 	return (0);
 }
 
-static int	handle_quote(char **res, char *buf, int *i, int *j)
+int	handle_quote(char **res, char *buf, int *i, int *j)
 {
 	char	c;
 
