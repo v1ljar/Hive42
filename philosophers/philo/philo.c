@@ -21,7 +21,10 @@ int	main(int ac, char **av)
 	static t_master	master;
 
 	if (init_master(&master, ac, av) == -1)
+	{
+		clean_up(&master);
 		return (1);
+	}
 	clean_up(&master);
 	return (0);
 }
@@ -81,18 +84,18 @@ int	init_values(int ac, char **av, t_master *master, int i)
 	master->write_lock = malloc(sizeof(pthread_mutex_t));
 	if (!master->write_lock)
 		return (printf("Write lock mutex failed\n"));
-	memset(master->write_lock, '\0', sizeof(pthread_mutex_t));
+	if (pthread_mutex_init(master->write_lock, NULL) != 0)
+		return (printf("Mutex lock initialization failed\n"));
 	master->forks = malloc(sizeof(pthread_mutex_t) * master->philos);
 	if (!master->forks)
 		return (printf("Forks allocation failed\n"));
-	memset(master->forks, '\0', sizeof(pthread_mutex_t) * master->philos);
 	while (i < master->philos)
 	{
 		if (pthread_mutex_init(&master->forks[i], NULL) != 0)
 		{
 			while (--i >= 0)
 			{
-				pthread_mutex_destroy(&master->forks[i--]);
+				pthread_mutex_destroy(&master->forks[i]);
 			}
 			free(master->forks);
 			free(master->write_lock);

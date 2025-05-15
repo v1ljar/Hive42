@@ -18,21 +18,41 @@ void	*philo_routine(void *data)
 
 	info = (t_philo *)data;
 	while(get_time() < info->master->start)
-		usleep(100);
-	if (info->id % 2 == 0)
-		usleep(info->master->eat_time * 900);
-	while (info->master->meals == -1 || info->courses < info->master->meals)
+		usleep(500);
+	if ((info->master->philos > 2 && info->id % 2 != 0
+			&& info->id == info->master->philos) || info->id % 2 == 0)
 	{
-		lock_fork(info);
+		print_msg(info, "is thinking");
+		while (get_time() < info->last_meal + info->master->eat_time)
+		{
+			if (info->master->dead == true)
+				return (NULL);
+			usleep(500);
+		}
+		if (info->id % 2 != 0)			// This sleep has huge inpact!
+			usleep(1000);
+	}
+	while (!info->master->dead && (info->master->meals == -1
+			|| info->courses < info->master->meals))
+	{
+		if (lock_first_fork(info) == -1 || lock_second_fork(info) == -1)
+			return (NULL);
 		print_msg(info, "is eating");
 		info->last_meal = get_time();
 		while (get_time() < info->last_meal + info->master->eat_time)
 		{
 			if (info->master->dead == true)
+			{
+				unlock_first_fork(info);
+				unlock_second_fork(info);
 				return (NULL);
-			usleep(100);
+			}
+			usleep(500);
 		}
-		unlock_fork(info);
+		if (unlock_first_fork(info) == -1)
+			return (NULL);
+		if (unlock_second_fork(info) == -1)
+			return (NULL);
 		if (info->master->meals != -1)
 		{
 			info->courses++;
@@ -44,9 +64,10 @@ void	*philo_routine(void *data)
 		{
 			if (info->master->dead == true)
 				return (NULL);
-			usleep(100);
+			usleep(1000);
 		}
 		print_msg(info, "is thinking");
+		usleep(1000);
 	}
 	return (NULL);
 }
@@ -71,8 +92,10 @@ void	*monitoring_routine(void *data)
 			if ((master->meals == -1 || master->arr_philos[i]->courses < master->meals)
 					&& get_time() - master->arr_philos[i]->last_meal > master->time_to_die)
 			{
+				pthread_mutex_lock(master->write_lock);
 				master->dead = true;
 				printf("%li %i died\n", get_time() - master->start, i + 1);
+				pthread_mutex_unlock(master->write_lock);
 				return (NULL);
 			}
 			i++;

@@ -27,8 +27,8 @@ typedef struct s_philo
 {
 	pthread_t		phil;
 	int				id;
-	long			last_meal;
-	long			courses;
+	_Atomic(long)	last_meal;
+	_Atomic(long)	courses;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	t_master		*master;
@@ -46,7 +46,7 @@ typedef struct s_master
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*write_lock;
 	pthread_t		monitoring;
-	bool			dead;
+	_Atomic(bool)	dead;
 }	t_master;
 
 /*
@@ -63,8 +63,10 @@ void	*monitoring_routine(void *data);
  * Philo actions
 */
 int		create_philo_thread(t_master *master, int *i);
-void	lock_fork(t_philo *info);
-void	unlock_fork(t_philo *info);
+int		lock_first_fork(t_philo *info);
+int		lock_second_fork(t_philo *info);
+int		unlock_first_fork(t_philo *info);
+int		unlock_second_fork(t_philo *info);
 void	print_msg(t_philo *info, char *str);
 void	clean_up(t_master *master);
 
