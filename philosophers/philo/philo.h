@@ -13,13 +13,13 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <sys/time.h>
-#include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
+# include <pthread.h>
+# include <sys/time.h>
+# include <stdbool.h>
 
 typedef struct s_master	t_master;
 
@@ -54,6 +54,9 @@ typedef struct s_master
 */
 long	p_atol(const char *str);
 long	get_time(void);
+void	print_msg(t_philo *info, char *str);
+void	*print_died(t_master *master, int i);
+void	clean_up(t_master *master);
 /*
  * Routines
 */
@@ -62,12 +65,10 @@ void	*monitoring_routine(void *data);
 /*
  * Philo actions
 */
-int		create_philo_thread(t_master *master, int *i);
+int		create_philo_thread(t_master *master, int *i, t_philo *phil_data);
 int		lock_first_fork(t_philo *info);
 int		lock_second_fork(t_philo *info);
 int		unlock_first_fork(t_philo *info);
 int		unlock_second_fork(t_philo *info);
-void	print_msg(t_philo *info, char *str);
-void	clean_up(t_master *master);
 
 #endif

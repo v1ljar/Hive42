@@ -29,7 +29,7 @@ int	lock_first_fork(t_philo *info)
 	}
 	else
 	{
- 		pthread_mutex_lock(info->left_fork);
+		pthread_mutex_lock(info->left_fork);
 		print_msg(info, "has taken left_fork");
 	}
 	if (info->master->dead)
@@ -56,7 +56,7 @@ int	lock_second_fork(t_philo *info)
 	}
 	else
 	{
- 		pthread_mutex_lock(info->right_fork);
+		pthread_mutex_lock(info->right_fork);
 		print_msg(info, "has taken right_fork");
 	}
 	if (info->master->dead)
@@ -97,23 +97,8 @@ int	unlock_second_fork(t_philo *info)
 	return (0);
 }
 
-void	print_msg(t_philo *info, char *str)
+int	create_philo_thread(t_master *master, int *i, t_philo *phil_data)
 {
-	long	time_atm;
-
-	pthread_mutex_lock(info->master->write_lock);
-	if (!info->master->dead)
-	{
-		time_atm = get_time();
-		printf("%li %i %s\n", time_atm - info->master->start, info->id, str);
-	}
-	pthread_mutex_unlock(info->master->write_lock);
-}
-
-int	create_philo_thread(t_master *master, int *i)
-{
-	t_philo		*phil_data;
-
 	phil_data = malloc(sizeof(t_philo));
 	if (!phil_data)
 	{
@@ -134,30 +119,8 @@ int	create_philo_thread(t_master *master, int *i)
 	phil_data->courses = 0;
 	phil_data->master = master;
 	master->arr_philos[*i] = phil_data;
-	pthread_create(&master->arr_philos[*i]->phil, NULL, philo_routine, master->arr_philos[*i]);
+	pthread_create(&master->arr_philos[*i]->phil, NULL, philo_routine,
+		master->arr_philos[*i]);
 	(*i)++;
 	return (0);
-}
-
-void	clean_up(t_master *master)
-{
-	int	i;
-
-	i = 0;
-	while (i < master->philos)
-	{
-		pthread_mutex_destroy(&master->forks[i++]);
-	}
-	free(master->forks);
-	i = 0;
-	usleep(2000);
-	while (i < master->philos)
-	{
-		if (master->arr_philos[i])
-			free(master->arr_philos[i]);
-		i++;
-	}
-	free(master->arr_philos);
-	pthread_mutex_destroy(master->write_lock);
-	free(master->write_lock);
 }

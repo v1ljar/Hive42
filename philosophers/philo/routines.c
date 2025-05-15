@@ -12,60 +12,33 @@
 
 #include "philo.h"
 
+static int	start_routine(void *data, t_philo **info);
+static int	eat_routine(t_philo *info);
+static int	sleep_routine(t_philo *info);
+
 void	*philo_routine(void *data)
 {
-	t_philo *info;
+	t_philo	*info;
 
-	info = (t_philo *)data;
-	while(get_time() < info->master->start)
-		usleep(500);
-	if ((info->master->philos > 2 && info->id % 2 != 0
-			&& info->id == info->master->philos) || info->id % 2 == 0)
-	{
-		print_msg(info, "is thinking");
-		while (get_time() < info->last_meal + info->master->eat_time)
-		{
-			if (info->master->dead == true)
-				return (NULL);
-			usleep(500);
-		}
-		if (info->id % 2 != 0)			// This sleep has huge inpact!
-			usleep(1000);
-	}
+	if (start_routine(data, &info) == -1)
+		return (NULL);
 	while (!info->master->dead && (info->master->meals == -1
 			|| info->courses < info->master->meals))
 	{
 		if (lock_first_fork(info) == -1 || lock_second_fork(info) == -1)
 			return (NULL);
-		print_msg(info, "is eating");
-		info->last_meal = get_time();
-		while (get_time() < info->last_meal + info->master->eat_time)
-		{
-			if (info->master->dead == true)
-			{
-				unlock_first_fork(info);
-				unlock_second_fork(info);
-				return (NULL);
-			}
-			usleep(500);
-		}
-		if (unlock_first_fork(info) == -1)
+		if (eat_routine(info) == -1)
 			return (NULL);
-		if (unlock_second_fork(info) == -1)
+		if (unlock_first_fork(info) == -1 || unlock_second_fork(info) == -1)
 			return (NULL);
 		if (info->master->meals != -1)
 		{
 			info->courses++;
-			if (info->courses == info->master->meals || info->master->dead == true)
+			if (info->courses == info->master->meals || info->master->dead)
 				return (NULL);
 		}
-		print_msg(info, "is sleeping");
-		while (get_time() < info->last_meal + info->master->sleep_time + info->master->eat_time)
-		{
-			if (info->master->dead == true)
-				return (NULL);
-			usleep(1000);
-		}
+		if (sleep_routine(info) == -1)
+			return (NULL);
 		print_msg(info, "is thinking");
 		usleep(1000);
 	}
@@ -74,34 +47,77 @@ void	*philo_routine(void *data)
 
 void	*monitoring_routine(void *data)
 {
-	t_master	*master;
+	t_master	*ms;
 	int			i;
 	int			full;
 
-	master = (t_master *)data;
-	while(get_time() < master->start)
-		usleep(100);
+	ms = (t_master *)data;
+	while (get_time() < ms->start)
+		usleep(500);
 	while (1)
 	{
 		full = 0;
 		i = 0;
-		while (i < master->philos)
+		while (i < ms->philos)
 		{
-			if (master->meals != -1 && master->arr_philos[i]->courses == master->meals)
+			if (ms->meals != -1 && ms->arr_philos[i]->courses == ms->meals)
 				full++;
-			if ((master->meals == -1 || master->arr_philos[i]->courses < master->meals)
-					&& get_time() - master->arr_philos[i]->last_meal > master->time_to_die)
-			{
-				pthread_mutex_lock(master->write_lock);
-				master->dead = true;
-				printf("%li %i died\n", get_time() - master->start, i + 1);
-				pthread_mutex_unlock(master->write_lock);
-				return (NULL);
-			}
+			if ((ms->meals == -1 || ms->arr_philos[i]->courses < ms->meals)
+				&& get_time() - ms->arr_philos[i]->last_meal > ms->time_to_die)
+				return (print_died(ms, i));
 			i++;
 		}
-		if (master->meals != -1 && full == master->philos)
+		if (ms->meals != -1 && full == ms->philos)
 			return (NULL);
 	}
 	return (NULL);
+}
+
+static int	start_routine(void *data, t_philo **info)
+{
+	*info = (t_philo *)data;
+	while (get_time() < (*info)->master->start)
+		usleep(500);
+	if (((*info)->master->philos > 2 && (*info)->id % 2 != 0
+			&& (*info)->id == (*info)->master->philos) || (*info)->id % 2 == 0)
+	{
+		print_msg(*info, "is thinking");
+		while (get_time() < (*info)->last_meal + (*info)->master->eat_time)
+		{
+			if ((*info)->master->dead == true)
+				return (-1);
+			usleep(500);
+		}
+	}
+	return (0);
+}
+
+static int	eat_routine(t_philo *info)
+{
+	print_msg(info, "is eating");
+	info->last_meal = get_time();
+	while (get_time() < info->last_meal + info->master->eat_time)
+	{
+		if (info->master->dead == true)
+		{
+			unlock_first_fork(info);
+			unlock_second_fork(info);
+			return (-1);
+		}
+		usleep(500);
+	}
+	return (0);
+}
+
+static int	sleep_routine(t_philo *info)
+{
+	print_msg(info, "is sleeping");
+	while (get_time() < info->last_meal + info->master->sleep_time
+		+ info->master->eat_time)
+	{
+		if (info->master->dead == true)
+			return (-1);
+		usleep(1000);
+	}
+	return (0);
 }

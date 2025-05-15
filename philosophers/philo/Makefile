@@ -1,8 +1,20 @@
+#* ************************************************************************** *#
+#*                                                                            *#
+#*                                                        :::      ::::::::   *#
+#*   philo.c                                            :+:      :+:    :+:   *#
+#*                                                    +:+ +:+         +:+     *#
+#*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        *#
+#*                                                +#+#+#+#+#+   +#+           *#
+#*   Created: 2025/05/13 11:15:39 by vuljas            #+#    #+#             *#
+#*   Updated: 2025/05/13 11:15:44 by vuljas           ###   ########.fr       *#
+#*                                                                            *#
+#* ************************************************************************** *#
+
 NAME = philo
 
 CC = cc
 
-WFLAGS = -Werror -Wextra -Wall -pthread -g
+WFLAGS = -Werror -Wextra -Wall
 
 SRC = philo.c philo_utils.c routines.c philo_actions.c
 
@@ -16,7 +28,7 @@ $(NAME): $(OBJPATH) $(OBJ)
 	$(CC) $(OBJ) -o $(NAME)
 
 $(OBJ): $(OBJPATH)%.o: %.c
-	$(CC) $(WFLAGS) -c $< -o $@
+	$(CC) $(WFLAGS) -c $< -o $@ -pthread
 
 $(OBJPATH):
 	mkdir -p $(OBJPATH)
