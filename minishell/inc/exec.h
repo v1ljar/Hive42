@@ -6,7 +6,7 @@
 /*   By: jpiensal <jpiensal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:25:08 by jpiensal          #+#    #+#             */
-/*   Updated: 2025/04/29 14:20:03 by jpiensal         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:50:47 by jpiensal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,22 @@
  * static void exec_builtin(t_master *mini, t_cmd *cmd);
  * -> looks at the current command and calls the builtin if match is found
  */
-int		handle_heredoc(t_list *env, t_file *file, int *fd, t_master *mini);
+int		create_heredoc(t_master *mini, t_cmd *cmd, t_file *file);
 /** EXEC_UTILS.c **/
 /*
  * counts the number of commands
  */
-size_t	count_commands(t_cmd *cmd);
+int		count_commands(t_cmd *cmd);
 int		is_heredoc_signal(t_master *mini, int *fd, char *line);
 /*
  * copies a list whose contents are strings to an array of strings
  */
-char	**cpy_lst_to_arr(t_list *lst);
+char	**cpy_lst_to_arr(t_list **lst);
 /*
  * performs a swap for two char * pointers
  */
 void	swap_ptrs(char **s1, char **s2);
-void	close_herepipes(t_file *file);
+int		print_warning(char *limiter, t_master *mini, int *fd, bool flag);
 /* REDIRECTIONS.C */
 /*
  * sets the needed redirections for current command
@@ -64,9 +64,17 @@ void	close_herepipes(t_file *file);
  */
 int		set_redirections(t_cmd *cmd);
 int		dup_fd(t_cmd *cmd);
-int		set_io(t_cmd *cmd, int *temp_io, bool is_in);
 int		create_pipe(t_cmd *cmd);
-void	wait_loop(t_master *mini);
+void	wait_loop(t_master *mini, bool flag, int pid);
+/*
+ * IO.C
+ */
+int		set_io_in(t_cmd *cmd, int *temp_io);
+int		set_io_out(t_cmd *cmd, int *temp_io);
+int		open_temp_io(int temp_io[2]);
+int		close_temp_io(int temp_io[2]);
+//test
+
 /***** BUILT-IN FUNCTIONS *****/
 
 /*
@@ -90,7 +98,7 @@ int		mini_unset(t_master *mini, char **args);
  * Takes in the environment list
  * Prints it to stdout if not directed elsewhere
  */
-int		mini_env(t_list *env, char **cmd);
+int		mini_env(t_list **env, char **cmd);
 
 /*
  * Takes in the environment list.

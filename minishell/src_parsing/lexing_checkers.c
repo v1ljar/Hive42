@@ -54,14 +54,23 @@ static char	*check_expansions(t_master *mini, char *str)
 {
 	char	*res;
 
-	if (!str)
-		return (str);
-	res = extract_quotes(str, mini, 0, 0);
+	if (ft_strchr(str, '$'))
+	{
+		res = process_word(str, mini, 0, 0);
+		if (!res || res[0] == '\0')
+		{
+			mini->input = ft_strjoin(str, ": ambiguous redirect");
+			if (!mini->input)
+				mini->input = NULL;
+		}
+	}
+	else
+		res = process_word(str, mini, 0, 0);
 	free(str);
 	return (res);
 }
 
-void	check_envv_position(t_token **tokens, t_token **last_tok,
+void	check_env_var_position(t_token **tokens, t_token **last_tok,
 	char *envv_name)
 {
 	char	**buf_arr;

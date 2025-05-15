@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexing_handle_envv.c                               :+:      :+:    :+:   */
+/*   lexing_handle_env_var.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:04:10 by vuljas            #+#    #+#             */
-/*   Updated: 2025/03/12 16:04:14 by vuljas           ###   ########.fr       */
+/*   Updated: 2025/05/09 13:53:16 by jpiensal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	increment_len_n_check_qm(char *str, int start, int *len);
 
-char	*expand_envv(t_master *mini, char *str, int *i, int len)
+char	*expand_env_var(t_master *mini, char *str, int *i, int len)
 {
 	char	*envv_name;
 	char	*res;
@@ -32,7 +32,7 @@ char	*expand_envv(t_master *mini, char *str, int *i, int len)
 	if (envv_name && !ft_strncmp(envv_name, "?", 2))
 		res = ft_itoa(mini->wstatus);
 	else
-		res = ft_strdup(find_envv(mini->env, envv_name));
+		res = ft_strdup(find_envv(&mini->env, envv_name));
 	free(envv_name);
 	if (!res && (str[*i] == ' ' || str[*i] == '\0'))
 		return (NULL);
@@ -55,7 +55,7 @@ char	*extract_full_variable(char *str, int *i, char *envv_name,
 		return (envv_name);
 	save = mini->cleaned;
 	mini->cleaned = addition;
-	buf = extract_quotes(addition, mini, 0, 0);
+	buf = process_word(addition, mini, 0, 0);
 	free(addition);
 	mini->cleaned = save;
 	if (!buf)
@@ -94,7 +94,7 @@ void	extract_envv_quotes(t_master *mini, char **buf, int *i, int *j)
 	if (value && !ft_strncmp(value, "?", 2))
 		env_v = ft_itoa(mini->wstatus);
 	else
-		env_v = ft_strdup(find_envv(mini->env, value));
+		env_v = ft_strdup(find_envv(&mini->env, value));
 	free(value);
 	if (env_v)
 		envv_to_str(buf, env_v, j);

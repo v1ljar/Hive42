@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-/* handle_envv handles envv if not in quotes, according the ENVV name,
+/* handle_env_var handles envv if not in quotes, according the ENVV name,
 expand the value and create token accordingly */
-static void	handle_envv(t_master *mini, int *i, t_token **tokens,
+static void	handle_env_var(t_master *mini, int *i, t_token **tokens,
 				t_token **last_tok);
 /* handle_operator processes the right operator value (name after the
 operator) and type and creates token accordingly */
@@ -42,7 +42,7 @@ void	lexer(t_master *mini, int i)
 	{
 		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '?'
 				|| str[i + 1] == '_'))
-			handle_envv(mini, &i, &mini->tokens, &last_token);
+			handle_env_var(mini, &i, &mini->tokens, &last_token);
 		else if (is_operator(str[i]))
 			handle_operator(str, &i, &last_token, mini);
 		else if (str[i] == ' ')
@@ -54,7 +54,7 @@ void	lexer(t_master *mini, int i)
 	mini->cleaned = NULL;
 }
 
-void	handle_envv(t_master *mini, int *i, t_token **tokens,
+static void	handle_env_var(t_master *mini, int *i, t_token **tokens,
 			t_token **last_tok)
 {
 	char	*envv_name;
@@ -73,9 +73,9 @@ void	handle_envv(t_master *mini, int *i, t_token **tokens,
 		(*i)++;
 	else
 	{
-		envv_name = expand_envv(mini, str, i, 0);
+		envv_name = expand_env_var(mini, str, i, 0);
 		if (envv_name)
-			check_envv_position(tokens, last_tok, envv_name);
+			check_env_var_position(tokens, last_tok, envv_name);
 		else
 			(*i)++;
 	}
@@ -120,9 +120,9 @@ void	handle_word(char *str, int *i, t_master *mini, t_token **last_tok)
 		return ;
 	if (*last_tok == NULL || (*last_tok != NULL
 			&& is_cmd(&mini->tokens) == 0))
-		*last_tok = create_token(CMD, extract_quotes(word, mini, 0, 0));
+		*last_tok = create_token(CMD, process_word(word, mini, 0, 0));
 	else
-		*last_tok = create_token(ARG, extract_quotes(word, mini, 0, 0));
+		*last_tok = create_token(ARG, process_word(word, mini, 0, 0));
 	free(word);
 	add_token(&mini->tokens, *last_tok);
 }

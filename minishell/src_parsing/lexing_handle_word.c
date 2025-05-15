@@ -16,10 +16,7 @@
  to be extracted, length is stored in len variable, that is modifyable,
  because it is as int * parameter. */
 static void	extract_word_length(char *str, int *i, int *len);
-/* Helper function for extract_quotes, it extracts the total content of the
- word into modifyable string char **buf. */
-static void	handle_single_quotes(char *str, char **buf, int *i, int *j);
-/* Helper function for extract_quotes, if environment variable, if
+/* Helper function for process_word, if environment variable, if
  envv ($....), it uses extract_envv_quotes to expand envv, content
  between "..." will be placed into char **buf. */
 static void	handle_double_quotes(t_master *mini, char **buf, int *i,
@@ -71,7 +68,7 @@ static void	extract_word_length(char *str, int *i, int *len)
 	}
 }
 
-char	*extract_quotes(char *str, t_master *mini, int i, int j)
+char	*process_word(char *str, t_master *mini, int i, int j)
 {
 	char	*buf;
 	char	*save;
@@ -91,7 +88,7 @@ char	*extract_quotes(char *str, t_master *mini, int i, int j)
 				|| str[i + 1] == '"' || str[i + 1] == '\''))
 			extract_envv_quotes(mini, &buf, &i, &j);
 		else
-			buf[j++] = str[i++];
+			j = check_tilde_add_to_buf(buf, str, &i, mini);
 	}
 	mini->cleaned = save;
 	save = ft_strdup(buf);
@@ -99,7 +96,7 @@ char	*extract_quotes(char *str, t_master *mini, int i, int j)
 	return (save);
 }
 
-static void	handle_single_quotes(char *str, char **buf, int *i, int *j)
+void	handle_single_quotes(char *str, char **buf, int *i, int *j)
 {
 	char	c;
 

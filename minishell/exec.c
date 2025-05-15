@@ -6,27 +6,23 @@
 /*   By: jpiensal <jpiensal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:12:16 by jpiensal          #+#    #+#             */
-/*   Updated: 2025/04/29 14:19:29 by jpiensal         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:51:43 by jpiensal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <exec.h>
 
-static void	exec_commands(t_master *mini, int *temp_io, char **env);
+static void	exec_commands(t_master *mini, char **env);
 static int	exec_cmd(t_master *mini, t_cmd *cmd, char **env);
 static int	exec_builtin(t_master *mini, t_cmd *cmd);
-static int	heredoc_handler(t_list *env, t_cmd *cmd, t_master *mini);
+static int	heredoc_handler(t_master *mini, t_cmd *cmd);
 
 int	mini_exec(t_master *mini)
 {
-	int		temp_io[2];
 	char	**env;
-	int		heredoc_res;
 
-	handle_temp_io(temp_io, 1);
-	heredoc_res = heredoc_handler(mini->env, mini->root_cmd, mini);
-	if (heredoc_res != 0)
-		return (handle_temp_io(temp_io, 0), heredoc_res);
+	if (heredoc_handler(mini, mini->root_cmd))
+		return (-1);
 	mini->wstatus = set_redirections(mini->root_cmd);
 	if (mini->root_cmd->next == NULL
 		&& is_builtin((const char **)mini->root_cmd->cmd))
@@ -36,16 +32,16 @@ int	mini_exec(t_master *mini)
 	}
 	else
 	{
-		env = cpy_lst_to_arr(mini->env);
-		exec_commands(mini, temp_io, env);
+		env = cpy_lst_to_arr(&mini->env);
+		if (!env)
+			return (1);
+		exec_commands(mini, env);
 		ft_delarray(env);
 	}
-	handle_temp_io(temp_io, 0);
-	init_signals(&mini->sa);
 	return (0);
 }
 
-static void	exec_commands(t_master *mini, int *temp_io, char **env)
+static void	exec_commands(t_master *mini, char **env)
 {
 	t_cmd	*cmd;
 
@@ -56,11 +52,11 @@ static void	exec_commands(t_master *mini, int *temp_io, char **env)
 	{
 		while (cmd && cmd->io_error == true && !close_fd(cmd))
 			cmd = cmd->next;
-		if (!cmd || set_io(cmd, temp_io, true))
+		if (!cmd || set_io_in(cmd, mini->temp_io))
 			return ;
 		if (cmd->next && create_pipe(cmd))
 			return ;
-		if (set_io(cmd, temp_io, false))
+		if (set_io_out(cmd, mini->temp_io))
 			return ;
 		mini->pid = fork();
 		if (mini->pid == -1)
@@ -69,19 +65,24 @@ static void	exec_commands(t_master *mini, int *temp_io, char **env)
 			exec_cmd(mini, cmd, env);
 		cmd = cmd->next;
 	}
-	wait_loop(mini);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	wait_loop(mini, false, 0);
 }
 
 static int	exec_cmd(t_master *mini, t_cmd *cmd, char **env)
 {
+	close(mini->temp_io[0]);
+	close(mini->temp_io[1]);
+	if (cmd->next && cmd->next->fdin != -1)
+		close(cmd->next->fdin);
 	if (!cmd->cmd)
 		exit(0);
 	if (is_builtin((const char **)cmd->cmd))
 		exit(exec_builtin(mini, cmd));
 	execve(cmd->path, cmd->cmd, env);
-	if (errno == 126)
-		exit(mini_error(cmd->cmd[0], NULL, NULL, 0));
-	exit(mini_error(cmd->cmd[0], NULL, "command not found", 127));
+	command_error(cmd->cmd[0]);
+	exit(0);
 }
 
 static int	exec_builtin(t_master *mini, t_cmd *cmd)
@@ -98,7 +99,7 @@ static int	exec_builtin(t_master *mini, t_cmd *cmd)
 	else if (!ft_strncmp(cmd->cmd[0], "pwd", 4))
 		ret = mini_pwd(mini);
 	else if (!ft_strncmp(cmd->cmd[0], "env", 4))
-		ret = mini_env(mini->env, &(cmd->cmd[1]));
+		ret = mini_env(&mini->env, &(cmd->cmd[1]));
 	else if (!ft_strncmp(cmd->cmd[0], "exit", 5))
 		ret = mini_exit(mini, &(cmd->cmd[1]));
 	else if (!ft_strncmp(cmd->cmd[0], "echo", 5))
@@ -106,7 +107,7 @@ static int	exec_builtin(t_master *mini, t_cmd *cmd)
 	return (ret);
 }
 
-static int	heredoc_handler(t_list *env, t_cmd *cmd, t_master *mini)
+static int	heredoc_handler(t_master *mini, t_cmd *cmd)
 {
 	t_file	*temp;
 
@@ -117,12 +118,8 @@ static int	heredoc_handler(t_list *env, t_cmd *cmd, t_master *mini)
 		{
 			if (temp->type == '+')
 			{
-				if (pipe(temp->herepipe) == -1)
-					return (mini_error(NULL, NULL, NULL, 0));
-				if (handle_heredoc(env, temp, temp->herepipe, mini) != 0)
-					return (-2);
-				if (cmd->io_error == true)
-					close(temp->herepipe[0]);
+				if (create_heredoc(mini, cmd, temp))
+					return (-1);
 			}
 			temp = temp->next;
 		}
