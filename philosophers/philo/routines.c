@@ -22,8 +22,8 @@ void	*philo_routine(void *data)
 
 	if (start_routine(data, &info) == -1)
 		return (NULL);
-	while (!info->master->dead && (info->master->meals == -1
-			|| info->courses < info->master->meals))
+	while (info->master->meals == -1
+			|| info->courses < info->master->meals)
 	{
 		if (lock_first_fork(info) == -1 || lock_second_fork(info) == -1)
 			return (NULL);
@@ -40,7 +40,6 @@ void	*philo_routine(void *data)
 		if (sleep_routine(info) == -1)
 			return (NULL);
 		print_msg(info, "is thinking");
-		usleep(1000);
 	}
 	return (NULL);
 }
@@ -51,9 +50,8 @@ void	*monitoring_routine(void *data)
 	int			i;
 	int			full;
 
-	ms = (t_master *)data;
-	while (get_time() < ms->start)
-		usleep(500);
+	if (monitoring_start_routine(data, &ms) == -1)
+		return (NULL);
 	while (1)
 	{
 		full = 0;
@@ -76,8 +74,13 @@ void	*monitoring_routine(void *data)
 static int	start_routine(void *data, t_philo **info)
 {
 	*info = (t_philo *)data;
-	while (get_time() < (*info)->master->start)
-		usleep(500);
+	while (!(*info)->master->ready_to_eat)
+	{
+		if ((*info)->master->dead == true)
+			return (-1);
+		usleep(100);
+	}
+	(*info)->last_meal = get_time();
 	if (((*info)->master->philos > 2 && (*info)->id % 2 != 0
 			&& (*info)->id == (*info)->master->philos) || (*info)->id % 2 == 0)
 	{
@@ -86,7 +89,6 @@ static int	start_routine(void *data, t_philo **info)
 		{
 			if ((*info)->master->dead == true)
 				return (-1);
-			usleep(500);
 		}
 	}
 	return (0);
@@ -117,7 +119,7 @@ static int	sleep_routine(t_philo *info)
 	{
 		if (info->master->dead == true)
 			return (-1);
-		usleep(1000);
+		usleep(500);
 	}
 	return (0);
 }

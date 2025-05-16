@@ -38,47 +38,43 @@ long	get_time(void)
 	return (res);
 }
 
-void	print_msg(t_philo *info, char *str)
-{
-	long	time_atm;
-
-	pthread_mutex_lock(info->master->write_lock);
-	if (!info->master->dead)
-	{
-		time_atm = get_time();
-		printf("%li %i %s\n", time_atm - info->master->start, info->id, str);
-	}
-	pthread_mutex_unlock(info->master->write_lock);
-}
-
-void	*print_died(t_master *master, int i)
-{
-	pthread_mutex_lock(master->write_lock);
-	master->dead = true;
-	printf("%li %i died\n", get_time() - master->start, i + 1);
-	pthread_mutex_unlock(master->write_lock);
-	return (NULL);
-}
-
 void	clean_up(t_master *master)
 {
 	int	i;
 
 	i = 0;
-	while (i < master->philos)
+	while (master->forks && i < master->philos)
 	{
-		pthread_mutex_destroy(&master->forks[i++]);
+		if (&master->forks[i])
+			pthread_mutex_destroy(&master->forks[i]);
+		i++;
 	}
-	free(master->forks);
+	if (master->forks)
+		free(master->forks);
 	i = 0;
-	usleep(2000);
-	while (i < master->philos)
+	while (master->arr_philos && i < master->philos)
 	{
 		if (master->arr_philos[i])
 			free(master->arr_philos[i]);
 		i++;
 	}
-	free(master->arr_philos);
-	pthread_mutex_destroy(master->write_lock);
-	free(master->write_lock);
+	if (master->arr_philos)
+		free(master->arr_philos);
+	if (master->write_lock)
+		pthread_mutex_destroy(master->write_lock);
+	if (master->write_lock)
+		free(master->write_lock);
+}
+
+int	monitoring_start_routine(void *data, t_master **master)
+{
+	*master = (t_master *)data;
+	while (!(*master)->ready_to_eat)
+	{
+		if ((*master)->dead == true)
+			return (-1);
+		usleep(500);
+	}
+	usleep(1000);
+	return (0);
 }

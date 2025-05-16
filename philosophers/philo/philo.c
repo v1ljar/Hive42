@@ -22,10 +22,7 @@ int	main(int ac, char **av)
 	static t_master	master;
 
 	if (init_master(&master, ac, av) == -1)
-	{
-		clean_up(&master);
 		return (1);
-	}
 	clean_up(&master);
 	return (0);
 }
@@ -34,7 +31,9 @@ static int	init_master(t_master *master, int ac, char **av)
 {
 	if (ac != 5 && ac != 6)
 	{
-		printf("Four (fifth argument is optional) arguments are required!\n");
+		printf("Must have following arguments:\n\tnumber_of_philosophers\n\t"
+				"time_to_die\n\ttime_to_eat\n\ttime_to_sleep\n\t"
+				"[number_of_times_each_philosopher_must_eat]\n");
 		return (-1);
 	}
 	if (validate_args(ac, av, 1, 0) == -1)
@@ -53,7 +52,8 @@ static int	validate_args(int ac, char **av, int i, int j)
 		{
 			if (av[i][0] == '0' || !(av[i][j] >= '0' && av[i][j] <= '9'))
 			{
-				printf("Only positive integers allowed as arguments!\n");
+				printf("Invalid argument: `%s´\n%s\n", av[i],
+						"Only positive integers allowed!");
 				return (-1);
 			}
 			j++;
@@ -66,7 +66,6 @@ static int	validate_args(int ac, char **av, int i, int j)
 static int	init_values(int ac, char **av, t_master *master)
 {
 	master->philos = p_atol(av[1]);
-	master->start = get_time() + (65 * master->philos);
 	master->time_to_die = p_atol(av[2]);
 	master->eat_time = p_atol(av[3]);
 	master->sleep_time = p_atol(av[4]);
@@ -98,25 +97,24 @@ static int	init_n_join_forks_n_threads(t_master *master, int i)
 	{
 		if (pthread_mutex_init(&master->forks[i], NULL) != 0)
 		{
-			while (--i >= 0)
-			{
-				pthread_mutex_destroy(&master->forks[i]);
-			}
-			free(master->forks);
-			free(master->write_lock);
+			clean_up(master);
 			return (printf("Mutex init failed\n"));
 		}
 		i++;
 	}
+	if (pthread_create(&master->monitoring, NULL, monitoring_routine, master))
+		return (free_n_print(master, "Monitoring thread creation failed"));
 	i = 0;
 	while (i < master->philos)
 	{
 		if (create_philo_thread(master, &i, NULL))
 			return (-1);
 	}
-	pthread_create(&master->monitoring, NULL, monitoring_routine, master);
 	i = 0;
 	while (i < master->philos)
-		pthread_join(master->arr_philos[i++]->phil, NULL);
-	return (pthread_join(master->monitoring, NULL));
+		if (pthread_join(master->arr_philos[i++]->phil, NULL) != 0)
+			return (free_n_print(master, "Philosopher thread join failed"));
+	if (pthread_join(master->monitoring, NULL) != 0)
+		return (free_n_print(master, "Monitoring thread join failed"));
+	return (0);
 }

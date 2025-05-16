@@ -101,26 +101,24 @@ int	create_philo_thread(t_master *master, int *i, t_philo *phil_data)
 {
 	phil_data = malloc(sizeof(t_philo));
 	if (!phil_data)
-	{
-		while (*i >= 0)
-		{
-			if (master->arr_philos[*i])
-				free(master->arr_philos[*i]);
-			(*i)--;
-		}
-		free(master->arr_philos);
-		return (printf("Philo_data allocation failed\n"));
-	}
+		free_n_print(master, "Philo_data allocation failed");
+	memset(phil_data, '\0', sizeof(t_philo));
 	phil_data->id = *i + 1;
 	if (master->philos > 1)
 		phil_data->left_fork = &master->forks[((*i) + 1) % master->philos];
 	phil_data->right_fork = &master->forks[*i];
-	phil_data->last_meal = master->start;
+	phil_data->last_meal = get_time() + 1000;
 	phil_data->courses = 0;
 	phil_data->master = master;
 	master->arr_philos[*i] = phil_data;
-	pthread_create(&master->arr_philos[*i]->phil, NULL, philo_routine,
-		master->arr_philos[*i]);
+	if (pthread_create(&master->arr_philos[*i]->phil, NULL, philo_routine,
+		master->arr_philos[*i]) != 0)
+		return (free_n_print(master, "Philo_data allocation failed"));
+	if (phil_data->id == master->philos)
+	{
+		master->start = get_time();
+		master->ready_to_eat = 1;
+	}
 	(*i)++;
 	return (0);
 }

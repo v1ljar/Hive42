@@ -25,28 +25,29 @@ typedef struct s_master	t_master;
 
 typedef struct s_philo
 {
+	t_master		*master;
 	pthread_t		phil;
-	int				id;
-	_Atomic(long)	last_meal;
-	_Atomic(long)	courses;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
-	t_master		*master;
+	_Atomic(long)	last_meal;
+	_Atomic(long)	courses;
+	int				id;
 }	t_philo;
 
 typedef struct s_master
 {
-	long			start;
+	t_philo			**arr_philos;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	*write_lock;
+	pthread_t		monitoring;
+	_Atomic(long)	start;
+	_Atomic(bool)	ready_to_eat;
+	_Atomic(bool)	dead;
 	long			philos;
 	long			time_to_die;
 	long			eat_time;
 	long			sleep_time;
 	long			meals;
-	t_philo			**arr_philos;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	*write_lock;
-	pthread_t		monitoring;
-	_Atomic(bool)	dead;
 }	t_master;
 
 /*
@@ -54,9 +55,8 @@ typedef struct s_master
 */
 long	p_atol(const char *str);
 long	get_time(void);
-void	print_msg(t_philo *info, char *str);
-void	*print_died(t_master *master, int i);
 void	clean_up(t_master *master);
+int		monitoring_start_routine(void *data, t_master **master);
 /*
  * Routines
 */
@@ -70,5 +70,11 @@ int		lock_first_fork(t_philo *info);
 int		lock_second_fork(t_philo *info);
 int		unlock_first_fork(t_philo *info);
 int		unlock_second_fork(t_philo *info);
+/*
+ * Philo print utils
+*/
+void	print_msg(t_philo *info, char *str);
+void	*print_died(t_master *master, int i);
+int		free_n_print(t_master *master, char *str);
 
 #endif
