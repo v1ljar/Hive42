@@ -75,8 +75,9 @@ int		unlock_second_fork(t_philo *info);
 /*
  * Helpers
 */
+int		create_n_join_threads(t_master *master, int j, int k);
+int		join_threads(t_master *master, int k);
 int		sleep_routine(t_philo *info);
-int		create_monitor_n_join_threads(t_master *master, int k);
 int		check_overflow(t_master *master);
 
 #endif

@@ -14,7 +14,7 @@ NAME = philo
 
 CC = cc
 
-WFLAGS = -Werror -Wextra -Wall
+WFLAGS = -Werror -Wextra -Wall -g
 
 SRC = philo.c philo_utils.c philo_routines.c philo_actions.c philo_helpers.c
 

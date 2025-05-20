@@ -12,28 +12,31 @@
 
 #include "philo.h"
 
-int	sleep_routine(t_philo *info)
-{
-	print_msg(info, "is sleeping");
-	while (get_time(NULL, info) < info->last_meal + info->master->sleep_time
-		+ info->master->eat_time)
-	{
-		if (info->master->dead == true)
-			return (-1);
-		usleep(500);
-	}
-	return (0);
-}
-
-int	create_monitor_n_join_threads(t_master *master, int k)
+int	create_n_join_threads(t_master *master, int j, int k)
 {
 	if (pthread_create(&master->monitoring, NULL, monitoring_routine, master))
-	{
-		master->dead = true;
-		clean_up(master);
 		return (printf("Monitoring thread creation failed!\n"));
+	while (j < master->philos)
+	{
+		if (create_philo_thread(master, &j, NULL) == -1)
+		{
+			master->dead = true;
+			if (pthread_join(master->monitoring, NULL) != 0)
+				printf("Monitoring join failed!\n");
+			while (--j >= 0)
+				if (pthread_join(master->arr_philos[j]->phil, NULL) != 0)
+					printf("Philo thread [index: %i] creation and join"
+						"failed!\n", j);
+			if (j == 0)
+				return (printf("Philo thread creation failed!\n"));
+		}
 	}
 	master->philos_ready = true;
+	return (join_threads(master, k));
+}
+
+int	join_threads(t_master *master, int k)
+{
 	if (pthread_join(master->monitoring, NULL) != 0)
 	{
 		master->dead = true;
@@ -48,6 +51,19 @@ int	create_monitor_n_join_threads(t_master *master, int k)
 			usleep(3000);
 			return (printf("Philos join failed!\n"));
 		}
+	}
+	return (0);
+}
+
+int	sleep_routine(t_philo *info)
+{
+	print_msg(info, "is sleeping");
+	while (get_time(NULL, info) < info->last_meal + info->master->sleep_time
+		+ info->master->eat_time)
+	{
+		if (info->master->dead == true)
+			return (-1);
+		usleep(500);
 	}
 	return (0);
 }

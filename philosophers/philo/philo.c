@@ -122,10 +122,5 @@ static int	init_n_join_forks_n_threads(t_master *master, int i, int j, int k)
 		}
 		i++;
 	}
-	while (j < master->philos)
-	{
-		if (create_philo_thread(master, &j, NULL) == -1)
-			return (printf("Philo thread creation failed!\n"));
-	}
-	return (create_monitor_n_join_threads(master, k));
+	return (create_n_join_threads(master, j, k));
 }
