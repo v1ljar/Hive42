@@ -27,15 +27,48 @@ long	p_atol(const char *str)
 	return (result);
 }
 
-long	get_time(void)
+long	get_time(t_master *master, t_philo *phil)
 {
 	struct timeval	tv;
-	long			res;
+	unsigned long	res;
 
-	gettimeofday(&tv, NULL);
-	res = 0;
-	res = (long)((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-	return (res);
+	if (gettimeofday(&tv, NULL) == -1)
+	{
+		if (master)
+		{
+			master->dead = true;
+			usleep(1000);
+			printf("gettimofday failed!\n");
+		}
+		else if (phil)
+		{
+			phil->master->dead = true;
+			usleep(1000);
+			printf("gettimofday failed!\n");
+		}
+		return (-1);
+	}
+	res = (unsigned long)((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	return ((long)res);
+}
+
+void	print_msg(t_philo *info, char *str)
+{
+	pthread_mutex_lock(info->master->write_lock);
+	if (!info->master->dead)
+		printf("%li %i %s\n", get_time(NULL, info) - info->master->start,
+			info->id, str);
+	pthread_mutex_unlock(info->master->write_lock);
+}
+
+void	*print_died(t_master *master, int i)
+{
+	pthread_mutex_lock(master->write_lock);
+	master->dead = true;
+	printf("%li %i died\n", get_time(master, NULL) - master->start, i + 1);
+	usleep(1000);
+	pthread_mutex_unlock(master->write_lock);
+	return (NULL);
 }
 
 void	clean_up(t_master *master)
@@ -45,13 +78,12 @@ void	clean_up(t_master *master)
 	i = 0;
 	while (master->forks && i < master->philos)
 	{
-		if (&master->forks[i])
-			pthread_mutex_destroy(&master->forks[i]);
-		i++;
+		pthread_mutex_destroy(&master->forks[i++]);
 	}
 	if (master->forks)
 		free(master->forks);
 	i = 0;
+	usleep(2000);
 	while (master->arr_philos && i < master->philos)
 	{
 		if (master->arr_philos[i])
@@ -61,20 +93,8 @@ void	clean_up(t_master *master)
 	if (master->arr_philos)
 		free(master->arr_philos);
 	if (master->write_lock)
-		pthread_mutex_destroy(master->write_lock);
-	if (master->write_lock)
-		free(master->write_lock);
-}
-
-int	monitoring_start_routine(void *data, t_master **master)
-{
-	*master = (t_master *)data;
-	while (!(*master)->ready_to_eat)
 	{
-		if ((*master)->dead == true)
-			return (-1);
-		usleep(500);
+		pthread_mutex_destroy(master->write_lock);
+		free(master->write_lock);
 	}
-	usleep(1000);
-	return (0);
 }

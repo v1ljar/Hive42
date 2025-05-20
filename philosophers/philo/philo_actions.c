@@ -19,22 +19,22 @@ int	lock_first_fork(t_philo *info)
 	if (info->master->philos == 1)
 	{
 		if (pthread_mutex_lock(info->right_fork) == 0)
-			print_msg(info, "has taken right_fork");
+			print_msg(info, "has taken a fork");
 		return (0);
 	}
 	if (info->id % 2 != 0)
 	{
 		pthread_mutex_lock(info->right_fork);
-		print_msg(info, "has taken right_fork");
+		print_msg(info, "has taken a fork");
 	}
 	else
 	{
 		pthread_mutex_lock(info->left_fork);
-		print_msg(info, "has taken left_fork");
+		print_msg(info, "has taken a fork");
 	}
 	if (info->master->dead)
 	{
-		unlock_first_fork(info);
+		unlock_first_fork(info, 0);
 		return (-1);
 	}
 	return (0);
@@ -43,32 +43,28 @@ int	lock_first_fork(t_philo *info)
 int	lock_second_fork(t_philo *info)
 {
 	if (info->master->dead)
-	{
-		unlock_first_fork(info);
-		return (-1);
-	}
+		return (unlock_first_fork(info, 1));
 	if (info->master->philos == 1)
 		return (0);
 	if (info->id % 2 != 0)
 	{
 		pthread_mutex_lock(info->left_fork);
-		print_msg(info, "has taken left_fork");
+		print_msg(info, "has taken a fork");
 	}
 	else
 	{
 		pthread_mutex_lock(info->right_fork);
-		print_msg(info, "has taken right_fork");
+		print_msg(info, "has taken a fork");
 	}
 	if (info->master->dead)
 	{
-		unlock_first_fork(info);
-		unlock_second_fork(info);
+		unlock_first_fork(info, 1);
 		return (-1);
 	}
 	return (0);
 }
 
-int	unlock_first_fork(t_philo *info)
+int	unlock_first_fork(t_philo *info, int unlock)
 {
 	if (info->master->philos == 1)
 	{
@@ -79,7 +75,7 @@ int	unlock_first_fork(t_philo *info)
 		pthread_mutex_unlock(info->right_fork);
 	else
 		pthread_mutex_unlock(info->left_fork);
-	if (info->master->dead)
+	if (info->master->dead && unlock)
 		return (unlock_second_fork(info));
 	return (0);
 }
@@ -101,24 +97,27 @@ int	create_philo_thread(t_master *master, int *i, t_philo *phil_data)
 {
 	phil_data = malloc(sizeof(t_philo));
 	if (!phil_data)
-		free_n_print(master, "Philo_data allocation failed");
-	memset(phil_data, '\0', sizeof(t_philo));
+	{
+		while (*i >= 0)
+		{
+			if (master->arr_philos[*i])
+				free(master->arr_philos[*i]);
+			(*i)--;
+		}
+		free(master->arr_philos);
+		return (printf("Philo_data allocation failed\n"));
+	}
 	phil_data->id = *i + 1;
 	if (master->philos > 1)
 		phil_data->left_fork = &master->forks[((*i) + 1) % master->philos];
 	phil_data->right_fork = &master->forks[*i];
-	phil_data->last_meal = get_time() + 1000;
+	phil_data->last_meal = master->start;
 	phil_data->courses = 0;
 	phil_data->master = master;
 	master->arr_philos[*i] = phil_data;
 	if (pthread_create(&master->arr_philos[*i]->phil, NULL, philo_routine,
-		master->arr_philos[*i]) != 0)
-		return (free_n_print(master, "Philo_data allocation failed"));
-	if (phil_data->id == master->philos)
-	{
-		master->start = get_time();
-		master->ready_to_eat = 1;
-	}
+			master->arr_philos[*i]))
+		return (-1);
 	(*i)++;
 	return (0);
 }

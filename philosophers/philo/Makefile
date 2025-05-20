@@ -16,7 +16,7 @@ CC = cc
 
 WFLAGS = -Werror -Wextra -Wall
 
-SRC = philo.c philo_utils.c routines.c philo_actions.c philo_print_utils.c
+SRC = philo.c philo_utils.c philo_routines.c philo_actions.c philo_helpers.c
 
 OBJPATH = obj/
 
@@ -24,7 +24,7 @@ OBJ = $(SRC:%.c=$(OBJPATH)%.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJPATH) $(OBJ)
+$(NAME): $(OBJPATH) $(OBJ) philo.h Makefile
 	$(CC) $(OBJ) -o $(NAME)
 
 $(OBJ): $(OBJPATH)%.o: %.c
