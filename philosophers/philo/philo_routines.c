@@ -53,10 +53,12 @@ int	monitoring_start_routine(t_master *master)
 {
 	while (!master->philos_ready)
 	{
+		pthread_mutex_lock(master->write_lock);
 		if (master->start + 4 <= get_time(master, NULL))
 			master->start = get_time(master, NULL) + 10;
 		if (master->dead == true)
 			return (-1);
+		pthread_mutex_unlock(master->write_lock);
 		usleep(500);
 	}
 	while (get_time(master, NULL) < master->start)
@@ -100,7 +102,7 @@ void	*monitoring_routine(void *data)
 		}
 		if (ms->meals != -1 && full == ms->philos)
 			return (NULL);
-		usleep(633);
+		usleep(1000);
 	}
 	return (NULL);
 }
@@ -108,9 +110,13 @@ void	*monitoring_routine(void *data)
 static int	start_routine(void *data, t_philo **info)
 {
 	long	target_time;
+	long	start;
 
 	*info = (t_philo *)data;
-	while (get_time(NULL, *info) < (*info)->master->start)
+	pthread_mutex_lock((*info)->master->write_lock);
+	start = (*info)->master->start;
+	pthread_mutex_unlock((*info)->master->write_lock);
+	while (get_time(NULL, *info) < start)
 	{
 		if ((*info)->master->dead == true)
 			return (-1);
@@ -128,7 +134,7 @@ static int	start_routine(void *data, t_philo **info)
 		{
 			if ((*info)->master->dead == true)
 				return (-1);
-			usleep(500);
+			usleep(1000);
 		}
 		if ((*info)->id % 2 != 0)
 			usleep(250);
@@ -152,7 +158,7 @@ static int	eat_routine(t_philo *info, long target_time)
 				unlock_first_fork(info, 1);
 				return (-1);
 			}
-			usleep(500);
+			usleep(1000);
 		}
 	}
 	while (get_time(NULL, info) < target_time)
@@ -162,7 +168,7 @@ static int	eat_routine(t_philo *info, long target_time)
 			unlock_first_fork(info, 1);
 			return (-1);
 		}
-		usleep(733);
+		usleep(1000);
 	}
 	return (0);
 }

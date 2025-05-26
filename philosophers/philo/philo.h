@@ -31,9 +31,9 @@ typedef struct s_philo
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	access_lock;
 	t_master		*master;
-	long			last_meal;
-	long			courses;
-	int				id;
+	_Atomic(long)	last_meal;
+	_Atomic(long)	courses;
+	_Atomic(int)	id;
 }	t_philo;
 
 typedef struct s_master
@@ -49,7 +49,7 @@ typedef struct s_master
 	long			time_to_die;
 	long			eat_time;
 	long			sleep_time;
-	long			meals;
+	_Atomic(long)	meals;
 }	t_master;
 
 /*
