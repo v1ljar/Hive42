@@ -122,5 +122,5 @@ static int	init_n_join_forks_n_threads(t_master *master, int i, int j, int k)
 		}
 		i++;
 	}
-	return (create_n_join_threads(master, j, k));
+	return (create_n_join_threads(master, j, k, 0));
 }

@@ -88,8 +88,7 @@ void	clean_up(t_master *master)
 	{
 		if (master->arr_philos[i])
 		{
-			if (&master->arr_philos[i]->last_meal_lock)
-				pthread_mutex_destroy(&master->arr_philos[i]->last_meal_lock);
+			pthread_mutex_destroy(&master->arr_philos[i]->access_lock);
 			free(master->arr_philos[i]);
 		}
 		i++;

@@ -12,13 +12,14 @@
 
 #include "philo.h"
 
-int	create_n_join_threads(t_master *master, int j, int k)
+int	create_n_join_threads(t_master *master, int j, int k, int value)
 {
 	if (pthread_create(&master->monitoring, NULL, monitoring_routine, master))
 		return (printf("Monitoring thread creation failed!\n"));
 	while (j < master->philos)
 	{
-		if (create_philo_thread(master, &j, NULL) == -1)
+		value = create_philo_thread(master, &j, NULL);
+		if (value == -1)
 		{
 			master->dead = true;
 			if (pthread_join(master->monitoring, NULL) != 0)
@@ -30,6 +31,8 @@ int	create_n_join_threads(t_master *master, int j, int k)
 			if (j == 0)
 				return (printf("Philo thread creation failed!\n"));
 		}
+		else if (value != 0)
+			return (1);
 	}
 	master->philos_ready = true;
 	return (join_threads(master, k));
@@ -60,10 +63,10 @@ int	sleep_routine(t_philo *info)
 	long	target_time;
 
 	print_msg(info, "is sleeping");
-	pthread_mutex_lock(&info->last_meal_lock);
+	pthread_mutex_lock(&info->access_lock);
 	target_time = info->last_meal + info->master->sleep_time
 		+ info->master->eat_time;
-	pthread_mutex_unlock(&info->last_meal_lock);
+	pthread_mutex_unlock(&info->access_lock);
 	while (get_time(NULL, info) < target_time)
 	{
 		if (info->master->dead == true)

@@ -32,14 +32,14 @@ void	*philo_routine(void *data)
 			return (NULL);
 		if (info->master->meals != -1)
 		{
-			pthread_mutex_lock(&info->last_meal_lock);
+			pthread_mutex_lock(&info->access_lock);
 			info->courses++;
 			if (info->courses == info->master->meals || info->master->dead)
 			{
-				pthread_mutex_unlock(&info->last_meal_lock);
+				pthread_mutex_unlock(&info->access_lock);
 				return (NULL);
 			}
-			pthread_mutex_unlock(&info->last_meal_lock);
+			pthread_mutex_unlock(&info->access_lock);
 		}
 		if (sleep_routine(info) == -1)
 			return (NULL);
@@ -65,7 +65,7 @@ int	monitoring_start_routine(t_master *master)
 			return (-1);
 		usleep(500);
 	}
-	usleep(500);
+	usleep(master->time_to_die * 90);
 	return (0);
 }
 
@@ -85,22 +85,22 @@ void	*monitoring_routine(void *data)
 		i = 0;
 		while (i < ms->philos)
 		{
-			pthread_mutex_lock(&ms->arr_philos[i]->last_meal_lock);
+			pthread_mutex_lock(&ms->arr_philos[i]->access_lock);
 			if (ms->meals != -1 && ms->arr_philos[i]->courses == ms->meals)
 				full++;
 			target_time = get_time(ms, NULL) - ms->arr_philos[i]->last_meal;
 			if ((ms->meals == -1 || ms->arr_philos[i]->courses < ms->meals)
 				&& target_time >= ms->time_to_die)
 			{
-				pthread_mutex_unlock(&ms->arr_philos[i]->last_meal_lock);
+				pthread_mutex_unlock(&ms->arr_philos[i]->access_lock);
 				return (print_died(ms, i));
 			}
-			pthread_mutex_unlock(&ms->arr_philos[i]->last_meal_lock);
+			pthread_mutex_unlock(&ms->arr_philos[i]->access_lock);
 			i++;
 		}
 		if (ms->meals != -1 && full == ms->philos)
 			return (NULL);
-		usleep(333);
+		usleep(633);
 	}
 	return (NULL);
 }
@@ -114,15 +114,12 @@ static int	start_routine(void *data, t_philo **info)
 	{
 		if ((*info)->master->dead == true)
 			return (-1);
-		pthread_mutex_lock(&(*info)->last_meal_lock);
-		(*info)->last_meal = (*info)->master->start;
-		pthread_mutex_unlock(&(*info)->last_meal_lock);
 		usleep(500);
 	}
-	pthread_mutex_lock(&(*info)->last_meal_lock);
+	pthread_mutex_lock(&(*info)->access_lock);
 	(*info)->last_meal = get_time(NULL, *info);
 	target_time = (*info)->last_meal + (*info)->master->eat_time;
-	pthread_mutex_unlock(&(*info)->last_meal_lock);
+	pthread_mutex_unlock(&(*info)->access_lock);
 	if (((*info)->master->philos > 2 && (*info)->id % 2 != 0
 			&& (*info)->id == (*info)->master->philos) || (*info)->id % 2 == 0)
 	{
@@ -142,10 +139,10 @@ static int	start_routine(void *data, t_philo **info)
 static int	eat_routine(t_philo *info, long target_time)
 {
 	print_msg(info, "is eating");
-	pthread_mutex_lock(&info->last_meal_lock);
+	pthread_mutex_lock(&info->access_lock);
 	info->last_meal = get_time(NULL, info);
 	target_time = info->last_meal + info->master->eat_time;
-	pthread_mutex_unlock(&info->last_meal_lock);
+	pthread_mutex_unlock(&info->access_lock);
 	if (info->master->philos == 1)
 	{
 		while (1)

@@ -29,10 +29,10 @@ typedef struct s_philo
 	pthread_t		phil;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	last_meal_lock;
+	pthread_mutex_t	access_lock;
 	t_master		*master;
-	_Atomic(long)	last_meal;
-	_Atomic(long)	courses;
+	long			last_meal;
+	long			courses;
 	int				id;
 }	t_philo;
 
@@ -76,7 +76,7 @@ int		unlock_second_fork(t_philo *info);
 /*
  * Helpers
 */
-int		create_n_join_threads(t_master *master, int j, int k);
+int		create_n_join_threads(t_master *master, int j, int k, int value);
 int		join_threads(t_master *master, int k);
 int		sleep_routine(t_philo *info);
 int		check_overflow(t_master *master);
