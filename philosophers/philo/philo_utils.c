@@ -87,7 +87,11 @@ void	clean_up(t_master *master)
 	while (master->arr_philos && i < master->philos)
 	{
 		if (master->arr_philos[i])
+		{
+			if (&master->arr_philos[i]->last_meal_lock)
+				pthread_mutex_destroy(&master->arr_philos[i]->last_meal_lock);
 			free(master->arr_philos[i]);
+		}
 		i++;
 	}
 	if (master->arr_philos)

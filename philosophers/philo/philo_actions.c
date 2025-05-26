@@ -107,12 +107,30 @@ int	create_philo_thread(t_master *master, int *i, t_philo *phil_data)
 		free(master->arr_philos);
 		return (printf("Philo_data allocation failed\n"));
 	}
+	memset(phil_data, '\0', sizeof(t_philo));
+	if (pthread_mutex_init(&phil_data->last_meal_lock, NULL))
+	{
+		while (*i >= 0)
+		{
+			if (master->arr_philos[*i])
+			{
+				if (&master->arr_philos[*i]->last_meal_lock)
+					pthread_mutex_destroy(&master->arr_philos[*i]->last_meal_lock);
+				free(master->arr_philos[*i]);
+			}
+			(*i)--;
+		}
+		free(master->arr_philos);
+		return (printf("Philo_data last_meal_lock init failed\n"));
+	}
 	phil_data->id = *i + 1;
 	if (master->philos > 1)
 		phil_data->left_fork = &master->forks[((*i) + 1) % master->philos];
 	phil_data->right_fork = &master->forks[*i];
+	pthread_mutex_lock(&phil_data->last_meal_lock);
 	phil_data->last_meal = master->start;
 	phil_data->courses = 0;
+	pthread_mutex_unlock(&phil_data->last_meal_lock);
 	phil_data->master = master;
 	master->arr_philos[*i] = phil_data;
 	if (pthread_create(&master->arr_philos[*i]->phil, NULL, philo_routine,

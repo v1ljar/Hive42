@@ -57,9 +57,14 @@ int	join_threads(t_master *master, int k)
 
 int	sleep_routine(t_philo *info)
 {
+	long	target_time;
+
 	print_msg(info, "is sleeping");
-	while (get_time(NULL, info) < info->last_meal + info->master->sleep_time
-		+ info->master->eat_time)
+	pthread_mutex_lock(&info->last_meal_lock);
+	target_time = info->last_meal + info->master->sleep_time
+		+ info->master->eat_time;
+	pthread_mutex_unlock(&info->last_meal_lock);
+	while (get_time(NULL, info) < target_time)
 	{
 		if (info->master->dead == true)
 			return (-1);
@@ -71,7 +76,8 @@ int	sleep_routine(t_philo *info)
 int	check_overflow(t_master *master)
 {
 	if (master->time_to_die > INT_MAX || master->eat_time > INT_MAX
-		|| master->sleep_time > INT_MAX || master->meals > INT_MAX)
+		|| master->sleep_time > INT_MAX || (master->meals != -1
+		&& master->meals > INT_MAX))
 		return (printf("Values are overflowing INT_MAX,"
 				"please enter reasonable values!\n"));
 	return (0);
