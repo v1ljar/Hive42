@@ -31,9 +31,9 @@ typedef struct s_philo
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	access_lock;
 	t_master		*master;
-	_Atomic(long)	last_meal;
-	_Atomic(long)	courses;
-	_Atomic(int)	id;
+	_Atomic long	last_meal;
+	_Atomic long	courses;
+	_Atomic int		id;
 }	t_philo;
 
 typedef struct s_master
@@ -42,14 +42,14 @@ typedef struct s_master
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*write_lock;
 	pthread_t		monitoring;
-	_Atomic(bool)	dead;
-	_Atomic(bool)	philos_ready;
-	_Atomic(long)	start;
-	long			philos;
-	long			time_to_die;
-	long			eat_time;
-	long			sleep_time;
-	_Atomic(long)	meals;
+	_Atomic bool	dead;
+	_Atomic bool	philos_ready;
+	_Atomic long	start;
+	_Atomic long	philos;
+	_Atomic long	time_to_die;
+	_Atomic long	eat_time;
+	_Atomic long	sleep_time;
+	_Atomic long	meals;
 }	t_master;
 
 /*
@@ -59,12 +59,19 @@ long	p_atol(const char *str);
 long	get_time(t_master *master, t_philo *phil);
 void	print_msg(t_philo *info, char *str);
 void	*print_died(t_master *master, int i);
-void	clean_up(t_master *master);
+void	clean_up(t_master *master, int i);
 /*
  * Routines
 */
 void	*philo_routine(void *data);
 void	*monitoring_routine(void *data);
+/*
+ * Routines helpers
+*/
+int		init_data_n_wait_start(void *data, t_philo **info);
+int		increment_courses(t_philo *info);
+int		sleep_routine(t_philo *info);
+int		check_philo_death(t_master *master, int i, int *full);
 /*
  * Philo actions
 */
@@ -78,7 +85,7 @@ int		unlock_second_fork(t_philo *info);
 */
 int		create_n_join_threads(t_master *master, int j, int k, int value);
 int		join_threads(t_master *master, int k);
-int		sleep_routine(t_philo *info);
 int		check_overflow(t_master *master);
+int		free_philos_arr(t_master *master, int *i, int mode);
 
 #endif

@@ -97,30 +97,10 @@ int	create_philo_thread(t_master *master, int *i, t_philo *phil_data)
 {
 	phil_data = malloc(sizeof(t_philo));
 	if (!phil_data)
-	{
-		while (*i >= 0)
-		{
-			if (master->arr_philos[*i])
-				free(master->arr_philos[*i]);
-			(*i)--;
-		}
-		free(master->arr_philos);
-		return (printf("Philo_data allocation failed\n"));
-	}
+		free_philos_arr(master, i, 0);
 	memset(phil_data, '\0', sizeof(t_philo));
 	if (pthread_mutex_init(&phil_data->access_lock, NULL))
-	{
-		while (*i >= 0)
-		{
-			if (master->arr_philos[*i])
-				free(master->arr_philos[*i]);
-			(*i)--;
-			if (*i >= 0)
-				pthread_mutex_destroy(&master->arr_philos[*i]->access_lock);
-		}
-		free(master->arr_philos);
-		return (printf("Philo_data access_lock init failed\n"));
-	}
+		free_philos_arr(master, i, 1);
 	phil_data->id = *i + 1;
 	if (master->philos > 1)
 		phil_data->left_fork = &master->forks[((*i) + 1) % master->philos];

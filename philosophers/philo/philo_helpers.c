@@ -26,8 +26,8 @@ int	create_n_join_threads(t_master *master, int j, int k, int value)
 				printf("Monitoring join failed!\n");
 			while (--j >= 0)
 				if (pthread_join(master->arr_philos[j]->phil, NULL) != 0)
-					printf("Philo thread [index: %i] creation and join"
-						"failed!\n", j);
+					printf("Philo thread [id: %i] creation and join"
+						"failed!\n", j + 1);
 			if (j == 0)
 				return (printf("Philo thread creation failed!\n"));
 		}
@@ -58,30 +58,29 @@ int	join_threads(t_master *master, int k)
 	return (0);
 }
 
-int	sleep_routine(t_philo *info)
-{
-	long	target_time;
-
-	print_msg(info, "is sleeping");
-	pthread_mutex_lock(&info->access_lock);
-	target_time = info->last_meal + info->master->sleep_time
-		+ info->master->eat_time;
-	pthread_mutex_unlock(&info->access_lock);
-	while (get_time(NULL, info) < target_time)
-	{
-		if (info->master->dead == true)
-			return (-1);
-		usleep(500);
-	}
-	return (0);
-}
-
 int	check_overflow(t_master *master)
 {
 	if (master->time_to_die > INT_MAX || master->eat_time > INT_MAX
 		|| master->sleep_time > INT_MAX || (master->meals != -1
-		&& master->meals > INT_MAX))
+			&& master->meals > INT_MAX))
 		return (printf("Values are overflowing INT_MAX,"
 				"please enter reasonable values!\n"));
 	return (0);
+}
+
+int	free_philos_arr(t_master *master, int *i, int mode)
+{
+	while (*i >= 0)
+	{
+		if (master->arr_philos[*i])
+			free(master->arr_philos[*i]);
+		(*i)--;
+		if (mode == 1 && *i >= 0)
+			pthread_mutex_destroy(&master->arr_philos[*i]->access_lock);
+	}
+	free(master->arr_philos);
+	if (mode == -0)
+		return (printf("Philo_data allocation failed\n"));
+	else
+		return (printf("Philo_data access_lock init failed\n"));
 }

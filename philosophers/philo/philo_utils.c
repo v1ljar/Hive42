@@ -71,11 +71,8 @@ void	*print_died(t_master *master, int i)
 	return (NULL);
 }
 
-void	clean_up(t_master *master)
+void	clean_up(t_master *master, int i)
 {
-	int	i;
-
-	i = 0;
 	while (master->forks && i < master->philos)
 	{
 		pthread_mutex_destroy(&master->forks[i++]);

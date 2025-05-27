@@ -23,7 +23,7 @@ int	main(int ac, char **av)
 
 	if (init_master(&master, ac, av) == -1)
 		return (1);
-	clean_up(&master);
+	clean_up(&master, 0);
 	return (0);
 }
 
@@ -40,7 +40,7 @@ static int	init_master(t_master *master, int ac, char **av)
 		return (-1);
 	if (init_values(ac, av, master))
 	{
-		clean_up(master);
+		clean_up(master, 0);
 		return (-1);
 	}
 	return (0);
