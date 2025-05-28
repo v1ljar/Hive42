@@ -38,7 +38,7 @@ void	*philo_routine(void *data)
 		if (sleep_routine(info) == -1)
 			return (NULL);
 		print_msg(info, "is thinking");
-		usleep(1000);
+		usleep(3000);
 	}
 	return (NULL);
 }
