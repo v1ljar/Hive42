@@ -24,7 +24,7 @@ int	init_data_n_wait_start(void *data, t_philo **info)
 	{
 		if ((*info)->master->dead == true)
 			return (-1);
-		usleep(500);
+		usleep(750);
 		pthread_mutex_lock((*info)->master->write_lock);
 		if (start < (*info)->master->start)
 			start = (*info)->master->start;
@@ -40,6 +40,7 @@ int	increment_courses(t_philo *info)
 	if (info->courses == info->master->meals || info->master->dead)
 	{
 		pthread_mutex_unlock(&info->access_lock);
+		print_msg(info, "is thinking");
 		return (-1);
 	}
 	pthread_mutex_unlock(&info->access_lock);
@@ -77,7 +78,7 @@ int	check_philo_death(t_master *master, int i, int *full)
 	{
 		pthread_mutex_unlock(&master->arr_philos[i]->access_lock);
 		print_died(master, i);
-		usleep(1000);
+		usleep(500);
 		return (-1);
 	}
 	pthread_mutex_unlock(&master->arr_philos[i]->access_lock);

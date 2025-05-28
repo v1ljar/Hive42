@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_utils.c                                      :+:      :+:    :+:   */
+/*   philo_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 11:16:25 by vuljas            #+#    #+#             */
-/*   Updated: 2025/05/13 11:16:31 by vuljas           ###   ########.fr       */
+/*   Updated: 2025/05/28 13:24:31 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	create_n_join_threads(t_master *master, int j, int k, int value)
 				printf("Monitoring join failed!\n");
 			while (--j >= 0)
 				if (pthread_join(master->arr_philos[j]->phil, NULL) != 0)
-					printf("Philo thread [id: %i] creation and join"
-						"failed!\n", j + 1);
+					printf("Philo thread [index: %i] creation and join"
+						"failed!\n", j);
 			if (j == 0)
 				return (printf("Philo thread creation failed!\n"));
 		}

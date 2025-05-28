@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routines.c                                         :+:      :+:    :+:   */
+/*   philo_routines.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 11:15:56 by vuljas            #+#    #+#             */
-/*   Updated: 2025/05/19 17:51:32 by vuljas           ###   ########.fr       */
+/*   Updated: 2025/05/28 11:23:17 by vuljas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	*monitoring_routine(void *data)
 		}
 		if (ms->meals != -1 && full == ms->philos)
 			return (NULL);
-		usleep(1000);
 	}
 	return (NULL);
 }
@@ -117,14 +116,15 @@ static int	start_routine(void *data, t_philo **info)
 			usleep(1000);
 		}
 		if ((*info)->id % 2 != 0)
-			usleep(250);
+			usleep(1000);
 	}
 	return (0);
 }
 
 static int	eat_routine(t_philo *info, long target_time)
 {
-	print_msg(info, "is eating");
+	if (info->master->philos != 1)
+		print_msg(info, "is eating");
 	pthread_mutex_lock(&info->access_lock);
 	info->last_meal = get_time(NULL, info);
 	target_time = info->last_meal + info->master->eat_time;
