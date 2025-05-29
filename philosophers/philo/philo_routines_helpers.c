@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-int	init_data_n_wait_start(void *data, t_philo **info)
+int	wait_for_start(void *data, t_philo **info)
 {
 	long	start;
 

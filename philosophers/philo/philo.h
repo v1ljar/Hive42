@@ -23,7 +23,7 @@
 # include <stdbool.h>
 
 typedef struct s_master	t_master;
-
+// Philo struct holds individual philo data and has access to master struct.
 typedef struct s_philo
 {
 	pthread_t		phil;
@@ -35,7 +35,7 @@ typedef struct s_philo
 	_Atomic long	courses;
 	_Atomic int		id;
 }	t_philo;
-
+// Master struct hold all the data of the program.
 typedef struct s_master
 {
 	t_philo			**arr_philos;
@@ -53,39 +53,62 @@ typedef struct s_master
 }	t_master;
 
 /*
- * Philo utils
+ * Philo actions
 */
-long	p_atol(const char *str);
-long	get_time(t_master *master, t_philo *phil);
-void	print_msg(t_philo *info, char *str);
-void	*print_died(t_master *master, int i);
-void	clean_up(t_master *master, int i);
+// Handles locking first lock respectively.
+int		lock_first_fork(t_philo *info);
+// Handles locking second lock respectively.
+int		lock_second_fork(t_philo *info);
+// Handles unlocking first lock respectively.
+int		unlock_first_fork(t_philo *info, int unlock);
+// Handles unlocking second lock respectively.
+int		unlock_second_fork(t_philo *info);
 /*
- * Routines
+ * Philo helpers
 */
-void	*philo_routine(void *data);
-void	*monitoring_routine(void *data);
+// Checks if given parameters are not greater than INT_MAX.
+int		check_overflow(t_master *master);
+// If create_philo_thread function fails, then it handles freeing accordingly.
+int		free_philos_arr(t_master *master, int *i, int mode);
 /*
  * Routines helpers
 */
-int		init_data_n_wait_start(void *data, t_philo **info);
+// Start_routine helper, smart wait function for philos to start routine.
+int		wait_for_start(void *data, t_philo **info);
+// If meals amount specfied, function handles incrementing courses amount.
 int		increment_courses(t_philo *info);
+// Smart sleep function for philos.
 int		sleep_routine(t_philo *info);
+// Monitoring_routine helper, checks death of  philo
 int		check_philo_death(t_master *master, int i, int *full);
 /*
- * Philo actions
+ * Routines
 */
-int		create_philo_thread(t_master *master, int *i, t_philo *phil_data);
-int		lock_first_fork(t_philo *info);
-int		lock_second_fork(t_philo *info);
-int		unlock_first_fork(t_philo *info, int unlock);
-int		unlock_second_fork(t_philo *info);
+// Philosopher thread routine
+void	*philo_routine(void *data);
+// Monitoring thread routine
+void	*monitoring_routine(void *data);
 /*
- * Helpers
+ * Philo threads
 */
+// Handles threads creation process.
 int		create_n_join_threads(t_master *master, int j, int k, int value);
+// Handles initializing single philo data and its thread creation.
+int		create_philo_thread(t_master *master, int *i, t_philo *phil_data);
+// Handles (waiting) threads to be joined after the routines.
 int		join_threads(t_master *master, int k);
-int		check_overflow(t_master *master);
-int		free_philos_arr(t_master *master, int *i, int mode);
+/*
+ * Philo utils
+*/
+// Ascii to long conversion.
+long	p_atol(const char *str);
+// Outputs time at the moment in ms.
+long	get_time(t_master *master, t_philo *phil);
+// Handles printing message accordingly
+void	print_msg(t_philo *info, char *str);
+// Check_philo_death helper, sets dead variable true and prints philos death.
+void	*print_died(t_master *master, int i);
+// Handles cleaning up master struct
+void	clean_up(t_master *master, int i);
 
 #endif

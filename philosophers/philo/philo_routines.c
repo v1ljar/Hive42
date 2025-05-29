@@ -99,7 +99,7 @@ static int	start_routine(void *data, t_philo **info)
 {
 	long	target_time;
 
-	if (init_data_n_wait_start(data, info) != 0)
+	if (wait_for_start(data, info) != 0)
 		return (-1);
 	pthread_mutex_lock(&(*info)->access_lock);
 	(*info)->last_meal = get_time(NULL, *info);
