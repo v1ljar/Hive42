@@ -25,11 +25,11 @@ int	create_n_join_threads(t_master *master, int j, int k, int value)
 			if (pthread_join(master->monitoring, NULL) != 0)
 				printf("Monitoring join failed!\n");
 			while (--j >= 0)
+			{
 				if (pthread_join(master->arr_philos[j]->phil, NULL) != 0)
-					printf("Philo thread [index: %i] creation and join"
-						"failed!\n", j);
-			if (j == 0)
-				return (printf("Philo thread creation failed!\n"));
+					printf("Philo id %i thread join failed!\n", j + 1);
+			}
+			return (printf("Philo thread creation failed!\n"));
 		}
 		else if (value != 0)
 			return (1);
@@ -42,10 +42,10 @@ int	create_philo_thread(t_master *master, int *i, t_philo *phil_data)
 {
 	phil_data = malloc(sizeof(t_philo));
 	if (!phil_data)
-		free_philos_arr(master, i, 0);
+		return (-1);
 	memset(phil_data, '\0', sizeof(t_philo));
 	if (pthread_mutex_init(&phil_data->access_lock, NULL))
-		free_philos_arr(master, i, 1);
+		return (-1);
 	phil_data->id = *i + 1;
 	if (master->philos > 1)
 		phil_data->left_fork = &master->forks[((*i) + 1) % master->philos];

@@ -79,7 +79,7 @@ int	monitoring_start_routine(t_master *master)
 		if (master->start + 4 <= get_time(master, NULL))
 			master->start = get_time(master, NULL) + 10;
 		if (master->dead == true)
-			return (-1);
+			return (pthread_mutex_unlock(master->write_lock), -1);
 		pthread_mutex_unlock(master->write_lock);
 		usleep(500);
 	}

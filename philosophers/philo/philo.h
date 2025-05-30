@@ -51,7 +51,6 @@ typedef struct s_master
 	_Atomic long	sleep_time;
 	_Atomic long	meals;
 }	t_master;
-
 /*
  * Philo actions
 */
@@ -64,15 +63,10 @@ int		unlock_first_fork(t_philo *info, int unlock);
 // Handles unlocking second lock respectively.
 int		unlock_second_fork(t_philo *info);
 /*
- * Philo helpers
-*/
-// Checks if given parameters are not greater than INT_MAX.
-int		check_overflow(t_master *master);
-// If create_philo_thread function fails, then it handles freeing accordingly.
-int		free_philos_arr(t_master *master, int *i, int mode);
-/*
  * Routines helpers
 */
+// Handles printing message accordingly
+void	print_msg(t_philo *info, char *str);
 // Start_routine helper, smart wait function for philos to start routine.
 int		wait_for_start(void *data, t_philo **info);
 // If meals amount specfied, function handles incrementing courses amount.
@@ -104,8 +98,8 @@ int		join_threads(t_master *master, int k);
 long	p_atol(const char *str);
 // Outputs time at the moment in ms.
 long	get_time(t_master *master, t_philo *phil);
-// Handles printing message accordingly
-void	print_msg(t_philo *info, char *str);
+// Checks if given parameters are not greater than INT_MAX.
+int		check_overflow(t_master *master);
 // Check_philo_death helper, sets dead variable true and prints philos death.
 void	*print_died(t_master *master, int i);
 // Handles cleaning up master struct

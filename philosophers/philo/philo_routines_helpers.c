@@ -12,6 +12,15 @@
 
 #include "philo.h"
 
+void	print_msg(t_philo *info, char *str)
+{
+	pthread_mutex_lock(info->master->write_lock);
+	if (!info->master->dead)
+		printf("%li %i %s\n", get_time(NULL, info) - info->master->start,
+			info->id, str);
+	pthread_mutex_unlock(info->master->write_lock);
+}
+
 int	wait_for_start(void *data, t_philo **info)
 {
 	long	start;

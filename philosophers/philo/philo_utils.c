@@ -52,13 +52,14 @@ long	get_time(t_master *master, t_philo *phil)
 	return ((long)res);
 }
 
-void	print_msg(t_philo *info, char *str)
+int	check_overflow(t_master *master)
 {
-	pthread_mutex_lock(info->master->write_lock);
-	if (!info->master->dead)
-		printf("%li %i %s\n", get_time(NULL, info) - info->master->start,
-			info->id, str);
-	pthread_mutex_unlock(info->master->write_lock);
+	if (master->time_to_die > INT_MAX || master->eat_time > INT_MAX
+		|| master->sleep_time > INT_MAX || (master->meals != -1
+			&& master->meals > INT_MAX))
+		return (printf("Values are overflowing INT_MAX,"
+				"please enter reasonable values!\n"));
+	return (0);
 }
 
 void	*print_died(t_master *master, int i)
