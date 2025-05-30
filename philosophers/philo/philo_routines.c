@@ -22,7 +22,7 @@ void	*philo_routine(void *data)
 
 	if (start_routine(data, &info) == -1)
 		return (NULL);
-	while (1)
+	while (info->master->meals == -1 || info->courses != info->master->meals)
 	{
 		if (lock_first_fork(info) == -1 || lock_second_fork(info) == -1)
 			return (NULL);
@@ -64,6 +64,7 @@ void	*monitoring_routine(void *data)
 		}
 		if (ms->meals != -1 && full == ms->philos)
 			return (NULL);
+		usleep(500);
 	}
 	return (NULL);
 }
@@ -134,17 +135,14 @@ static int	eat_routine(t_philo *info, long target_time)
 		while (1)
 		{
 			if (info->master->dead == true)
-				return (unlock_first_fork(info, 1), -1);
+				return (unlock_first_fork(info, 0), -1);
 			usleep(1000);
 		}
 	}
 	while (get_time(NULL, info) < target_time)
 	{
 		if (info->master->dead == true)
-		{
-			unlock_first_fork(info, 1);
-			return (-1);
-		}
+			return (unlock_first_fork(info, 1), -1);
 		usleep(1000);
 	}
 	return (0);

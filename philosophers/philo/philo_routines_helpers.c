@@ -37,12 +37,6 @@ int	increment_courses(t_philo *info)
 {
 	pthread_mutex_lock(&info->access_lock);
 	info->courses++;
-	if (info->courses == info->master->meals || info->master->dead)
-	{
-		pthread_mutex_unlock(&info->access_lock);
-		print_msg(info, "is thinking");
-		return (-1);
-	}
 	pthread_mutex_unlock(&info->access_lock);
 	return (0);
 }
