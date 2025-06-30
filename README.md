@@ -1,14 +1,14 @@
 # Welcome to my **Hive42 Helsinki** project repository! 🎓🚀
 
 My journey in Hive began in 2024 and this repository is a reflection of my growth, skills and accomplishments throughout the program.
-
 Every challenge is an opportunity to grow, every line of code is written with purpose and resilience drives my learning process.
 
 ## What is Hive42?
 
 **Hive Helsinki (part of the 42 Network) is an innovative and collaborative coding school that emphasizes peer learning, problem-solving and real-world projects. With a focus on C programming, algorithms, full-stack development and system architecture, the curriculum is designed to forge independent and highly skilled software engineers.**
 
-## This repository contains my projects from Hive42, categorized by their respective modules and difficulty levels:
+## List of my projects at Hive42(in process or finished):
+
 **📂 cub3d/** – Graphical 3D (MLX42) project. Goal is to make a dynamic view inside a maze, inspired by the world-famous eponymous 90's game "Wolfenstein 3D". **In progress**
 
 **📂 ft_printf/** – Recreating the famous printf function in C. **Mandatory part done (100/100)**
@@ -27,7 +27,7 @@ Every challenge is an opportunity to grow, every line of code is written with pu
 
 **📂 push_swap/** – An algorithmic challenge to sort a stack using the fewest moves. **Mandatory part done (96/100)**
 
-**📂 so_long/** – A basic 2D game (library used: MLX42) in which a hero escapes Matrix after collecting some knowledge **Mandatory part done (104/100)** | Enemies added, at the moment hero is not able to kill dragon.
+**📂 so_long/** – A basic 2D game (library used: MLX42) in which a hero escapes Matrix after collecting some knowledge. **Mandatory part done (104/100)** | Enemies added, at the moment hero is not able to kill dragons.
 
 ##
 ## Thank you for visiting my repository and Happy coding! 💻🔥
