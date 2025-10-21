@@ -9,7 +9,9 @@ Every challenge is an opportunity to grow, every line of code is written with pu
 
 ## List of my projects at Hive42(in process or finished):
 
-**📂 cub3d/** – Graphical 3D (MLX42) project. Goal is to make a dynamic view inside a maze, inspired by the world-famous eponymous 90's game "Wolfenstein 3D". **In progress**
+**📂 CPP00/** - This first module of C++ is designed to help understand the specifities of the language when compared to C. Time to dive into Object Oriented Programming! **In progress**
+
+**📂 cub3d/** – Graphical 3D (MLX42) project. Goal is to make a dynamic view inside a maze, inspired by the world-famous eponymous 90's game "Wolfenstein 3D". **Mandatory part done (105/100)**
 
 **📂 ft_printf/** – Recreating the famous printf function in C. **Mandatory part done (100/100)**
 
