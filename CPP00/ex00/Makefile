@@ -6,11 +6,11 @@ FLAGS = -Werror -Wextra -Wall -std=c++11
 
 SRC = megaphone.cpp
 
-OBJ = $(SRC:%.c=obj/%.o)
+OBJ = $(SRC:%.cpp=obj/%.o)
 
 all: $(NAME)
 
-obj/%.o: %.c
+obj/%.o: %.cpp
 	mkdir -p obj
 	$(CC) $(FLAGS) -c $< -o $@
 
