@@ -1,0 +1,44 @@
+#include "contact.hpp"
+
+Contact::Contact() {}
+
+std::string	get_input(const std::string& prompt)
+{
+	std::string	input;
+
+	while (true)
+	{
+		std::cout << prompt;
+		if (!std::getline(std::cin, input))
+		{
+			std::cout << "EOF detected. Exiting the program!\n";
+			exit(EXIT_FAILURE);
+		}
+		if (!input.empty())
+			return input;
+		std::cout << "Please insert valid value!\n";
+	}
+}
+
+void Contact::fill() {
+	first_name = get_input("Enter first name: ");
+	last_name = get_input("Enter last name: ");
+	nickname = get_input("Enter nickname: ");
+	phone_number = get_input("Enter phone number: ");
+	darkest_secret = get_input("Enter darkest secret: ");
+}
+std::string	Contact::get_first_name() const{
+	return first_name;
+};
+std::string	Contact::get_last_name() const{
+	return last_name;
+};
+std::string	Contact::get_nickname() const{
+	return nickname;
+};
+std::string	Contact::get_phone_number() const{
+	return phone_number;
+};
+std::string	Contact::get_darkest_secret() const{
+	return darkest_secret;
+};

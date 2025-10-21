@@ -6,8 +6,10 @@
 
 class PhoneBook{
 	private:
-		Contact	*contacts[8];
+		Contact	contacts[8];
 		int		index;
-		int		nbr_contacts;
 	public:
+		PhoneBook();
+		void add_contact();
+		void search_contact() const;
 };

@@ -7,13 +7,22 @@ int	main()
 	std::string choice;
 
 	std::cout << "\n\t\tWelcome to phonebook\n" << std::endl;
-	std::cout << "Please insert one of the commands: ADD, SEARCH or EXIT" << std::endl;
-	std::cout << "Your choice: ";
-	if (!choice.compare("ADD"))
+	while (true)
 	{
-		Contact::fill;
+		std::cout << "Please insert one of the commands: ADD, SEARCH or EXIT" << std::endl;
+		std::cout << "Your choice: ";
+		std::getline(std::cin, choice);
+		if (choice == "ADD")
+			pb.add_contact();
+		else if (choice == "SEARCH")
+			pb.search_contact();
+		else if (choice == "EXIT")
+		{
+			std::cout << "See you next time!" << std::endl;
+			break ;
+		}
+		else
+			std::cout << "Please enter a valid command" << std::endl;
 	}
-	// std::cin >> choice;
-	// std::cout << choice << std::endl;
 	return (0);
 }
