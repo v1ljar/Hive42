@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <limits>
 
 class Contact{
 	private:
@@ -12,7 +13,7 @@ class Contact{
 		std::string	darkest_secret;
 	public:
 		Contact();
-		void fill();
+		void 		fill();
 		std::string	get_first_name() const;
 		std::string	get_last_name() const;
 		std::string	get_nickname() const;

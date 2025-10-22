@@ -6,23 +6,31 @@ int	main()
 	PhoneBook pb;
 	std::string choice;
 
-	std::cout << "\n\t\tWelcome to phonebook\n" << std::endl;
+	std::cout << "\n\t\t\tWelcome to phonebook" << std::endl;
 	while (true)
 	{
-		std::cout << "Please insert one of the commands: ADD, SEARCH or EXIT" << std::endl;
-		std::cout << "Your choice: ";
-		std::getline(std::cin, choice);
+		std::cout << "\nPlease insert one of the commands: ADD, SEARCH or EXIT\n" \
+				  << "\t\t      Your choice: ";
+		if (!std::getline(std::cin, choice))
+		{
+			if (std::cin.eof())
+			{
+				std::cin.clear();
+				std::cout << "\n[ EOF detected. Exiting the program! ]\n";
+				std::exit(0);
+			}
+		}
 		if (choice == "ADD")
 			pb.add_contact();
 		else if (choice == "SEARCH")
 			pb.search_contact();
 		else if (choice == "EXIT")
 		{
-			std::cout << "See you next time!" << std::endl;
+			std::cout << "\n\t\t\t See you next time!" << std::endl;
 			break ;
 		}
 		else
-			std::cout << "Please enter a valid command" << std::endl;
+			std::cout << "\t\t[ Please enter a valid command ]" << std::endl;
 	}
 	return (0);
 }
