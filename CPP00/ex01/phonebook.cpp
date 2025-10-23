@@ -1,7 +1,7 @@
 #include "phonebook.hpp"
 
 PhoneBook::PhoneBook() : index(0), total(0) {}
-void	print_full_contact(const Contact contacts[8]);
+void	print_full_contact(const Contact contacts[8], int total);
 
 void	PhoneBook::add_contact()
 {
@@ -38,10 +38,10 @@ void	PhoneBook::search_contact() const
 					<< std::setw(10) << get_correct_value(contacts[i].get_last_name()) << "|"
 					<< std::setw(10) << get_correct_value(contacts[i].get_nickname()) << std::endl;
 	}
-	print_full_contact(contacts);
+	print_full_contact(contacts, total);
 }
 
-void	print_full_contact(const Contact contacts[8])
+void	print_full_contact(const Contact contacts[8], int total)
 {
 	std::cout << "For full information of a contact, enter index: ";
 	std::string	indx;
@@ -53,11 +53,19 @@ void	print_full_contact(const Contact contacts[8])
 	if (indx.size() == 1 && (indx[0] >= '1' && indx[0] <= '8'))
 	{
 		int	casted_i = indx[0] - '1';
-		std::cout	<< contacts[casted_i].get_first_name() << std::endl
-					<< contacts[casted_i].get_last_name() << std::endl
-					<< contacts[casted_i].get_nickname() << std::endl
-					<< contacts[casted_i].get_phone_number() << std::endl
-					<< contacts[casted_i].get_darkest_secret() << std::endl;
+		if (casted_i < total)
+		{
+			std::cout	<< contacts[casted_i].get_first_name() << std::endl
+						<< contacts[casted_i].get_last_name() << std::endl
+						<< contacts[casted_i].get_nickname() << std::endl
+						<< contacts[casted_i].get_phone_number() << std::endl
+						<< contacts[casted_i].get_darkest_secret() << std::endl;
+		}
+		else
+		{
+			std::cout << "\t\t[ '" << indx << "' is not a valid index! ]" << std::endl;
+			return;
+		}
 	}
 	else
 		std::cout << "\t\t[ '" << indx << "' is not a valid index! ]" << std::endl;
