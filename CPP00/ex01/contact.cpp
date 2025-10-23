@@ -1,3 +1,15 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   contact.cpp                                        :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/10/23 13:22:49 by vuljas            #+#    #+#             //
+//   Updated: 2025/10/23 13:22:54 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "contact.hpp"
 
 Contact::Contact() {}
@@ -27,18 +39,23 @@ void Contact::fill() {
 	phone_number = get_input("\t       Enter phone number: ");
 	darkest_secret = get_input("\t     Enter darkest secret: ");
 }
+
 std::string	Contact::get_first_name() const{
 	return first_name;
 }
+
 std::string	Contact::get_last_name() const{
 	return last_name;
 }
+
 std::string	Contact::get_nickname() const{
 	return nickname;
 }
+
 std::string	Contact::get_phone_number() const{
 	return phone_number;
 }
+
 std::string	Contact::get_darkest_secret() const{
 	return darkest_secret;
 }
