@@ -10,13 +10,13 @@
 #                                                                              #
 #******************************************************************************#
 
-NAME = weapon
+NAME = unnecessary_violence
 
 CC = c++
 
 FLAGS = -Werror -Wextra -Wall -std=c++11
 
-SRC = main.cpp Weapon.cpp
+SRC = main.cpp Weapon.cpp HumanA.cpp HumanB.cpp
 
 OBJ = $(SRC:%.cpp = obj/%.o)
 
