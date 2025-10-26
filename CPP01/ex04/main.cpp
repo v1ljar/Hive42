@@ -6,64 +6,48 @@ int main(int ac, char **av)
 {
 	if (ac != 4)
 	{
-		std::cout << "Error! Program that takes three parameters in the "
-				  <<"following order: a filename and two strings, s1 and s2." << std::endl;
+		std::cerr << "Error! Usage: ./sed_is_for_losers <filename> <s1> <s2>" << std::endl;
+		return (1);
 	}
-	std::ifstream	og_file;
+	std::string		fname(av[1]);
 	std::string		s1(av[2]);
 	std::string		s2(av[3]);
 
-	og_file.open(av[1], std::ifstream::in);
-	if (!og_file.good())
+	if (s1.empty())
 	{
-		std::cout << "Error opening file: " << av[1] << std::endl;
+		std::cerr << "Error! s1 cannot be empty!" << std::endl;
 		return (1);
 	}
+	std::ifstream	og_file(fname);
 
+	if (!og_file)
+	{
+		std::cerr << "Error opening file: " << fname << std::endl;
+		return (1);
+	}
+	std::ofstream	replace_file(fname + ".replace");
+
+	if (!replace_file)
+	{
+		std::cerr << "Error opening file: " << fname + ".replace" << std::endl;
+		return (1);
+	}
 	std::string	line;
 
-	std::getline(og_file, line, '\n');
-	if (line.empty())
+	while (std::getline(og_file, line))
 	{
-		std::cout << av[1] << " is empty!" << std::endl;
-		return (0);
-	}
-
-	std::string		replace_filename = av[1];
-
-	replace_filename.append(".replace");
-
-	std::ofstream	replace_file(replace_filename);
-	
-	if (!replace_file.good())
-	{
-		std::cout << "Error creating file: " << replace_filename << std::endl;
-		og_file.close();
-		return (1);
-	}
-	std::size_t	position = std::string::npos;
-	
-	position = line.find(s1, 0);
-	while (position != std::string::npos)
-	{
-		line.erase(position, s1.size());
-		line.insert(position, s2);
+		std::size_t position = 0;
 		position = line.find(s1, 0);
-	}
-	replace_file << line;
-	while (std::getline(og_file, line, '\n'))
-	{
-		position = std::string::npos;
-		position = line.find(s1, 0);
-		while (position != std::string::npos)
+		while ((position = line.find(s1, position)) != std::string::npos)
 		{
-			line.erase(position, sizeof(s1));
+			line.erase(position, s1.size());
 			line.insert(position, s2);
-			position = line.find(s1, 0);
+			position += s2.size();
 		}
-			replace_file << '\n' + line;
+		replace_file << line;
+		if (!og_file.eof())
+			replace_file << '\n';
 	}
-
 	og_file.close();
 	replace_file.close();
 	return 0;

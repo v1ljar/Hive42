@@ -44,4 +44,11 @@ fclean:
 
 re: fclean all
 
+test: all
+	@echo "\033[1;36mBuilding and running tests...\033[0m"
+	$(CXX) $(CXXFLAGS) test.cpp -o test_replace
+	@./test_replace
+
+
+
 .PHONY: all clean fclean re
