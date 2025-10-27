@@ -35,7 +35,7 @@ clean:
 	else \
 		echo "make clean: Nothing to be done for 'make clean'"; \
 	fi
-fclean:
+fclean: clean
 	@if [ -f $(NAME) ]; then \
 		rm $(NAME); \
 	else \

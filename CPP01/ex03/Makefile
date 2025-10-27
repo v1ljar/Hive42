@@ -18,7 +18,7 @@ FLAGS = -Werror -Wextra -Wall -std=c++11
 
 SRC = main.cpp Weapon.cpp HumanA.cpp HumanB.cpp
 
-OBJ = $(SRC:%.cpp = obj/%.o)
+OBJ = $(SRC:%.cpp=obj/%.o)
 
 all: $(NAME)
 
@@ -35,7 +35,7 @@ clean:
 	else \
 		echo "make clean: Nothing to be done for 'make clean'"; \
 	fi
-fclean:
+fclean: clean
 	@if [ -f $(NAME) ]; then \
 		rm $(NAME); \
 	else \

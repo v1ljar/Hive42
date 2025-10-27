@@ -18,7 +18,7 @@ FLAGS = -Werror -Wextra -Wall -std=c++11
 
 SRC = main.cpp
 
-OBJ = $(SRC:%.cpp = obj/%.o)
+OBJ = $(SRC:%.cpp=obj/%.o)
 
 all: $(NAME)
 
@@ -35,7 +35,7 @@ clean:
 	else \
 		echo "make clean: Nothing to be done for 'make clean'"; \
 	fi
-fclean:
+fclean: clean
 	@if [ -f $(NAME) ]; then \
 		rm $(NAME); \
 	else \
@@ -45,9 +45,12 @@ fclean:
 re: fclean all
 
 test: all
+	@rm -rf tests;
+	@mkdir -p tests;
 	@echo "\033[1;36mBuilding and running tests...\033[0m"
-	$(CXX) $(CXXFLAGS) test.cpp -o test_replace
-	@./test_replace
+	$(CC) $(FLAGS) test.cpp -o ./tests/test_replace
+	@./tests/test_replace
+	@rm -rf tests;
 
 
 
