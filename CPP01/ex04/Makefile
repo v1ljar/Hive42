@@ -47,7 +47,7 @@ re: fclean all
 test: all
 	@rm -rf tests;
 	@mkdir -p tests;
-	@echo "\033[1;36mBuilding and running tests...\033[0m"
+	@echo "\t\t[ Building and running tests... ]"
 	$(CC) $(FLAGS) test.cpp -o ./tests/test_replace
 	@./tests/test_replace
 	@rm -rf tests;

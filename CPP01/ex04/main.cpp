@@ -13,11 +13,6 @@ int main(int ac, char **av)
 	std::string		s1(av[2]);
 	std::string		s2(av[3]);
 
-	if (s1.empty())
-	{
-		std::cerr << "Error! s1 cannot be empty!" << std::endl;
-		return (1);
-	}
 	std::ifstream	og_file(fname);
 
 	if (!og_file)
@@ -36,13 +31,21 @@ int main(int ac, char **av)
 
 	while (std::getline(og_file, line))
 	{
-		std::size_t position = 0;
-		position = line.find(s1, 0);
-		while ((position = line.find(s1, position)) != std::string::npos)
+		if (!s1.empty())
 		{
-			line.erase(position, s1.size());
-			line.insert(position, s2);
-			position += s2.size();
+			std::size_t position = 0;
+			position = line.find(s1, 0);
+			while ((position = line.find(s1, position)) != std::string::npos)
+			{
+				line.erase(position, s1.size());
+				if (!s2.empty())
+				{
+					line.insert(position, s2);
+					position += s2.size();
+				}
+				else
+					position++;
+			}
 		}
 		replace_file << line;
 		if (!og_file.eof())
