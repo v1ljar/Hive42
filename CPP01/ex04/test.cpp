@@ -15,7 +15,8 @@
 #include <fstream>
 #include <optional>
 
-static bool	run_test(const std::string base, const std::string filename, const std::string content, const std::string s1, const std::optional<std::string> s3);
+static bool	run_test(const std::string base, const std::string filename,
+	const std::string content, const std::string s1, const std::optional<std::string> s3);
 
 int	main()
 {
@@ -65,15 +66,18 @@ int	main()
 	return (0);
 }
 
-static bool	run_test(const std::string base, const std::string filename, const std::string content, std::string s1, const std::optional<std::string> s3)
+static bool	run_test(const std::string base, const std::string filename,
+	const std::string content, std::string s1, const std::optional<std::string> s3)
 {
+	std::string	s2;
+
 	if (s1.empty())
 		s1 = "";
-	std::string s2; 
 	if (s3)
 		s2 = *s3;
 	else
 		s2 = "";
+		
 	std::cout << "\t\t️📝Running test: " + filename + "\n" << std::endl;
 	
 	std::string	expected_fn = filename + "_expected";
@@ -112,7 +116,11 @@ static bool	run_test(const std::string base, const std::string filename, const s
 
 	while (std::getline(real_output, str1) && std::getline(expected_output, str2))
 	{
-		std::cout << "My output : " << str1 << "\nSed output: " << str2 + '\n' << std::endl;
+		std::cout << "My output : "
+				  << str1
+				  << "\nSed output: "
+				  << str2 + '\n'
+				  << std::endl;
 		if (str1 != str2)
 			break ;
 	}
