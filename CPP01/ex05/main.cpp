@@ -1,20 +1,17 @@
 #include "Harl.hpp"
 
-int main()
+int main(int ac, char **av)
 {
+	if (ac != 2)
+	{
+		std::cout << "\tProgram accepts only 1 argument!\n"
+				  << "\tValid arguments: DEBUG, INFO, WARNING, ERROR"
+				  << std::endl;
+		return (1);
+	}
+
 	Harl	harl;
 
-	std::cout << "[ Debug ]\n" << std::endl;
-	harl.complain("DEBUG");
-	std::cout << std::endl;
-	std::cout << "[Info ]\n" << std::endl;
-	harl.complain("INFO");
-	std::cout << std::endl;
-	std::cout << "[ Warning ]\n" << std::endl;
-	harl.complain("WARNING");
-	std::cout << std::endl;
-	std::cout << "[ Error ]\n" << std::endl;
-	harl.complain("ERROR");
-	std::cout << std::endl;
+	harl.complain(av[1]);
 	return 0;
 }

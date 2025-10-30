@@ -50,7 +50,8 @@ test: all
 	@echo "\t\t[ Building and running tests... ]"
 	$(CC) $(FLAGS) test.cpp -o ./tests/test_replace
 	@./tests/test_replace
-	@rm -rf tests;
+	@rm -rf tests main.o;
+	@make fclean;
 
 
 
