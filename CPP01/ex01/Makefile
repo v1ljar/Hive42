@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/10/23 13:23:27 by vuljas            #+#    #+#              #
-#    Updated: 2025/10/23 13:23:31 by vuljas           ###   ########.fr        #
+#    Created: 2025/10/30 13:05:49 by vuljas            #+#    #+#              #
+#    Updated: 2025/10/30 13:05:54 by vuljas           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -14,7 +14,7 @@ NAME = zombieHorde
 
 CC = c++
 
-FLAGS = -Werror -Wextra -Wall -std=c++11
+FLAGS = -Werror -Wextra -Wall -std=c++17
 
 SRC = main.cpp Zombie.cpp zombieHorde.cpp
 

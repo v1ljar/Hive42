@@ -1,3 +1,15 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   Harl.hpp                                           :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/10/30 13:11:59 by vuljas            #+#    #+#             //
+//   Updated: 2025/10/30 13:12:00 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #pragma once
 
 #include <string>
@@ -13,12 +25,4 @@ class Harl{
 		Harl();
 		~Harl();
 		void complain( std::string level );
-};
-
-enum Level{
-	DEBUG,
-	INFO,
-	WARNING,
-	ERROR,
-	INVALID
 };

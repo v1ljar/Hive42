@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/10/23 13:23:27 by vuljas            #+#    #+#              #
-#    Updated: 2025/10/23 13:23:31 by vuljas           ###   ########.fr        #
+#    Created: 2025/10/30 13:09:12 by vuljas            #+#    #+#              #
+#    Updated: 2025/10/30 13:09:14 by vuljas           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -14,7 +14,7 @@ NAME = unnecessary_violence
 
 CC = c++
 
-FLAGS = -Werror -Wextra -Wall -std=c++11
+FLAGS = -Werror -Wextra -Wall -std=c++17
 
 SRC = main.cpp Weapon.cpp HumanA.cpp HumanB.cpp
 

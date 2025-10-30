@@ -1,17 +1,33 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   main.cpp                                           :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/10/30 13:11:07 by vuljas            #+#    #+#             //
+//   Updated: 2025/10/30 13:11:10 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include <iostream>
 #include <string>
 #include <fstream>
 
 int main(int ac, char **av)
 {
-	if (ac != 4)
+	if (ac < 3 || ac > 4)
 	{
 		std::cerr << "Error! Usage: ./sed_is_for_losers <filename> <s1> <s2>" << std::endl;
 		return (1);
 	}
 	std::string		fname(av[1]);
 	std::string		s1(av[2]);
-	std::string		s2(av[3]);
+	std::string		s2;
+	if (ac == 4)
+		s2 = av[3];
+	else
+		s2 = "";
 
 	std::ifstream	og_file(fname);
 
