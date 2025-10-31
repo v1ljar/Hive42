@@ -2,9 +2,9 @@ NAME = fixed
 
 CC = c++
 
-FLAGS = -Werror -Wextra -Wall -std=c++17-MMD -MP
+FLAGS = -Werror -Wextra -Wall -std=c++17 -MMD -MP
 
-SRC = main.cpp
+SRC = main.cpp Fixed.cpp
 
 OBJ = $(SRC:%.cpp=obj/%.o)
 
