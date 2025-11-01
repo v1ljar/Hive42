@@ -4,12 +4,12 @@
 
 class Fixed{
 	private:
-		int	value;
-		static const int	nbr_frac_bits = 8;
+		int	_value;
+		static const int	_nbr_frac_bits = 8;
 	public:
 		Fixed();
-		Fixed(Fixed &old);
-		Fixed &operator=(const Fixed &old);
+		Fixed(Fixed &other);
+		Fixed& operator=(const Fixed &other);
 		~Fixed();
 		int getRawBits( void ) const;
 		void setRawBits( int const raw );
