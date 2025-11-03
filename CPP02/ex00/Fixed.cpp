@@ -5,7 +5,7 @@ Fixed::Fixed() : _value(0)
 	std::cout << "Default constructor called" << std::endl;
 }
 
-Fixed::Fixed(Fixed &other) 
+Fixed::Fixed(const Fixed &other) 
 {
 	std::cout << "Copy constructor called" << std::endl;
 	Fixed::operator= (other);

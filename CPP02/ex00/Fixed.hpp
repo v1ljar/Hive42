@@ -8,7 +8,7 @@ class Fixed{
 		static const int	_nbr_frac_bits = 8;
 	public:
 		Fixed();
-		Fixed(Fixed &other);
+		Fixed(const Fixed &other);
 		Fixed& operator=(const Fixed &other);
 		~Fixed();
 		int getRawBits( void ) const;
