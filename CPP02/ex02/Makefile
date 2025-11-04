@@ -21,7 +21,7 @@ clean:
 	@if [ -d obj ]; then \
 		rm -rf obj; \
 	else \
-		echo "make clean: Nothing to be done for 'make clean'"; \
+			echo "make clean: Nothing to be done for 'make clean'"; \
 	fi
 fclean: clean
 	@if [ -f $(NAME) ]; then \
