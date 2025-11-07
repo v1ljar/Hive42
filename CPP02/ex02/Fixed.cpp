@@ -1,3 +1,15 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   Fixed.cpp                                          :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/07 12:57:41 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/07 12:57:42 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "Fixed.hpp"
 
 Fixed::Fixed() : _value(0)
@@ -147,7 +159,7 @@ Fixed& Fixed::max(Fixed &one, Fixed &two)
 
 const Fixed& Fixed::max(const Fixed &one, const Fixed &two)
 {
-	return one.toFloat() > two.toFloat() ? one : two;
+	return one > two ? one : two;
 }
 
 /*
