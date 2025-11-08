@@ -28,7 +28,7 @@ int	main()
 	std::cout << "\n\t *** [ TEST 6 lala (with no energy points) tries to repair ] ***" << std::endl;
 	lala.beRepaired(5);
 
-	std::cout << "\n\t *** [ TEST 7 lala (with 80 hit points after TEST 4), was attacked 10 times ] ***" << std::endl;
+	std::cout << "\n\t *** [ TEST 7 lala (with 90 hit points after TEST 4), was attacked 10 times ] ***" << std::endl;
 	for (i = 1; i <= 10; i++)
 	{
 		lala.takeDamage(20);
