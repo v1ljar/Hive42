@@ -1,11 +1,11 @@
 #include "Dog.hpp"
 
-Dog::Dog(): Animal("Dog"), _type("Dog")
+Dog::Dog(): Animal("Dog")
 {
 	std::cout << _type << " default constructor called." << std::endl;
 }
 
-Dog::Dog(std::string type): Animal(type), _type("Dog")
+Dog::Dog(std::string type): Animal(type)
 {
 	std::cout << _type << " parametrized constructor called." << std::endl;
 }
@@ -27,4 +27,9 @@ Dog& Dog::operator=(const Dog& other)
 Dog::~Dog()
 {
 	std::cout << _type << " destructor called." << std::endl;
+}
+
+void Dog::makeSound() const
+{
+	std::cout << _type << " says auh-auh-auh" << std::endl;
 }

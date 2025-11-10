@@ -1,11 +1,11 @@
 #include "Cat.hpp"
 
-Cat::Cat(): Animal("Cat"), _type("Cat")
+Cat::Cat(): Animal("Cat")
 {
 	std::cout << _type << " default constructor called." << std::endl;
 }
 
-Cat::Cat(std::string type): Animal(type), _type("Cat")
+Cat::Cat(std::string type): Animal(type)
 {
 	std::cout << _type << " parametrized constructor called." << std::endl;
 }
@@ -27,4 +27,9 @@ Cat& Cat::operator=(const Cat& other)
 Cat::~Cat()
 {
 	std::cout << _type << " destructor called." << std::endl;
+}
+
+void Cat::makeSound() const
+{
+	std::cout << _type << " says mjau-mjau-mjau" << std::endl;
 }

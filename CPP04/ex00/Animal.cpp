@@ -36,8 +36,5 @@ std::string Animal::getType() const
 
 void Animal::makeSound() const
 {
-	if (_type == "Dog")
-		std::cout << "Estonian " << _type << " says auh-auh-auh" << std::endl;
-	else if (_type == "Cat")
-		std::cout << "Estonian " << _type << " says mjau-mjau-mjau" << std::endl;
+	std::cout << "Animal " << _type << " says . . ." << std::endl;
 }
