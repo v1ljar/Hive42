@@ -2,20 +2,13 @@
 
 Dog::Dog(): Animal("Dog")
 {
-	std::cout << "Dog ";
-	Brain	*brain_ptr;
-
-	brain_ptr = new Brain();
-	_brain = brain_ptr;
+	_brain = new Brain();
 	std::cout << _type << " default constructor called." << std::endl;
 }
 
 Dog::Dog(std::string type): Animal(type)
 {
-	Brain	*brain_ptr;
-
-	brain_ptr = new Brain();
-	_brain = brain_ptr;
+	_brain = new Brain();
 	std::cout << _type << " parametrized constructor called." << std::endl;
 }
 
@@ -29,8 +22,9 @@ Dog& Dog::operator=(const Dog& other)
 {
 	if (this != &other)
 	{
-		_type = other._type;
-		_brain = other._brain;
+		Animal::operator=(other);
+		delete _brain;
+		_brain = new Brain(*other._brain);
 	}
 	std::cout << _type << " copy assignment operator called." << std::endl;
 	return (*this);
