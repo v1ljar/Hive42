@@ -5,9 +5,10 @@ CC = c++
 
 FLAGS = -Werror -Wextra -Wall -std=c++17 -MMD -MP
 
-SRC = main.cpp Animal.cpp Dog.cpp Cat.cpp
+SRC = main.cpp Animal.cpp Dog.cpp Cat.cpp WrongAnimal.cpp WrongCat.cpp
 
 OBJ = $(SRC:%.cpp=obj/%.o)
+DEP = $(OBJ:.o=.d)
 
 all: $(NAME)
 
@@ -17,6 +18,8 @@ obj/%.o: %.cpp
 
 $(NAME): $(OBJ)
 	$(CC) $(FLAGS) -o $@ $(OBJ)
+
+-include $(DEP)
 
 clean:
 	@if [ -d obj ]; then \

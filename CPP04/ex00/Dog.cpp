@@ -10,7 +10,7 @@ Dog::Dog(std::string type): Animal(type)
 	std::cout << _type << " parametrized constructor called." << std::endl;
 }
 
-Dog::Dog(const Dog& other)
+Dog::Dog(const Dog& other) : Animal(other)
 {
 	*this = other;
 	std::cout << _type << " copy constructor called." << std::endl;

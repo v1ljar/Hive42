@@ -1,22 +1,22 @@
-#include "Cat.hpp"
+#include "WrongCat.hpp"
 
-Cat::Cat(): Animal("Cat")
+WrongCat::WrongCat(): WrongAnimal("WrongCat")
 {
 	std::cout << _type << " default constructor called." << std::endl;
 }
 
-Cat::Cat(std::string type): Animal(type)
+WrongCat::WrongCat(std::string type): WrongAnimal(type)
 {
 	std::cout << _type << " parametrized constructor called." << std::endl;
 }
 
-Cat::Cat(const Cat& other) : Animal(other)
+WrongCat::WrongCat(const WrongCat& other) : WrongAnimal(other)
 {
 	*this = other;
 	std::cout << _type << " copy constructor called." << std::endl;
 }
 
-Cat& Cat::operator=(const Cat& other)
+WrongCat& WrongCat::operator=(const WrongCat& other)
 {
 	if (this != &other)
 		_type = other._type;
@@ -24,12 +24,12 @@ Cat& Cat::operator=(const Cat& other)
 	return (*this);
 }
 
-Cat::~Cat()
+WrongCat::~WrongCat()
 {
 	std::cout << _type << " destructor called." << std::endl;
 }
 
-void Cat::makeSound() const
+void WrongCat::makeSound() const
 {
-	std::cout << _type << " says mjäu-mjäu-mjäu" << std::endl;
+	std::cout << _type << " says wrong undetectable speach!" << std::endl;
 }
