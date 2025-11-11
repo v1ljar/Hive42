@@ -31,5 +31,5 @@ WrongCat::~WrongCat()
 
 void WrongCat::makeSound() const
 {
-	std::cout << _type << " says wrong undetectable speach!" << std::endl;
+	std::cout << _type << " makes sound mjäu" << std::endl;
 }
