@@ -1,3 +1,15 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   main.cpp                                           :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/14 11:15:04 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/14 11:15:04 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "Animal.hpp"
 #include "WrongAnimal.hpp"
 #include "WrongCat.hpp"
@@ -31,5 +43,8 @@ int main()
 	std::cout << "\t\t[ Destructors ]" << std::endl;
 	for (n = 0; n < nbr; n++)
 		delete animals[n];
+	std::cout << "\t[ Testing deep copy of dog object ]" << std::endl;
+	Dog basic;
+	Dog tmp = basic;
 	return 0;
 }

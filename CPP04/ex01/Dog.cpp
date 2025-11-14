@@ -1,3 +1,15 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   Dog.cpp                                            :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/14 11:15:11 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/14 11:15:11 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "Dog.hpp"
 
 Dog::Dog(): Animal("Dog")
@@ -17,6 +29,7 @@ Dog::Dog(std::string type): Animal(type)
 Dog::Dog(const Dog& other) : Animal(other)
 {
 	std::cout << _type << " copy constructor called." << std::endl;
+	_brain = new Brain(*other._brain);
 	*this = other;
 }
 

@@ -1,3 +1,15 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   Cat.cpp                                            :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/14 11:16:40 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/14 11:16:40 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "Cat.hpp"
 
 Cat::Cat(): Animal("Cat")
@@ -16,8 +28,9 @@ Cat::Cat(std::string type): Animal(type)
 
 Cat::Cat(const Cat& other) : Animal(other)
 {
-	_brain = new Brain(*other._brain);
 	std::cout << _type << " copy constructor called." << std::endl;
+	_brain = new Brain(*other._brain);
+	*this = other;
 }
 
 Cat& Cat::operator=(const Cat& other)
