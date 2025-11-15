@@ -24,7 +24,7 @@ Cat::Cat(std::string type): Animal(type)
 
 Cat::Cat(const Cat& other) : Animal(other)
 {
-	*this = other;
+	_type = other._type;
 	std::cout << _type << " copy constructor called." << std::endl;
 }
 

@@ -12,7 +12,7 @@
 
 #include "Animal.hpp"
 
-Animal::Animal() : _type("Animal")
+Animal::Animal() : _type("Default")
 {
 	std::cout << "Animal " << _type << " default constructor called." << std::endl;
 }
@@ -24,7 +24,7 @@ Animal::Animal(const std::string type) : _type(type)
 
 Animal::Animal(const Animal& other)
 {
-	*this = other;
+	_type = other._type;
 	std::cout << "Animal " << _type << " copy constructor called." << std::endl;
 }
 

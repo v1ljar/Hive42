@@ -24,7 +24,7 @@ Dog::Dog(std::string type): Animal(type)
 
 Dog::Dog(const Dog& other) : Animal(other)
 {
-	*this = other;
+	_type = other._type;
 	std::cout << _type << " copy constructor called." << std::endl;
 }
 

@@ -24,7 +24,7 @@ WrongAnimal::WrongAnimal(const std::string type) : _type(type)
 
 WrongAnimal::WrongAnimal(const WrongAnimal& other)
 {
-	*this = other;
+	_type = other._type;
 	std::cout << "WrongAnimal " << _type << " copy constructor called." << std::endl;
 }
 

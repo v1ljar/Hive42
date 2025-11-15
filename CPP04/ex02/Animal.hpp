@@ -23,7 +23,7 @@ class Animal
 		Animal(const std::string type);
 		Animal(const Animal& other);
 		Animal& operator=(const Animal& other);
-		virtual ~Animal() = 0;
+		virtual ~Animal();
 		std::string getType() const;
-		virtual void makeSound() const;
+		virtual void makeSound() const = 0;
 };
