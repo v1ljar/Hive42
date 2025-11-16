@@ -1,6 +1,18 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   Animal.cpp                                         :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/14 11:14:20 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/14 11:14:21 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "Animal.hpp"
 
-Animal::Animal() : _type("Animal")
+Animal::Animal() : _type("Default")
 {
 	std::cout << "Animal " << _type << " default constructor called." << std::endl;
 }
@@ -12,7 +24,7 @@ Animal::Animal(const std::string type) : _type(type)
 
 Animal::Animal(const Animal& other)
 {
-	*this = other;
+	_type = other._type;
 	std::cout << "Animal " << _type << " copy constructor called." << std::endl;
 }
 

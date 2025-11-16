@@ -1,32 +1,46 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   Dog.cpp                                            :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/14 11:15:11 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/14 11:15:11 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "Dog.hpp"
 
 Dog::Dog(): Animal("Dog")
 {
-	_brain = new Brain();
 	std::cout << _type << " default constructor called." << std::endl;
+	std::cout << "Dog ";
+	_brain = new Brain();
 }
 
 Dog::Dog(std::string type): Animal(type)
 {
-	_brain = new Brain();
 	std::cout << _type << " parametrized constructor called." << std::endl;
+	std::cout << "Dog ";
+	_brain = new Brain();
 }
 
 Dog::Dog(const Dog& other) : Animal(other)
 {
-	*this = other;
 	std::cout << _type << " copy constructor called." << std::endl;
+	_brain = new Brain(*other._brain);
 }
 
 Dog& Dog::operator=(const Dog& other)
 {
+	std::cout << _type << " copy assignment operator called." << std::endl;
 	if (this != &other)
 	{
 		Animal::operator=(other);
 		delete _brain;
 		_brain = new Brain(*other._brain);
 	}
-	std::cout << _type << " copy assignment operator called." << std::endl;
 	return (*this);
 }
 

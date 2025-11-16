@@ -1,29 +1,29 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   Dog.hpp                                            :+:      :+:    :+:   //
+//   WrongAnimal.hpp                                    :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/11/14 11:15:07 by vuljas            #+#    #+#             //
-//   Updated: 2025/11/14 11:15:08 by vuljas           ###   ########.fr       //
+//   Created: 2025/11/14 11:16:14 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/14 11:16:14 by vuljas           ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
 #pragma once
 
-#include "Animal.hpp"
-#include "Brain.hpp"
+#include <iostream>
 
-class Dog : public Animal
+class WrongAnimal
 {
-	private:
-		Brain*	_brain;
+	protected:
+		std::string	_type;
 	public:
-		Dog();
-		Dog(std::string type);
-		Dog(const Dog& other);
-		Dog& operator=(const Dog& other);
-		~Dog();
-		void makeSound() const override;
+		WrongAnimal();
+		WrongAnimal(const std::string type);
+		WrongAnimal(const WrongAnimal& other);
+		WrongAnimal& operator=(const WrongAnimal& other);
+		~WrongAnimal();
+		std::string getType() const;
+		void makeSound() const;
 };

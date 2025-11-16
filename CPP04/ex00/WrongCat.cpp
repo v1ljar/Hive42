@@ -1,3 +1,15 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   WrongCat.cpp                                       :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/14 11:14:29 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/14 11:14:29 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "WrongCat.hpp"
 
 WrongCat::WrongCat(): WrongAnimal("WrongCat")
@@ -12,7 +24,7 @@ WrongCat::WrongCat(std::string type): WrongAnimal(type)
 
 WrongCat::WrongCat(const WrongCat& other) : WrongAnimal(other)
 {
-	*this = other;
+	_type = other._type;
 	std::cout << _type << " copy constructor called." << std::endl;
 }
 

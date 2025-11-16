@@ -1,3 +1,15 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   WrongAnimal.cpp                                    :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/14 11:14:57 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/14 11:14:58 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "WrongAnimal.hpp"
 
 WrongAnimal::WrongAnimal() : _type("Default")
@@ -12,7 +24,7 @@ WrongAnimal::WrongAnimal(const std::string type) : _type(type)
 
 WrongAnimal::WrongAnimal(const WrongAnimal& other)
 {
-	*this = other;
+	_type = other._type;
 	std::cout << "WrongAnimal " << _type << " copy constructor called." << std::endl;
 }
 

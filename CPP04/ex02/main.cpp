@@ -5,8 +5,8 @@
 //                                                    +:+ +:+         +:+     //
 //   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/11/14 11:15:04 by vuljas            #+#    #+#             //
-//   Updated: 2025/11/14 11:15:04 by vuljas           ###   ########.fr       //
+//   Created: 2025/11/14 11:16:25 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/14 11:16:25 by vuljas           ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -43,8 +43,7 @@ int main()
 	std::cout << "\t\t[ Destructors ]" << std::endl;
 	for (n = 0; n < nbr; n++)
 		delete animals[n];
-	std::cout << "\t[ Testing deep copy of dog object ]" << std::endl;
-	Dog basic;
-	Dog tmp = basic;
+	// std::cout << "\t\t[ Test to instaniate pure virtual Animal class ]" << std::endl;
+	// Animal* animal = new Animal();
 	return 0;
 }
