@@ -5,7 +5,7 @@ CC = c++
 
 FLAGS = -Wall -Wextra -Werror -std=c++17 -MMD -MP
 
-SRC = main.cpp
+SRC = main.cpp Bureaucrat.cpp
 
 OBJ = $(SRC:%.cpp=obj/%.o)
 
