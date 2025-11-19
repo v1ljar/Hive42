@@ -1,82 +1,67 @@
 #include "Bureaucrat.hpp"
 #include <string>
 
+Bureaucrat::Bureaucrat() : _name("Intern"), _grade(150)
+{
+	std::cout << "Default constructor called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
+}
+
 Bureaucrat::Bureaucrat(const std::string& name, int grade) : _name(name), _grade(grade)
 {
-	std::cout << _name << " Parametrized constructor called!" << std::endl;
 	if (_grade > 150)
 		throw GradeTooLowException();
 	else if (_grade < 1)
 		throw GradeTooHighException();
+	std::cout << "Parametrized constructor called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
 }
 
 Bureaucrat::Bureaucrat(const Bureaucrat& other) : _name(other._name), _grade(other._grade)
 {
-	std::cout << _name << " Copy constructor called!" << std::endl;
+	std::cout << "Copy constructor called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
 }
 
 Bureaucrat& Bureaucrat::operator=(const Bureaucrat& other)
 {
 	if (this != &other)
 	{
-		_name = other._name;
 		_grade = other._grade;
 	}
-	std::cout << _name << " Copy assignment operator called!" << std::endl;
+	std::cout << "Copy assignment operator called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
 	return *this;
 }
 
 Bureaucrat::~Bureaucrat()
 {
-	std::cout << _name << " Destructor called!" << std::endl;
+	std::cout << "Destructor called! [ Name: " << _name << " ]" << std::endl;
 }
 
-class Bureaucrat::GradeTooHighException : public std::exception
-{
-	public:
-		const char* what() const throw() {
-			return "Grade is too high!";
-		} 
-};
-
-class Bureaucrat::GradeTooLowException : public std::exception
-{
-	public:
-		const char* what() const throw() {
-			return "Grade is too low!";
-		}
-};
-
-const std::string& Bureaucrat::getName()
+const std::string& Bureaucrat::getName() const
 {
 	return _name;
 }
 
-int Bureaucrat::getGrade()
+int Bureaucrat::getGrade() const
 {
 	return _grade;
 }
 
 void Bureaucrat::increment_grade()
 {
+	if (_grade <= 1)
+		throw GradeTooHighException();
 	_grade--;
-	if (_grade > 150)
-		std::cerr << "Grade too low!" << std::endl;
-	else if (_grade < 1)
-		std::cerr << "Grade too high!" << std::endl;
 }
 
 void Bureaucrat::decrement_grade()
 {
+	if (_grade >= 150)
+		throw GradeTooLowException();
 	_grade++;
-	if (_grade > 150)
-		std::cerr << "Grade too low!" << std::endl;
-	else if (_grade < 1)
-		std::cerr << "Grade too high!" << std::endl;
+
 }
 
-std::ostream& operator<<(std::ostream& output, Bureaucrat& bur)
+std::ostream& operator<<(std::ostream& output, const Bureaucrat& bur)
 {
-	output << bur.getName() << ", bureaucrat grade " << bur.getGrade() << "." << std::endl;
+	output << bur.getName() << ", bureaucrat grade " << bur.getGrade() << ".";
 	return output;
 }

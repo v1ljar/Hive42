@@ -6,22 +6,28 @@
 class Bureaucrat
 {
 	private:
-		std::string _name;
+		const std::string _name;
 		int	_grade;
 	public:
-		Bureaucrat() = delete;
+		Bureaucrat();
 		Bureaucrat(const std::string& name, int grade);
 		Bureaucrat(const Bureaucrat& other);
 		Bureaucrat& operator=(const Bureaucrat& other);
 		~Bureaucrat();
 		// Exceptions
-		class GradeTooHighException{};
-		class GradeTooLowException{};
+		class GradeTooHighException : public std::exception {
+			public:
+				const char* what() const throw() {return "Grade is too high!";} 
+		};
+		class GradeTooLowException : public std::exception {
+			public:
+				const char* what() const throw() { return "Grade is too low!";}
+		};
 		// Getters
-		const std::string& getName();
-		int	getGrade();
+		const std::string& getName() const;
+		int	getGrade() const;
 		// Member functions
 		void increment_grade();
 		void decrement_grade();
 };
-std::ostream& operator<<(std::ostream& output, Bureaucrat& bur);
+std::ostream& operator<<(std::ostream& output, const Bureaucrat& bur);
