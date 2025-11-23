@@ -3,7 +3,7 @@
 
 Bureaucrat::Bureaucrat() : _name("Intern"), _grade(150)
 {
-	std::cout << "Default constructor called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
+	std::cout << "Bureaucrat Default constructor called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
 }
 
 Bureaucrat::Bureaucrat(const std::string& name, int grade) : _name(name), _grade(grade)
@@ -12,12 +12,12 @@ Bureaucrat::Bureaucrat(const std::string& name, int grade) : _name(name), _grade
 		throw GradeTooLowException();
 	else if (_grade < 1)
 		throw GradeTooHighException();
-	std::cout << "Parametrized constructor called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
+	std::cout << "Bureaucrat Parametrized constructor called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
 }
 
 Bureaucrat::Bureaucrat(const Bureaucrat& other) : _name(other._name), _grade(other._grade)
 {
-	std::cout << "Copy constructor called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
+	std::cout << "Bureaucrat Copy constructor called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
 }
 
 Bureaucrat& Bureaucrat::operator=(const Bureaucrat& other)
@@ -26,13 +26,13 @@ Bureaucrat& Bureaucrat::operator=(const Bureaucrat& other)
 	{
 		_grade = other._grade;
 	}
-	std::cout << "Copy assignment operator called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
+	std::cout << "Bureaucrat Copy assignment operator called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
 	return *this;
 }
 
 Bureaucrat::~Bureaucrat()
 {
-	std::cout << "Destructor called! [ Name: " << _name << " ]" << std::endl;
+	std::cout << "Bureaucrat Destructor called! [ Name: " << _name << " ]" << std::endl;
 }
 
 const std::string& Bureaucrat::getName() const
