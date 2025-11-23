@@ -31,11 +31,7 @@ int main()
 			std::cerr << "Caught exception: " << e.what() << std::endl;
 		}
 		std::cout << robohome << "\n";
-		try {
-			robohome.execute(bur1);
-		} catch(const std::exception& e) {
-			std::cerr << "Caught exception: " << e.what() << std::endl;
-		}
+		bur1.executeForm(robohome);
 
 		PresidentialPardonForm presipardon("Mr. Bean");
 		try {

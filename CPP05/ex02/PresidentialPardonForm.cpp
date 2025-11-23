@@ -3,7 +3,7 @@
 
 PresidentialPardonForm::PresidentialPardonForm(const std::string& target) : AForm("PresidentialPardonForm", 25, 5), _target(target)
 {
-	std::cout << "RobotomyRequestForm parametrized constructor called.\n\t[ Target: "
+	std::cout << "PresidentialPardonForm parametrized constructor called.\n\t[ Target: "
 			  << _target
 			  << ". (toSign: 25 | toExecute: 5) ]"
 			  << std::endl;

@@ -71,6 +71,17 @@ void Bureaucrat::signAForm(AForm& form)
 	}
 }
 
+void Bureaucrat::executeForm(AForm const & form)
+{
+	try {
+		form.execute(*this);
+		std::cout << _name << " executed " << form.getName() << ".\n";
+	} catch (std::exception& e) {
+		std::cerr << _name << " failed to execute " << form.getName()
+				  << "\n\tCaught exception: " << e.what() << std::endl;
+	}
+}
+
 std::ostream& operator<<(std::ostream& output, const Bureaucrat& bur)
 {
 	output << bur.getName() << ", bureaucrat grade " << bur.getGrade() << ".";

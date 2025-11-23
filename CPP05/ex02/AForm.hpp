@@ -15,7 +15,7 @@ class AForm
 
 	public:
 		AForm();
-		AForm(const std::string& _name, const int _gradeToSign, const int	_gradeToExecute);
+		AForm(const std::string& name, const int gradeToSign, const int	gradeToExecute);
 		AForm(const AForm& other);
 		AForm& operator=(const AForm& other) = delete;
 		virtual ~AForm() = 0;
@@ -41,8 +41,8 @@ class AForm
 		int getGradeToExecute() const;
 
 		// Member functions
-		virtual void beSigned(const Bureaucrat& bur);
-		virtual void execute(Bureaucrat const & executor) const;
+		void beSigned(const Bureaucrat& bur);
+		virtual void execute(Bureaucrat const & executor) const = 0;
 };
 // Overload insertion operator (<<)
 std::ostream& operator<<(std::ostream& output, const AForm& f);

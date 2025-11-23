@@ -64,10 +64,16 @@ void AForm::beSigned(const Bureaucrat& bur)
 
 void AForm::execute(Bureaucrat const & executor) const
 {
-	if (executor.getGrade() > _gradeToExecute)
-		throw GradeTooHighException();
 	if (!_isSigned)
+	{
+		std::cerr << executor.getName() << " failed to execute " << _name << ".\n";
 		throw FormNotSignedException();
+	}
+	if (executor.getGrade() > _gradeToExecute)
+	{
+		std::cerr << executor.getName() << " failed to execute " << _name << ".\n";
+		throw GradeTooLowException();
+	}
 	std::cout << "AForm execution ready to call!" << std::endl;
 }
 
