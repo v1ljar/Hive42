@@ -1,3 +1,15 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   Form.cpp                                           :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/24 10:30:22 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/24 10:30:22 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "Form.hpp"
 #include "Bureaucrat.hpp"
 
@@ -31,6 +43,17 @@ Form::Form(const Form& other)
 Form::~Form()
 {
 	std::cout << "Destructor called! [ Name: " << _name << " ]" << std::endl;
+}
+
+// Exceptions
+const char* Form::GradeTooHighException::what() const noexcept
+{
+	return "Form grade too high!";
+}
+
+const char* Form::GradeTooLowException::what() const noexcept
+{
+	return "Form grade too low!";
 }
 
 // Getters

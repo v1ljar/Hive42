@@ -1,7 +1,19 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   Bureaucrat.cpp                                     :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/24 10:29:52 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/24 10:29:53 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "Bureaucrat.hpp"
 #include <string>
 
-Bureaucrat::Bureaucrat() : _name("Intern"), _grade(150)
+Bureaucrat::Bureaucrat() : _name("NewBuraucrat"), _grade(150)
 {
 	std::cout << "Bureaucrat Default constructor called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
 }
@@ -35,6 +47,19 @@ Bureaucrat::~Bureaucrat()
 	std::cout << "Bureaucrat Destructor called! [ Name: " << _name << " ]" << std::endl;
 }
 
+// Exceptions
+
+const char* Bureaucrat::GradeTooHighException::what() const noexcept
+{
+	return "Grade is too high!";
+}
+
+const char* Bureaucrat::GradeTooLowException::what() const noexcept
+{
+	return "Grade is too low!";
+}
+
+// Getters
 const std::string& Bureaucrat::getName() const
 {
 	return _name;
@@ -45,6 +70,7 @@ int Bureaucrat::getGrade() const
 	return _grade;
 }
 
+// Member functions
 void Bureaucrat::increment_grade()
 {
 	if (_grade <= 1)
@@ -60,6 +86,7 @@ void Bureaucrat::decrement_grade()
 
 }
 
+// Overload operator (<<)
 std::ostream& operator<<(std::ostream& output, const Bureaucrat& bur)
 {
 	output << bur.getName() << ", bureaucrat grade " << bur.getGrade() << ".";

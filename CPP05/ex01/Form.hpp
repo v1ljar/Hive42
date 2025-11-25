@@ -1,3 +1,15 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   Form.hpp                                           :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/24 10:30:18 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/24 10:30:18 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #pragma once
 
 #include <iostream>
@@ -23,11 +35,11 @@ class Form
 		// Exceptions
 		class GradeTooHighException : public std::exception {
 			public:
-				const char* what() const throw() {return "Form grade too high!";}
+				const char* what() const noexcept override;
 		};
 		class GradeTooLowException : public std::exception {
 			public:
-				const char* what() const throw() {return "Form grade too low!";}
+				const char* what() const noexcept override;
 		};
 
 		// Getters

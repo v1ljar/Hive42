@@ -5,18 +5,19 @@
 #                                                     +:+ +:+         +:+      #
 #    By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/11/24 10:30:12 by vuljas            #+#    #+#              #
-#    Updated: 2025/11/24 10:30:13 by vuljas           ###   ########.fr        #
+#    Created: 2025/11/24 10:31:35 by vuljas            #+#    #+#              #
+#    Updated: 2025/11/24 10:31:35 by vuljas           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
-NAME = form
+NAME = intern
 
 CC = c++
 
 FLAGS = -Wall -Wextra -Werror -std=c++17 -MMD -MP
 
-SRC = main.cpp Bureaucrat.cpp Form.cpp
+SRC = main.cpp Bureaucrat.cpp AForm.cpp ShrubberyCreationForm.cpp \
+	  RobotomyRequestForm.cpp PresidentialPardonForm.cpp Intern.cpp
 
 OBJ = $(SRC:%.cpp=obj/%.o)
 
