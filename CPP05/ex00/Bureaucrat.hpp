@@ -19,11 +19,11 @@ class Bureaucrat
 		// Exceptions
 		class GradeTooHighException : public std::exception {
 			public:
-				const char* what() const throw() {return "Grade is too high!";} 
+				const char* what() const noexcept override;
 		};
 		class GradeTooLowException : public std::exception {
 			public:
-				const char* what() const throw() { return "Grade is too low!";}
+				const char* what() const noexcept override;
 		};
 
 		// Getters
@@ -34,4 +34,6 @@ class Bureaucrat
 		void increment_grade();
 		void decrement_grade();
 };
+
+// Overload of the insertion operator (<<)
 std::ostream& operator<<(std::ostream& output, const Bureaucrat& bur);

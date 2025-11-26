@@ -1,7 +1,6 @@
 #include "Bureaucrat.hpp"
-#include <string>
 
-Bureaucrat::Bureaucrat() : _name("Intern"), _grade(150)
+Bureaucrat::Bureaucrat() : _name("Newbie"), _grade(150)
 {
 	std::cout << "Bureaucrat Default constructor called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
 }
@@ -35,6 +34,18 @@ Bureaucrat::~Bureaucrat()
 	std::cout << "Bureaucrat Destructor called! [ Name: " << _name << " ]" << std::endl;
 }
 
+// Exceptions
+const char* Bureaucrat::GradeTooHighException::what() const noexcept
+{
+	return "Grade is too high!";
+}
+
+const char* Bureaucrat::GradeTooLowException::what() const noexcept
+{
+	return "Grade is too low!";
+}
+
+// Getters
 const std::string& Bureaucrat::getName() const
 {
 	return _name;
@@ -71,6 +82,7 @@ void Bureaucrat::signForm(Form& form)
 	}
 }
 
+// Overload of the insertion operator (<<)
 std::ostream& operator<<(std::ostream& output, const Bureaucrat& bur)
 {
 	output << bur.getName() << ", bureaucrat grade " << bur.getGrade() << ".";

@@ -33,6 +33,22 @@ Form::~Form()
 	std::cout << "Destructor called! [ Name: " << _name << " ]" << std::endl;
 }
 
+// Exceptions
+const char* Form::GradeTooHighException::what() const noexcept
+{
+	return "Form grade too high!";
+}
+
+const char* Form::GradeTooLowException::what() const noexcept
+{
+	return "Form grade too low!";
+}
+
+const char* Form::FormIsSignedException::what() const noexcept
+{
+	return "Form is already signed!";
+}
+
 // Getters
 const std::string& Form::getName() const
 {
@@ -59,6 +75,8 @@ void Form::beSigned(const Bureaucrat& bur)
 {
 	if (bur.getGrade() > _gradeToSign)
 		throw GradeTooLowException();
+	if (_isSigned)
+		throw FormIsSignedException();
 	_isSigned = true;
 }
 

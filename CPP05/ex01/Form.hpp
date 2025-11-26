@@ -23,11 +23,15 @@ class Form
 		// Exceptions
 		class GradeTooHighException : public std::exception {
 			public:
-				const char* what() const throw() {return "Form grade too high!";}
+				const char* what() const noexcept override;
 		};
 		class GradeTooLowException : public std::exception {
 			public:
-				const char* what() const throw() {return "Form grade too low!";}
+				const char* what() const noexcept override;
+		};
+		class FormIsSignedException : public std::exception {
+			public:
+				const char* what() const noexcept override;
 		};
 
 		// Getters
@@ -39,5 +43,6 @@ class Form
 		// Member functions
 		virtual void beSigned(const Bureaucrat& bur);
 };
+
 // Overload insertion operator (<<)
 std::ostream& operator<<(std::ostream& output, const Form& f);
