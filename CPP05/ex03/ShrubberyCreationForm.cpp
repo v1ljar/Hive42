@@ -1,15 +1,3 @@
-// ************************************************************************** //
-//                                                                            //
-//                                                        :::      ::::::::   //
-//   ShrubberyCreationForm.cpp                          :+:      :+:    :+:   //
-//                                                    +:+ +:+         +:+     //
-//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
-//                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/11/24 10:32:01 by vuljas            #+#    #+#             //
-//   Updated: 2025/11/24 10:32:02 by vuljas           ###   ########.fr       //
-//                                                                            //
-// ************************************************************************** //
-
 #include "ShrubberyCreationForm.hpp"
 #include "Bureaucrat.hpp"
 #include <fstream>

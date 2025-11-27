@@ -1,15 +1,3 @@
-// ************************************************************************** //
-//                                                                            //
-//                                                        :::      ::::::::   //
-//   AForm.cpp                                          :+:      :+:    :+:   //
-//                                                    +:+ +:+         +:+     //
-//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
-//                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/11/24 10:31:56 by vuljas            #+#    #+#             //
-//   Updated: 2025/11/24 10:31:56 by vuljas           ###   ########.fr       //
-//                                                                            //
-// ************************************************************************** //
-
 #include "AForm.hpp"
 #include "Bureaucrat.hpp"
 
@@ -46,22 +34,22 @@ AForm::~AForm()
 }
 
 // Exceptions
-const char* AForm::GradeTooHighException::what() const noexcept
+const char* AForm::GradeTooHighException::what() const throw()
 {
 	return "AForm grade too high!";
 }
 
-const char* AForm::GradeTooLowException::what() const noexcept
+const char* AForm::GradeTooLowException::what() const throw()
 {
 	return "AForm grade too low!";
 }
 
-const char* AForm::FormNotSignedException::what() const noexcept
+const char* AForm::FormNotSignedException::what() const throw()
 {
 	return "AForm is not signed!";
 }
 
-const char* AForm::FormIsSignedException::what() const noexcept
+const char* AForm::FormIsSignedException::what() const throw()
 {
 	return "AForm is already signed!";
 }

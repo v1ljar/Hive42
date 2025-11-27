@@ -46,22 +46,22 @@ AForm::~AForm()
 }
 
 // Exceptions
-const char* AForm::GradeTooHighException::what() const noexcept
+const char* AForm::GradeTooHighException::what() const throw()
 {
 	return "AForm grade too high!";
 }
 
-const char* AForm::GradeTooLowException::what() const noexcept
+const char* AForm::GradeTooLowException::what() const throw()
 {
 	return "AForm grade too low!";
 }
 
-const char* AForm::FormNotSignedException::what() const noexcept
+const char* AForm::FormNotSignedException::what() const throw()
 {
 	return "AForm is not signed!";
 }
 
-const char* AForm::FormIsSignedException::what() const noexcept
+const char* AForm::FormIsSignedException::what() const throw()
 {
 	return "AForm is already signed!";
 }

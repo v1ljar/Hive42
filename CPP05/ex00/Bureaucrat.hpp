@@ -46,5 +46,6 @@ class Bureaucrat
 		void increment_grade();
 		void decrement_grade();
 };
-// Overload operator (<<)
+
+// Overload of the insertion operator (<<)
 std::ostream& operator<<(std::ostream& output, const Bureaucrat& bur);

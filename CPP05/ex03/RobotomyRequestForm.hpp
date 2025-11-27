@@ -1,14 +1,4 @@
-// ************************************************************************** //
-//                                                                            //
-//                                                        :::      ::::::::   //
-//   RobotomyRequestForm.hpp                            :+:      :+:    :+:   //
-//                                                    +:+ +:+         +:+     //
-//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
-//                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/11/24 10:31:20 by vuljas            #+#    #+#             //
-//   Updated: 2025/11/24 10:31:20 by vuljas           ###   ########.fr       //
-//                                                                            //
-// ************************************************************************** //
+#pragma once
 
 #include "AForm.hpp"
 
@@ -22,5 +12,7 @@ class RobotomyRequestForm : public AForm
 		RobotomyRequestForm(const RobotomyRequestForm& other) = delete;
 		RobotomyRequestForm& operator=(const RobotomyRequestForm& other) = delete;
 		~RobotomyRequestForm();
+
+		// Member functions
 		void execute(const Bureaucrat& executor) const override;
 };

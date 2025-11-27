@@ -50,5 +50,5 @@ class Bureaucrat
 		void executeForm(AForm const & form);
 };
 
-// Overload operator (<<)
+// Overload of the insertion operator (<<)
 std::ostream& operator<<(std::ostream& output, const Bureaucrat& bur);

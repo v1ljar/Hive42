@@ -13,7 +13,7 @@
 #include "Bureaucrat.hpp"
 #include <string>
 
-Bureaucrat::Bureaucrat() : _name("NewBuraucrat"), _grade(150)
+Bureaucrat::Bureaucrat() : _name("Newbie"), _grade(150)
 {
 	std::cout << "Bureaucrat Default constructor called! [ Name: " << _name << "; Grade: " << _grade << " ]" << std::endl;
 }
@@ -48,7 +48,6 @@ Bureaucrat::~Bureaucrat()
 }
 
 // Exceptions
-
 const char* Bureaucrat::GradeTooHighException::what() const noexcept
 {
 	return "Grade is too high!";
@@ -86,7 +85,7 @@ void Bureaucrat::decrement_grade()
 
 }
 
-// Overload operator (<<)
+// Overload of the insertion operator (<<)
 std::ostream& operator<<(std::ostream& output, const Bureaucrat& bur)
 {
 	output << bur.getName() << ", bureaucrat grade " << bur.getGrade() << ".";

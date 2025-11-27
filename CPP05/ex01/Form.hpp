@@ -41,6 +41,10 @@ class Form
 			public:
 				const char* what() const noexcept override;
 		};
+		class FormIsSignedException : public std::exception {
+			public:
+				const char* what() const noexcept override;
+		};
 
 		// Getters
 		const std::string& getName() const;
@@ -51,5 +55,6 @@ class Form
 		// Member functions
 		virtual void beSigned(const Bureaucrat& bur);
 };
+
 // Overload insertion operator (<<)
 std::ostream& operator<<(std::ostream& output, const Form& f);

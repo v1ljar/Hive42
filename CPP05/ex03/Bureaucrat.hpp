@@ -1,15 +1,3 @@
-// ************************************************************************** //
-//                                                                            //
-//                                                        :::      ::::::::   //
-//   Bureaucrat.hpp                                     :+:      :+:    :+:   //
-//                                                    +:+ +:+         +:+     //
-//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
-//                                                +#+#+#+#+#+   +#+           //
-//   Created: 2025/11/24 10:31:43 by vuljas            #+#    #+#             //
-//   Updated: 2025/11/24 10:31:44 by vuljas           ###   ########.fr       //
-//                                                                            //
-// ************************************************************************** //
-
 #pragma once
 
 #include <iostream>
@@ -50,5 +38,5 @@ class Bureaucrat
 		void executeForm(AForm const & form);
 };
 
-// Overload operator (<<)
+// Overload of the insertion operator (<<)
 std::ostream& operator<<(std::ostream& output, const Bureaucrat& bur);
