@@ -4,10 +4,12 @@
 
 class ScalarConverter
 {
-	public:
+	private:
 		ScalarConverter() = delete;
 		ScalarConverter(const ScalarConverter& other) = delete;
 		ScalarConverter& operator=(const ScalarConverter& other) = delete;
 		~ScalarConverter() = delete;
-		virtual void convert(const std::string& value) = 0;
+
+	public:
+		static void convert(const std::string& literal);
 };
