@@ -11,6 +11,10 @@ void ScalarConverter::convert(const std::string& literal)
 		convertChar(literal, &c_res, &i_res, &d_res, &f_res);
 	else if (isInt(literal))
 		convertInt(literal, &c_res, &i_res, &d_res, &f_res);
+	else if (isDouble(literal))
+		convertDouble(literal, &c_res, &i_res, &d_res, &f_res);
+	else if (isFloat(literal))
+		convertFloat(literal, &c_res, &i_res, &d_res, &f_res);
 	else
 		throw NotValidLiteralException();
 	std::cout << "char: " << c_res
@@ -27,8 +31,7 @@ const char* NotValidLiteralException::what() const noexcept
 
 bool isChar(const std::string& literal)
 {
-	std::cout << "Size: " << literal.size() << "\n";
-	return (literal.size() == 1 && std::isalpha(literal[0]));
+	return (literal.size() == 1 && !std::isdigit(literal[0]));
 }
 
 bool isInt(const std::string& literal)
@@ -107,3 +110,20 @@ void convertInt(const std::string& literal, char *c_res, int *i_res, double *d_r
 	*f_res = static_cast<float>(*i_res);;
 }
 
+void convertDouble(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
+{
+	std::cout << "DOUBLE [ " << literal << " ]\n";
+	*d_res = std::stod(literal, nullptr);
+	*i_res = static_cast<int>(*d_res);
+	*c_res = static_cast<char>(*d_res);
+	*f_res = static_cast<float>(*d_res);;
+}
+
+void convertFloat(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
+{
+	std::cout << "FLOAT [ " << literal << " ]\n";
+	*f_res = std::stof(literal, nullptr);
+	*i_res = static_cast<int>(*f_res);
+	*c_res = static_cast<char>(*f_res);
+	*d_res = static_cast<double>(*f_res);
+}

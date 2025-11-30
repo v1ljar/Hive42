@@ -16,7 +16,6 @@ class ScalarConverter
 
 	public:
 		static void convert(const std::string& literal);
-	
 };
 
 class NotValidLiteralException : public std::exception {
@@ -30,3 +29,5 @@ bool isDouble(const std::string& literal);
 bool isFloat(const std::string& literal);
 void convertChar(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res);
 void convertInt(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res);
+void convertDouble(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res);
+void convertFloat(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res);
