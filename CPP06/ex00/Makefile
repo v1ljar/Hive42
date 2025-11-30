@@ -3,9 +3,9 @@ NAME = convert
 
 CC = c++
 
-FLAGS = -Werror -Wall -Wextra -MMD -MP
+FLAGS = -Werror -Wall -Wextra -MMD -MP -g
 
-SRC = main.cpp #ScalarConverter.cpp
+SRC = main.cpp ScalarConverter.cpp
 
 OBJ = $(SRC:%.cpp=obj/%.o)
 
