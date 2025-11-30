@@ -48,6 +48,5 @@ class AForm
 		void beSigned(const Bureaucrat& bur);
 		virtual void execute(Bureaucrat const & executor) const = 0;
 };
-
 // Overload insertion operator (<<)
 std::ostream& operator<<(std::ostream& output, const AForm& f);

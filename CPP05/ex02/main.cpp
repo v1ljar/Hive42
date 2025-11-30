@@ -1,4 +1,15 @@
-#include <iostream>
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   main.cpp                                           :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/24 10:31:39 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/24 10:31:40 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "Bureaucrat.hpp"
 #include "AForm.hpp"
 #include "ShrubberyCreationForm.hpp"
@@ -58,11 +69,7 @@ int main()
 			std::cerr << "Caught exception: " << e.what() << std::endl;
 		}
 		std::cout << shrubhomeb2 << "\n";
-		try {
-			shrubhomeb2.execute(bur2);
-		} catch(const std::exception& e) {
-			std::cerr << "Caught exception: " << e.what() << std::endl;
-		}
+		bur2.executeForm(shrubhomeb2);
 
 		RobotomyRequestForm robohomeb2("robohomeb2");
 		try {
@@ -132,11 +139,7 @@ int main()
 		} catch (std::exception& e) {
 			std::cerr << "Caught exception: " << e.what() << std::endl;
 		}
-		try {
-			presipardon3.execute(bur3);
-		} catch (std::exception& e) {
-			std::cerr << "Caught exception: " << e.what() << std::endl;
-		}
+		bur3.executeForm(presipardon3);
 	} catch (std::exception &e) {
 		std::cerr << "Caught exception: " << e.what() << std::endl;
 	}

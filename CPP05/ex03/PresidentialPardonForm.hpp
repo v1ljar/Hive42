@@ -6,7 +6,6 @@ class PresidentialPardonForm : public AForm
 {
 	private:
 		const std::string _target;
-
 	public:
 		PresidentialPardonForm() = delete;
 		PresidentialPardonForm(const std::string& target);

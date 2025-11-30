@@ -1,3 +1,15 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   Bureaucrat.cpp                                     :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/24 10:31:47 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/24 10:31:48 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "Bureaucrat.hpp"
 #include <string>
 
@@ -57,6 +69,7 @@ int Bureaucrat::getGrade() const
 	return _grade;
 }
 
+// Member functions
 void Bureaucrat::increment_grade()
 {
 	if (_grade <= 1)

@@ -6,7 +6,6 @@ class RobotomyRequestForm : public AForm
 {
 	private:
 		std::string _target;
-
 	public:
 		RobotomyRequestForm() = delete;
 		RobotomyRequestForm(const std::string& target);

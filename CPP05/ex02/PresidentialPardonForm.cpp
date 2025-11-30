@@ -1,7 +1,20 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   PresidentialPardonForm.cpp                         :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/11/24 10:31:31 by vuljas            #+#    #+#             //
+//   Updated: 2025/11/24 10:31:32 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "PresidentialPardonForm.hpp"
 #include "Bureaucrat.hpp"
 
-PresidentialPardonForm::PresidentialPardonForm(const std::string& target) : AForm("PresidentialPardonForm", 25, 5), _target(target)
+PresidentialPardonForm::PresidentialPardonForm(const std::string& target)
+	: AForm("PresidentialPardonForm", 25, 5), _target(target)
 {
 	std::cout << "PresidentialPardonForm parametrized constructor called.\n\t[ Target: "
 			  << _target
