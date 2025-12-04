@@ -48,11 +48,15 @@ bool isFloat(const std::string& literal)
 	if (literal == "-nanf" || literal == "-inff" || literal == "+inff")
 		return (true);
 
-	size_t	end;
-	float	nbr = std::stof(literal, &end);
-	if (literal[end] != 'f' || end != literal.length() - 1)
+	try {
+		size_t	end;
+		float	nbr = std::stof(literal, &end);
+		if (literal[end] != 'f' || end != literal.length() - 1)
+			return (false);
+		return (nbr >= std::numeric_limits<float>::min() && nbr <= std::numeric_limits<float>::max());
+	} catch (std::exception& e) {
 		return (false);
-	return (nbr >= std::numeric_limits<float>::min() && nbr <= std::numeric_limits<float>::max());
+	}
 }
 
 bool isDouble(const std::string& literal)
