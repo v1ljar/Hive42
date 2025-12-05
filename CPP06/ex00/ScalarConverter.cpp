@@ -17,11 +17,6 @@ void ScalarConverter::convert(const std::string& literal)
 		convertDouble(literal, &c_res, &i_res, &d_res, &f_res);
 	else
 		throw NotValidLiteralException();
-	std::cout << "char: " << c_res
-			  << "\nint: " << i_res
-			  << "\ndouble: " << d_res
-			  << "\nfloat: " << f_res
-			  << std::endl;
 }
 
 const char* NotValidLiteralException::what() const noexcept
@@ -45,7 +40,7 @@ bool isInt(const std::string& literal)
 
 bool isFloat(const std::string& literal)
 {
-	if (literal == "-nanf" || literal == "-inff" || literal == "+inff")
+	if (literal == "nanf" || literal == "-inff" || literal == "+inff")
 		return (true);
 
 	try {
@@ -61,7 +56,7 @@ bool isFloat(const std::string& literal)
 
 bool isDouble(const std::string& literal)
 {
-	if (literal == "-nan" || literal == "-inf" || literal == "+inf")
+	if (literal == "nan" || literal == "-inf" || literal == "+inf")
 		return (true);
 	char*	end;
 	double	nbr = std::strtod(literal.c_str(), &end);
@@ -72,38 +67,73 @@ bool isDouble(const std::string& literal)
 
 void convertChar(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
 {
-	std::cout << "CHAR [ " << literal << " ]\n";
 	*c_res = literal[0];
 	*i_res = static_cast<int>(literal[0]);
 	*d_res = static_cast<double>(literal[0]);
 	*f_res = static_cast<float>(literal[0]);
+	print_res(literal, *c_res, *i_res, *d_res, *f_res, false);
 }
 
 void convertInt(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
 {
-	std::cout << "INT [ " << literal << " ]\n";
 	*i_res = std::stoi(literal, nullptr, 10);
-	*c_res = static_cast<char>(*i_res);
+	if (*i_res >= 0 && *i_res <= 127)
+		*c_res = static_cast<char>(*i_res);
+	else
+		*c_res = '\0';
 	*d_res = static_cast<double>(*i_res);
-	*f_res = static_cast<float>(*i_res);;
+	*f_res = static_cast<float>(*i_res);
+	print_res(literal, *c_res, *i_res, *d_res, *f_res, false);
 }
 
 void convertDouble(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
 {
-	std::cout << "DOUBLE [ " << literal << " ]\n";
+	bool int_impossible = false;
+
+	if (literal == "nan" || literal == "-inf" || literal == "+inf")
+		int_impossible = true;
 	*d_res = std::stod(literal, nullptr);
 	*i_res = static_cast<int>(*d_res);
 	*c_res = static_cast<char>(*d_res);
-	*f_res = static_cast<float>(*d_res);;
+	*f_res = static_cast<float>(*d_res);
+	if (floor(*d_res) == *d_res && *d_res >= 0 && *d_res <= 127)
+		*c_res = static_cast<char>(*d_res);
+	else
+		*c_res = '\0';
+	print_res(literal, *c_res, *i_res, *d_res, *f_res, int_impossible);
 }
 
 void convertFloat(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
 {
-	std::cout << "FLOAT [ " << literal << " ]\n";
-	if (literal == "-nan" || literal == "-inf" || literal == "+inf")
-		return ;
+	bool int_impossible = false;
+
+	if (literal == "nanf" || literal == "-inff" || literal == "+inff")
+		int_impossible = true;
 	*f_res = std::stof(literal, nullptr);
 	*i_res = static_cast<int>(*f_res);
-	*c_res = static_cast<char>(*f_res);
 	*d_res = static_cast<double>(*f_res);
+	if (floor(*f_res) == *f_res && *f_res >= 0 && *f_res <= 127)
+		*c_res = static_cast<char>(*f_res);
+	else
+		*c_res = '\0';
+	print_res(literal, *c_res, *i_res, *d_res, *f_res, int_impossible);
+}
+
+void print_res(const std::string& literal, char c_res, int i_res, double d_res, float f_res, bool int_impossible)
+{
+	std::cout << "char: ";
+	if (c_res == '\0' && literal != "0")
+		std::cout << "impossible";
+	else if (!std::isprint(static_cast<unsigned char>(c_res)))
+		std::cout << "Non displayable";
+	else
+		std::cout << "'" << c_res << "'";
+	std::cout << "\nint: ";
+	if (!int_impossible)
+		std::cout << i_res;
+	else
+		std::cout << "impossible";
+	std::cout << "\nfloat: " << f_res << "f"
+			  << "\ndouble: " << d_res
+			  << std::endl;
 }
