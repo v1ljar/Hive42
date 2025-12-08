@@ -32,4 +32,4 @@ void convertChar(const std::string& literal, char *c_res, int *i_res, double *d_
 void convertInt(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res);
 void convertDouble(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res);
 void convertFloat(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res);
-void print_res(const std::string& literal, char c_res, int i_res, double d_res, float f_res, bool int_impossible);
+void print_res(char c_res, int i_res, double d_res, float f_res, bool int_impossible);

@@ -65,11 +65,12 @@ bool isDouble(const std::string& literal)
 {
 	if (literal == "nan" || literal == "-inf" || literal == "inf" || literal == "+inf")
 		return (true);
+
 	char*	end;
 	double	nbr = std::strtod(literal.c_str(), &end);
 	if (*end != '\0')
 		return (false);
-	return (nbr >= std::numeric_limits<double>::lowest() && nbr <= std::numeric_limits<double>::max());
+	return (nbr >= -std::numeric_limits<double>::max() && nbr <= std::numeric_limits<double>::max());
 }
 
 void convertChar(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
@@ -78,7 +79,7 @@ void convertChar(const std::string& literal, char *c_res, int *i_res, double *d_
 	*i_res = static_cast<int>(literal[0]);
 	*d_res = static_cast<double>(literal[0]);
 	*f_res = static_cast<float>(literal[0]);
-	print_res(literal, *c_res, *i_res, *d_res, *f_res, false);
+	print_res(*c_res, *i_res, *d_res, *f_res, false);
 }
 
 void convertInt(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
@@ -90,7 +91,7 @@ void convertInt(const std::string& literal, char *c_res, int *i_res, double *d_r
 		*c_res = '\0';
 	*d_res = static_cast<double>(*i_res);
 	*f_res = static_cast<float>(*i_res);
-	print_res(literal, *c_res, *i_res, *d_res, *f_res, false);
+	print_res(*c_res, *i_res, *d_res, *f_res, false);
 }
 
 void convertDouble(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
@@ -102,41 +103,47 @@ void convertDouble(const std::string& literal, char *c_res, int *i_res, double *
 	*d_res = std::stod(literal, nullptr);
 	if (*d_res > std::numeric_limits<int>::max() ||
 		*d_res < std::numeric_limits<int>::lowest())
+	{
 		int_impossible = true;
-	*i_res = static_cast<int>(*d_res);
+		*i_res = 0;
+	}
+	else
+		*i_res = static_cast<int>(*d_res);
 	*f_res = static_cast<float>(*d_res);
 	if (floor(*d_res) == *d_res && *d_res >= 0 && *d_res <= 127)
 		*c_res = static_cast<char>(*d_res);
 	else
 		*c_res = '\0';
-	print_res(literal, *c_res, *i_res, *d_res, *f_res, int_impossible);
+	print_res(*c_res, *i_res, *d_res, *f_res, int_impossible);
 }
 
 void convertFloat(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
 {
 	bool int_impossible = false;
-	double val;
 	std::string temp = literal.substr(0, literal.length() - 1);
 
-	val = std::stod(temp, nullptr);
+	*f_res = std::stof(temp, nullptr);
 	if (literal == "nanf" || literal == "-inff" || literal == "inff" || literal == "+inff" ||
-		val > std::numeric_limits<int>::max() || val < std::numeric_limits<int>::lowest()
+		*f_res > std::numeric_limits<int>::max() || *f_res < std::numeric_limits<int>::lowest()
 	)
+	{
 		int_impossible = true;
-	*f_res = static_cast<float>(val);
-	*i_res = static_cast<int>(val);
-	*d_res = val;
+		*i_res = 0;
+	}
+	else
+		*i_res = static_cast<int>(*f_res);
+	*d_res = static_cast<double>(*f_res);
 	if (floor(*f_res) == *f_res && *f_res >= 0 && *f_res <= 127)
 		*c_res = static_cast<char>(*f_res);
 	else
 		*c_res = '\0';
-	print_res(literal, *c_res, *i_res, *d_res, *f_res, int_impossible);
+	print_res(*c_res, *i_res, *d_res, *f_res, int_impossible);
 }
 
-void print_res(const std::string& literal, char c_res, int i_res, double d_res, float f_res, bool int_impossible)
+void print_res(char c_res, int i_res, double d_res, float f_res, bool int_impossible)
 {
 	std::cout << "char: ";
-	if (c_res == '\0' && literal != "0")
+	if (std::isnan(d_res) || std::isinf(d_res) || (c_res == '\0'))
 		std::cout << "impossible";
 	else if (!std::isprint(static_cast<unsigned char>(c_res)))
 		std::cout << "Non displayable";
