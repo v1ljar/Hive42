@@ -5,9 +5,33 @@
 
 int main()
 {
-	Base* og = generate();
+	srand(time(NULL));
+	std::cout << "\t\t----- Generating random object -----\n";
+	std::cout << "\t\t----- [ First object ] -----\n";
+	Base* unos = generate();
 
-	identify(og);
-	identify(*og);
+	identify(unos);
+	identify(*unos);
+	delete unos;
+
+	std::cout << "\n\t\t----- [ Second object ] -----\n";
+	Base* duos = generate();
+
+	identify(duos);
+	identify(*duos);
+	delete duos;
+
+	std::cout << "\n\t\t----- [ Third object ] -----\n";
+	Base* trios = generate();;
+
+	identify(trios);
+	identify(*trios);
+	delete trios;
+
+	std::cout << "\n\t\t----- [ Failing object ] -----\n";
+	Base fail;
+
+	identify(&fail);
+	identify(fail);
 	return (0);
 }

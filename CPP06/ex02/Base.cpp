@@ -8,7 +8,6 @@ Base* generate(void)
 {
 	Base* res;
 	
-	srand(time(NULL));
 	int	randint = rand() % 3 + 1;
 	switch (randint)
 	{
@@ -36,12 +35,33 @@ Base* generate(void)
 
 void identify(Base* p)
 {
-	(void)p;
-	std::cout << "Identify pointer\n";
+	if (dynamic_cast<A*>(p))
+		std::cout << "Pointer identified: A\n";
+	else if (dynamic_cast<B*>(p))
+		std::cout << "Pointer identified: B\n";
+	else if (dynamic_cast<C*>(p))
+		std::cout << "Pointer identified: C\n";
+	else
+		std::cout << "Pointer identified failed: Unknown type\n";
 }
 
 void identify(Base& p)
 {
-	(void)p;
-	std::cout << "Identify reference\n";
+	try {
+		(void)dynamic_cast<A&>(p);
+		std::cout << "Reference identified: A\n";
+		return ;
+	} catch (...) {}
+	try {
+		(void)dynamic_cast<B&>(p);
+		std::cout << "Reference identified: B\n";
+		return ;
+	} catch (...) {}
+	try {
+		(void)dynamic_cast<C&>(p);
+		std::cout << "Reference identified: C\n";
+		return ;
+	} catch (...) {}
+
+	std::cout << "Reference identified failed: Unknown type\n";
 }

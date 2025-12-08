@@ -3,7 +3,7 @@ NAME = convert
 
 CC = c++
 
-FLAGS = -Werror -Wall -Wextra -MMD -MP -g
+FLAGS = -Werror -Wall -Wextra -MMD -MP
 
 SRC = main.cpp ScalarConverter.cpp
 

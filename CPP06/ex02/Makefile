@@ -1,9 +1,9 @@
 
-NAME = serialization
+NAME = type_identification
 
 CC = c++
 
-FLAGS = -Werror -Wall -Wextra -MMD -MP -g
+FLAGS = -Werror -Wall -Wextra -MMD -MP
 
 SRC = main.cpp Base.cpp
 
