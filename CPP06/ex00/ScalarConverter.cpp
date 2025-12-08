@@ -2,10 +2,10 @@
 
 void ScalarConverter::convert(const std::string& literal)
 {
-	static char		c_res;
-	static int		i_res;
-	static double	d_res;
-	static float	f_res;
+	char	c_res;
+	int		i_res;
+	double	d_res;
+	float	f_res;
 
 	if (isChar(literal))
 		convertChar(literal, &c_res, &i_res, &d_res, &f_res);
@@ -35,34 +35,41 @@ bool isInt(const std::string& literal)
 	long nbr = std::strtol(literal.c_str(), &end, 10);
 	if (*end != '\0')
 		return (false);
-	return (nbr >= std::numeric_limits<int>::min() && nbr <= std::numeric_limits<int>::max());
+	return (nbr >= std::numeric_limits<int>::lowest() && nbr <= std::numeric_limits<int>::max());
 }
 
 bool isFloat(const std::string& literal)
 {
-	if (literal == "nanf" || literal == "-inff" || literal == "+inff")
-		return (true);
+	if (literal == "nanf" || literal == "inff" || literal == "+inff" || literal == "-inff")
+		return true;
+
+	if (literal.back() != 'f')
+		return false;
+
+	std::string core = literal.substr(0, literal.length() - 1);
 
 	try {
-		size_t	end;
-		float	nbr = std::stof(literal, &end);
-		if (literal[end] != 'f' || end != literal.length() - 1)
-			return (false);
-		return (nbr >= std::numeric_limits<float>::min() && nbr <= std::numeric_limits<float>::max());
-	} catch (std::exception& e) {
-		return (false);
+		size_t end;
+		std::stof(core, &end);
+		if (end != core.length())
+			return false;
+		return true;
+	}
+	catch (...) {
+		return false;
 	}
 }
 
+
 bool isDouble(const std::string& literal)
 {
-	if (literal == "nan" || literal == "-inf" || literal == "+inf")
+	if (literal == "nan" || literal == "-inf" || literal == "inf" || literal == "+inf")
 		return (true);
 	char*	end;
 	double	nbr = std::strtod(literal.c_str(), &end);
 	if (*end != '\0')
 		return (false);
-	return (nbr >= std::numeric_limits<double>::min() && nbr <= std::numeric_limits<double>::max());
+	return (nbr >= std::numeric_limits<double>::lowest() && nbr <= std::numeric_limits<double>::max());
 }
 
 void convertChar(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
@@ -90,11 +97,13 @@ void convertDouble(const std::string& literal, char *c_res, int *i_res, double *
 {
 	bool int_impossible = false;
 
-	if (literal == "nan" || literal == "-inf" || literal == "+inf")
+	if (literal == "nan" || literal == "-inf" || literal == "inf" || literal == "+inf")
 		int_impossible = true;
 	*d_res = std::stod(literal, nullptr);
+	if (*d_res > std::numeric_limits<int>::max() ||
+		*d_res < std::numeric_limits<int>::lowest())
+		int_impossible = true;
 	*i_res = static_cast<int>(*d_res);
-	*c_res = static_cast<char>(*d_res);
 	*f_res = static_cast<float>(*d_res);
 	if (floor(*d_res) == *d_res && *d_res >= 0 && *d_res <= 127)
 		*c_res = static_cast<char>(*d_res);
@@ -106,12 +115,17 @@ void convertDouble(const std::string& literal, char *c_res, int *i_res, double *
 void convertFloat(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
 {
 	bool int_impossible = false;
+	double val;
+	std::string temp = literal.substr(0, literal.length() - 1);
 
-	if (literal == "nanf" || literal == "-inff" || literal == "+inff")
+	val = std::stod(temp, nullptr);
+	if (literal == "nanf" || literal == "-inff" || literal == "inff" || literal == "+inff" ||
+		val > std::numeric_limits<int>::max() || val < std::numeric_limits<int>::lowest()
+	)
 		int_impossible = true;
-	*f_res = std::stof(literal, nullptr);
-	*i_res = static_cast<int>(*f_res);
-	*d_res = static_cast<double>(*f_res);
+	*f_res = static_cast<float>(val);
+	*i_res = static_cast<int>(val);
+	*d_res = val;
 	if (floor(*f_res) == *f_res && *f_res >= 0 && *f_res <= 127)
 		*c_res = static_cast<char>(*f_res);
 	else
