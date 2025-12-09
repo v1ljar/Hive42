@@ -1,3 +1,15 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   ScalarConverter.cpp                                :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/12/09 11:34:53 by vuljas            #+#    #+#             //
+//   Updated: 2025/12/09 11:34:54 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
+
 #include "ScalarConverter.hpp"
 
 void ScalarConverter::convert(const std::string& literal)
