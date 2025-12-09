@@ -31,11 +31,21 @@ void ScalarConverter::convert(const std::string& literal)
 		throw NotValidLiteralException();
 }
 
+/*
+ *******************
+ ***  Exception  ***
+ *******************
+*/
 const char* NotValidLiteralException::what() const noexcept
 {
 	return ("Literal is not valid!");
 }
 
+/*
+ ***********************
+ ***  Type checkers  ***
+ ***********************
+*/
 bool isChar(const std::string& literal)
 {
 	return (literal.size() == 1 && std::isprint(literal[0]) && !std::isdigit(literal[0]));
@@ -72,7 +82,6 @@ bool isFloat(const std::string& literal)
 	}
 }
 
-
 bool isDouble(const std::string& literal)
 {
 	if (literal == "nan" || literal == "-inf" || literal == "inf" || literal == "+inf")
@@ -85,6 +94,11 @@ bool isDouble(const std::string& literal)
 	return (nbr >= -std::numeric_limits<double>::max() && nbr <= std::numeric_limits<double>::max());
 }
 
+/*
+ ********************
+ ***  Converters  ***
+ ********************
+*/
 void convertChar(const std::string& literal, char *c_res, int *i_res, double *d_res, float *f_res)
 {
 	*c_res = literal[0];
@@ -136,7 +150,7 @@ void convertFloat(const std::string& literal, char *c_res, int *i_res, double *d
 
 	*f_res = std::stof(temp, nullptr);
 	if (literal == "nanf" || literal == "-inff" || literal == "inff" || literal == "+inff" ||
-		*f_res > std::numeric_limits<int>::max() || *f_res < std::numeric_limits<int>::lowest()
+		static_cast<long>(*f_res) > std::numeric_limits<int>::max() || static_cast<long>(*f_res) < std::numeric_limits<int>::lowest()
 	)
 	{
 		int_impossible = true;
@@ -152,6 +166,11 @@ void convertFloat(const std::string& literal, char *c_res, int *i_res, double *d
 	print_res(*c_res, *i_res, *d_res, *f_res, int_impossible);
 }
 
+/*
+ ************************
+ ***  Print function  ***
+ ************************
+*/
 void print_res(char c_res, int i_res, double d_res, float f_res, bool int_impossible)
 {
 	std::cout << "char: ";
