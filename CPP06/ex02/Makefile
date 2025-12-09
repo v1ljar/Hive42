@@ -14,7 +14,7 @@ NAME = type_identification
 
 CC = c++
 
-FLAGS = -Werror -Wall -Wextra -MMD -MP
+FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++17
 
 SRC = main.cpp Base.cpp
 

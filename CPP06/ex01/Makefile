@@ -14,9 +14,9 @@ NAME = serialization
 
 CC = c++
 
-FLAGS = -Werror -Wall -Wextra -MMD -MP -g
+FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++17
 
-SRC = main.cpp Serialization.cpp
+SRC = main.cpp Serializer.cpp
 
 OBJ = $(SRC:%.cpp=obj/%.o)
 

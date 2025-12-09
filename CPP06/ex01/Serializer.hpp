@@ -1,7 +1,7 @@
 // ************************************************************************** //
 //                                                                            //
 //                                                        :::      ::::::::   //
-//   Serialization.hpp                                  :+:      :+:    :+:   //
+//   Serializer.hpp                                  :+:      :+:    :+:   //
 //                                                    +:+ +:+         +:+     //
 //   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
@@ -15,13 +15,13 @@
 #include "Data.hpp"
 #include <iostream>
 
-class Serialization
+class Serializer
 {
 	private:
-		Serialization() = delete;
-		Serialization(const Serialization& other) = delete;
-		Serialization& operator=(const Serialization& other) = delete;
-		~Serialization() = delete;
+		Serializer() = delete;
+		Serializer(const Serializer& other) = delete;
+		Serializer& operator=(const Serializer& other) = delete;
+		~Serializer() = delete;
 	public:
 		static uintptr_t serialize(Data* ptr);
 		static Data* deserialize(uintptr_t raw);
