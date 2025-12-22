@@ -3,7 +3,7 @@ NAME = executable
 
 CC = c++
 
-FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++17 -g
+FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++17
 
 SRC = main.cpp
 

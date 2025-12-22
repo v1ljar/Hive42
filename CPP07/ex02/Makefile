@@ -3,9 +3,9 @@ NAME = array_exe
 
 CC = c++
 
-FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++17 -g
+FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++17 -I.
 
-SRC = main.cpp Array.cpp
+SRC = main.cpp
 
 OBJ = $(SRC:%.cpp=obj/%.o)
 
