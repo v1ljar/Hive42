@@ -1,5 +1,5 @@
 
-NAME = array_exe
+NAME = ex02_executable
 
 CC = c++
 

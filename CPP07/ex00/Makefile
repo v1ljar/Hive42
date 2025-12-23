@@ -1,5 +1,5 @@
 
-NAME = executable
+NAME = ex00_executable
 
 CC = c++
 
