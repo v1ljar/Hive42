@@ -1,20 +1,29 @@
 
 #include "Span.hpp"
-#include <iostream>
 
-int main( void ) {
+int main()
+{
+	srand(time(0));
+	std::cout << "\n--- [ Test1: test from the subject ] ---\n";
 	Span sp = Span(5);
 
-	sp.addNumber(1);
-	sp.addNumber(2);
-	sp.addNumber(3);
-	sp.addNumber(4);
-	sp.addNumber(5);
 	sp.addNumber(6);
-	for (auto i : sp._data)
-	{
-		std::cout << i << " ";
-	}
-	std::cout << "\n" << sp.longestSpan() << std::endl;
+	sp.addNumber(3);
+	sp.addNumber(17);
+	sp.addNumber(9);
+	sp.addNumber(11);
+
+	std::cout << sp.shortestSpan() << std::endl;
+	std::cout << sp.longestSpan() << std::endl;
+
+	std::cout << "\n--- [ Test2: add element to a full array ] ---\n";
+	sp.addNumber(1);
+
+	std::cout << "\n--- [ Test3: array with 10 000 numbers and use addMultipleNumbers to fill it ] ---\n";
+	Span sp2 = Span(10000);
+	sp2.addNumber(-1);
+	sp2.addMultipleNumbers();
+	std::cout << "Shortest span: " << sp2.shortestSpan() << std::endl;
+	std::cout << "Longest span: " << sp2.longestSpan() << std::endl;
 	return 0;
 }
