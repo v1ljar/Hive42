@@ -15,5 +15,6 @@ int main( void ) {
 	{
 		std::cout << i << " ";
 	}
+	std::cout << "\n" << sp.longestSpan() << std::endl;
 	return 0;
 }

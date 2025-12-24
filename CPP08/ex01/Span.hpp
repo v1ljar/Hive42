@@ -3,10 +3,10 @@
 #include <vector>
 #include <stdexcept>
 #include <iostream>
+#include <algorithm>
 
 class Span {
 	private:
-		
 		unsigned int _size;
 		unsigned int _filled;
 
@@ -19,4 +19,5 @@ class Span {
 		~Span() = default;
 
 		void addNumber(unsigned int nbr);
+		int longestSpan();
 };
