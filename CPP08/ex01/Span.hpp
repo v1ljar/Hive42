@@ -11,9 +11,9 @@ class Span {
 	private:
 		unsigned int _size;
 		unsigned int _filled;
+		std::vector<int> _data;
 		
 	public:
-		std::vector<int> _data;
 		Span() = delete;
 		Span(unsigned int nbr);
 		Span(const Span* other) = delete;

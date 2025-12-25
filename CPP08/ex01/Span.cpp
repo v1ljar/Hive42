@@ -1,6 +1,7 @@
 #include "Span.hpp"
 #include <numeric>
 
+// Helper functions
 void check_space(const int _filled, const int _size)
 {
 	if (!(_filled < _size))
@@ -20,9 +21,10 @@ int find_difference(std::vector<int> data) {
 }
 
 int generateRandomNumber() {
-	return (rand() % 10000);
+	return (rand() % 10000 + 1);
 }
 
+// Constructor
 Span::Span(unsigned int nbr) : _size(nbr), _filled(0), _data({}) {}
 
 void Span::addNumber(unsigned int nbr) {
@@ -35,6 +37,7 @@ void Span::addNumber(unsigned int nbr) {
 	_data.insert(_data.begin() + _filled++, nbr);
 }
 
+// Member functions
 int Span::longestSpan() {
 	try {
 		check_elements(_filled);
@@ -62,8 +65,8 @@ void Span::addMultipleNumbers() {
 		return ;
 	}
 	std::cout << "Before adding multiple numbers, data size is: " << data_size << "\n";
-	_data.insert(_data.begin() + data_size, _size, 0);
-	std::fill(_data.begin() + data_size, _data.begin() + _size, rand());
+	_data.insert(_data.begin() + data_size, _size - data_size, 0);
+	std::generate(_data.begin() + data_size, _data.begin() + _size, generateRandomNumber);
 	_filled = _size;
 	std::cout << "After adding multiple numbers, data size is: " << _data.size() << "\n";
 }
