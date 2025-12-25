@@ -1,3 +1,14 @@
+// ************************************************************************** //
+//                                                                            //
+//                                                        :::      ::::::::   //
+//   main.cpp                                           :+:      :+:    :+:   //
+//                                                    +:+ +:+         +:+     //
+//   By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+        //
+//                                                +#+#+#+#+#+   +#+           //
+//   Created: 2025/12/25 15:47:01 by vuljas            #+#    #+#             //
+//   Updated: 2025/12/25 15:47:01 by vuljas           ###   ########.fr       //
+//                                                                            //
+// ************************************************************************** //
 
 #include "iter.hpp"
 #include <iostream>
@@ -41,6 +52,14 @@ int main( void ) {
 	::iter(arr, siz, to_upper);
 	std::cout << "Iterated array: ";
 	::iter(arr, siz, print<char>);
+	std::cout << std::endl;
+
+	std::cout << "\n--- [ Test3: const array and print function ] ---\n";
+	const int array2[] = { 11, 22, 33, 44, 55 };
+	const size_t len2 = 5;
+
+	std::cout << "Const array: ";
+	::iter(array2, len2, print<int>);
 	std::cout << std::endl;
 	return 0;
 }
