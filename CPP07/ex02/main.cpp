@@ -17,7 +17,6 @@ int main(int, char**)
     try
     {
         std::cout << "Value of numbers[-10]:\t" << numbers[-10] << "\n";
-
     }
     catch(const std::exception& e)
     {

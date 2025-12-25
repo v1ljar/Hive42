@@ -13,13 +13,11 @@ class Array{
 
 		Array(unsigned int n) : _data(new T[n]()), _size(n) {}
 
-		Array(const Array& other) : _data(NULL), _size(0)
-		{
+		Array(const Array& other) : _data(NULL), _size(0) {
 			*this = other;
 		}
 
-		Array& operator=(const Array& other)
-		{
+		Array& operator=(const Array& other) {
 			if (this != &other)
 			{
 				delete[] _data;
@@ -31,20 +29,17 @@ class Array{
 			return *this;
 		}
 
-		~Array()
-		{
+		~Array() {
 			delete[] _data;
 		}
 
-		T& operator[](int index)
-		{
+		T& operator[](int index) {
 			if (index < 0 || index >= static_cast<int>(_size))
 				throw std::out_of_range("Index out of bounds");
 			return _data[index];
 		}
 
-		unsigned int size() const
-		{
+		unsigned int size() const {
 			return _size;
 		}
 };
