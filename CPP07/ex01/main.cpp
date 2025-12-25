@@ -19,7 +19,7 @@ void to_upper(char& c) {
 int main( void ) {
 	std::cout << "--- [ Test1: integer array and function to increment the integer by 1 ] ---\n";
 	int array[] = { 'a', 2, 3 };
-	const int len = 3;
+	const size_t len = 3;
 
 	std::cout << "Original array: ";
 	::iter(array, len, print<int>);
@@ -32,7 +32,7 @@ int main( void ) {
 
 	std::cout << "\n--- [ Test2: character array and function toupper ] ---\n";
 	char arr[] = { 'a', 'b' , 'y', 'z'};
-	const int siz = 4;
+	const size_t siz = 4;
 
 	std::cout << "Original array: ";
 	::iter(arr, siz, print<char>);
