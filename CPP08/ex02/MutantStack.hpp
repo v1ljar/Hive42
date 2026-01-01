@@ -1,22 +1,21 @@
 #pragma once
 
+#include <stack>
+#include <iostream>
+
 template <typename T>
-class MutantStack {
-	private:
-		unsigned int _size;
-		unsigned int _filled;
-		
+class MutantStack : public std::stack<T> {
 	public:
-		std::vector<int> _data;
-		MutantStack() = delete;
-		MutantStack(unsigned int nbr);
-		MutantStack(const MutantStack* other) = delete;
-		MutantStack& operator=(const MutantStack* other) = delete;
+		MutantStack() = default;
+		MutantStack(const MutantStack& other) {
+			return *this;
+		};
+		MutantStack& operator=(const MutantStack& other) {
+			if (this != &other) {
+				
+			}
+		};
 		~MutantStack() = default;
 
 		// Member functions
-		void addNumber(unsigned int nbr);
-		int longestSpan();
-		int shortestSpan();
-		void addMultipleNumbers();
 };

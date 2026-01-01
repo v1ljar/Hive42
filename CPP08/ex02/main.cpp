@@ -3,27 +3,33 @@
 
 int main()
 {
-	srand(time(0));
-	std::cout << "\n--- [ Test1: test from the subject ] ---\n";
-	Span sp = Span(5);
+	MutantStack<int> mstack;
 
-	sp.addNumber(6);
-	sp.addNumber(3);
-	sp.addNumber(17);
-	sp.addNumber(9);
-	sp.addNumber(11);
+	mstack.push(5);
+	mstack.push(17);
 
-	std::cout << sp.shortestSpan() << std::endl;
-	std::cout << sp.longestSpan() << std::endl;
+	std::cout << mstack.top() << std::endl;
 
-	std::cout << "\n--- [ Test2: add element to a full array ] ---\n";
-	sp.addNumber(1);
+	mstack.pop();
 
-	std::cout << "\n--- [ Test3: array with 10 000 numbers and use addMultipleNumbers to fill it ] ---\n";
-	Span sp2 = Span(10000);
-	sp2.addNumber(-1);
-	sp2.addMultipleNumbers();
-	std::cout << "Shortest span: " << sp2.shortestSpan() << std::endl;
-	std::cout << "Longest span: " << sp2.longestSpan() << std::endl;
+	std::cout << mstack.size() << std::endl;
+
+	mstack.push(3);
+	mstack.push(5);
+	mstack.push(737);
+	//[...]
+	mstack.push(0);
+
+	// MutantStack<int>::iterator it = mstack.begin();
+	// MutantStack<int>::iterator ite = mstack.end();
+
+	// ++it;
+	// --it;
+	// while (it != ite)
+	// {
+	// 	std::cout << *it << std::endl;
+	// 	++it;
+	// }
+	std::stack<int> s(mstack);
 	return 0;
 }
