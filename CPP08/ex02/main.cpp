@@ -41,7 +41,7 @@ int main()
 	mstack2.push_back(5);
 	mstack2.push_back(17);
 
-	std::cout << mstack2.front() << std::endl;
+	std::cout << mstack2.back() << std::endl;
 
 	mstack2.pop_back();
 
