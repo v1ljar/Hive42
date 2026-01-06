@@ -3,7 +3,7 @@ NAME = btc
 
 CC = c++
 
-FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++17
+FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++20
 
 SRC = main.cpp BitcoinExchange.cpp
 

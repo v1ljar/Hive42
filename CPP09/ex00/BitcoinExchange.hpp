@@ -12,5 +12,5 @@
 
 class BitcoinExchange {
 	public:
-		std::map<time_t, int> _data;
+		std::map<time_t, double> _data;
 };
