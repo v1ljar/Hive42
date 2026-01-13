@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <string>
 #include <chrono>
+#include <iterator>
 
 void check_file_existance(char *input, BitcoinExchange& data);
 bool is_valid_date(std::string date);
@@ -50,14 +51,21 @@ int main(int ac, char **av)
 						double _value = convert_nbr(value);
 						time_t _time = convert_time(date);
 						
-						auto it = data._data.find(_time);
-						if (it == data._data.end()) 
-							it = data._data.lower_bound(_time);
+						auto it = data._data.begin();
+						for (it = data._data.begin(); it != data._data.end(); it++) {
+							if (it == data._data.begin() && it->first > _time)
+								throw std::runtime_error("Error: date is out of scope: " + date + "\n");
+							if (it->first > _time) {
+								if (it != data._data.begin())
+									--it;
+								break;
+							}
+						}
 						if (it != data._data.end()) {
 							std::cout << date << " => " << _value << " = " << _value * it->second << "\n";
 						}
 						else
-							std::cout << "Error: cannot find the value for date: " << _time << "\n";
+							std::cout << "Error: cannot find the value for date: " << date << "\n";
 					} catch (std::exception& e) {
 						std::cout << e.what() << "\n";
 					}
