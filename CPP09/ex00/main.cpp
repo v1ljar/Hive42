@@ -26,6 +26,7 @@ int main(int ac, char **av)
 		data.check_file_existance_fill_data(av[1], data);
 	} catch (std::exception& e) {
 		std::cerr << "Error: " << e.what() << "\n";
+		return (1);
 	}
 
 	std::ifstream infile;
@@ -77,7 +78,7 @@ int main(int ac, char **av)
 			}
 		}
 		else
-			std::cout << "Error: bad input => " << date << "\n"; 
+			std::cerr << "Error: bad input => " << date << "\n"; 
 	}
 	infile.close();
 	return 0;
