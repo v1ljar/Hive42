@@ -14,7 +14,7 @@ NAME = RPN
 
 CC = c++
 
-FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++20 -g
+FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++20
 
 SRC = main.cpp RPN.cpp
 

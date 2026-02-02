@@ -1,4 +1,3 @@
-#include <iostream>
 #include "RPN.hpp"
 
 int main(int ac, char **av) {
@@ -7,22 +6,20 @@ int main(int ac, char **av) {
 		return (1);
 	}
 	RPN master;
+	std::string line(av[1]);
 
-	for (int i = 0; av[1][i] != '\0';) {
-		if (av[1][i + 1] != ' ' && av[1][i + 1] != '\0') {
-			std::cerr << "Error\n";
-			return (2);
-		}
-		master._data.push_back(av[1][i]);
-		if (av[1][i + 1] == '\0')
-			break;
-		else
-			i += 2;
+	try {
+		master.check_argv(line);
+	} catch (std::exception &e) {
+		std::cerr << e.what() << "\n";
+		return (2);
 	}
 
-	for (auto x : master._data) {
-		std::cout << x << " ";
+	try {
+		master.process_data();
+	} catch (std::exception &e) {
+		std::cerr << e.what() << "\n";
+		return (2);
 	}
-	std::cout << "\n";
 	return (0);
 }
