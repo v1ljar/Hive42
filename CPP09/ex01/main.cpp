@@ -16,7 +16,7 @@ int main(int ac, char **av) {
 	}
 
 	try {
-		master.process_data();
+		master.process_data(line);
 	} catch (std::exception &e) {
 		std::cerr << e.what() << "\n";
 		return (2);

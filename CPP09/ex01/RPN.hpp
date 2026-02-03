@@ -1,11 +1,9 @@
 #include <iostream>
-#include <deque>
+#include <stack>
 #include <exception>
 
 class RPN{
 	public:
-		std::deque<char> _data;
-
 		RPN();
 		RPN(const RPN& other);
 		RPN& operator=(const RPN& other);
@@ -13,7 +11,7 @@ class RPN{
 
 	// ------------------- Helper functions
 	void check_argv(std::string &str);
-	void process_data();
+	void process_data(std::string &str);
 	bool is_operator(char c);
 	bool is_nbr(char c);
 	int  do_operation(int fir, int sec, char op);
