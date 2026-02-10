@@ -16,7 +16,7 @@ CC = c++
 
 FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++20
 
-SRC = main.cpp
+SRC = main.cpp PmergeMe.cpp
 
 OBJ = $(SRC:%.cpp=obj/%.o)
 
