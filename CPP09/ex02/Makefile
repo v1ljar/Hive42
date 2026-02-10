@@ -14,7 +14,7 @@ NAME = PmergeMe
 
 CC = c++
 
-FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++20
+FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++20 -g
 
 SRC = main.cpp PmergeMe.cpp
 

@@ -14,11 +14,16 @@ PmergeMe& PmergeMe::operator=(const PmergeMe &other) {
 	return *this;
 }
 
-PmergeMe::~PmergeMe() {
-	_vec.clear();
-	_deq.clear();
+// ---------------------------------------------------- Getters
+const std::vector<int>& PmergeMe::get_vec() const {
+	return (_vec);
 }
 
+const std::deque<int>& PmergeMe::get_deq() const {
+	return (_deq);
+}
+
+// ---------------------------------------------------- Helper functions
 void PmergeMe::check_args_fill(int ac, char **av) {
 	for (int i = 1; i < ac; i++) {
 		std::string str(av[i]);
@@ -35,7 +40,7 @@ void PmergeMe::check_args_fill(int ac, char **av) {
 		long nbr;
 		nbr = std::atol(str.c_str());
 		if (nbr < 0 || nbr > INT_MAX)
-			throw std::runtime_error("Invalid argument: [" + str + "]");
+			throw std::runtime_error("Out of range: [" + str + "]");
 		_vec.push_back(nbr);
 		_deq.push_back(nbr);
 	}
