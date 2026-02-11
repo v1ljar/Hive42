@@ -55,3 +55,20 @@ void PmergeMe::print_before() {
 	}
 	std::cout << "\n";
 }
+
+std::vector<size_t> PmergeMe::buildJacob(size_t n) {
+	std::vector<size_t> result;
+
+	if (n <= 1)
+		return result;
+	size_t i = 1;
+	size_t j = 3;
+	result.push_back(i);
+	while (j < n) {
+		result.push_back(j);
+		size_t next = j + 2 * i;
+		i = j;
+		j = next;
+	}
+	return result;
+}

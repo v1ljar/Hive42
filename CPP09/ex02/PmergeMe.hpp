@@ -25,6 +25,22 @@ class PmergeMe {
 		// ------------- Helper functions
 		void check_args_fill(int ac, char **av);
 		void print_before();
+		std::vector<size_t> buildJacob(size_t n);
+
+		template <typename T>
+		void insertNbr(T &container, int value, size_t high) {
+			size_t low = 0;
+
+			while (low < high) {
+				size_t mid = (low + high) / 2;
+
+				if (container[mid] < value)
+					low = mid + 1;
+				else
+					high = mid;
+			}
+			container.insert(container.begin() + low, value);
+		}
 
 		template <typename T>
 		T fordJohnson(const T& data){
@@ -48,41 +64,38 @@ class PmergeMe {
 				odd_value = data[len - 1];
 
 			T big;
-			for (size_t i = 0; i < pairs.size(); i++) {
+			for (size_t i = 0; i < pairs.size(); i++)
 				big.push_back(pairs[i].second);
-			}
 
 			T main_chain = fordJohnson(big);
 
-			for (size_t i = 0; i < pairs.size(); i++) {
-				int value = pairs[i].first;
-				size_t low = 0;
-				size_t high = main_chain.size();
-
-				while (low < high) {
-					size_t mid = (low + high) / 2;
-
-					if (main_chain[mid] < value)
-						low = mid + 1;
-					else
-						high = mid;
-				}
-				main_chain.insert(main_chain.begin() + low, value);
+			if (!pairs.empty()) {
+				size_t pos = std::lower_bound(main_chain.begin(), main_chain.end(), pairs[0].second) - main_chain.begin();
+				insertNbr(main_chain, pairs[0].first, pos);
 			}
-			if (has_odd) {
-				size_t low = 0;
-				size_t high = main_chain.size();
 
-				while (low < high) {
-					size_t mid = (low + high) / 2;
-
-					if (main_chain[mid] < odd_value)
-						low = mid + 1;
-					else
-						high = mid;
+			std::vector<size_t> jac_seq = buildJacob(pairs.size());
+			size_t inserted = 1;
+			for (size_t i = 0; i < jac_seq.size(); i++) {
+				size_t jacob = jac_seq[i];
+				if (jacob > pairs.size())
+					jacob = pairs.size();
+				for (size_t j = jacob; j > inserted; j--) {
+					size_t index = j - 1;
+					int value = pairs[index].first;
+					int big_brother = pairs[index].second;
+					size_t pos = std::lower_bound(main_chain.begin(), main_chain.end(), big_brother) - main_chain.begin();
+					insertNbr(main_chain, value, pos);
 				}
-				main_chain.insert(main_chain.begin() + low, odd_value);
+				inserted = jacob;
 			}
+
+			for (size_t i = inserted; i < pairs.size(); i++) {
+				size_t pos = std::lower_bound(main_chain.begin(), main_chain.end(), pairs[i].second) - main_chain.begin();
+				insertNbr(main_chain, pairs[i].first, pos);
+			}
+			if (has_odd)
+				insertNbr(main_chain, odd_value, main_chain.size());
 			return main_chain;
 		}
 };
