@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: vuljas <vuljas@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/01/31 14:26:22 by vuljas            #+#    #+#              #
-#    Updated: 2026/01/31 14:26:45 by vuljas           ###   ########.fr        #
+#    Created: 2026/02/12 10:39:01 by vuljas            #+#    #+#              #
+#    Updated: 2026/02/12 10:39:04 by vuljas           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -14,7 +14,7 @@ NAME = PmergeMe
 
 CC = c++
 
-FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++20 -g
+FLAGS = -Werror -Wall -Wextra -MMD -MP -std=c++20
 
 SRC = main.cpp PmergeMe.cpp
 
