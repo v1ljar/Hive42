@@ -18,10 +18,8 @@
 #include <filesystem>
 #include <map>
 #include <ctime>
-#include <iomanip>
-#include <string>
-#include <chrono>
 #include <iterator>
+#include <climits>
 
 class BitcoinExchange {
 	public:

@@ -12,8 +12,6 @@
 
 #include "BitcoinExchange.hpp"
 
-
-
 int main(int ac, char **av)
 {
 	BitcoinExchange data;
@@ -41,6 +39,11 @@ int main(int ac, char **av)
 	std::string delimiter;
 
 	std::getline(infile, line);
+	if (line != "date | value") {
+		infile.close();
+		std::cerr << "Error: infile must start with line: `date | value`\n";
+		return (2);
+	}
 	while (std::getline(infile, line)) {
 		std::istringstream ss(line);
 		getline(ss, date, ' ');
@@ -57,20 +60,15 @@ int main(int ac, char **av)
 						double _value = data.convert_nbr(value, true);
 						time_t _time = data.convert_time(date);
 						
-						auto it = data._data.begin();
-						for (it = data._data.begin(); it != data._data.end(); it++) {
-							if (it == data._data.begin() && it->first > _time)
+						auto it = data._data.lower_bound(_time);
+						if (it == data._data.end())
+							--it;
+						else if (it->first != _time) {
+							if (it == data._data.begin())
 								throw std::runtime_error("Error: date is out of scope: " + date);
-							if (it->first > _time) {
-								if (it != data._data.begin())
-									--it;
-								break;
-							}
+							--it;
 						}
-						if (it != data._data.end())
-							std::cout << date << " => " << _value << " = " << _value * it->second << "\n";
-						else
-							std::cerr << "Error: cannot find the value for date: " << date << "\n";
+						std::cout << date << " => " << _value << " = " << _value * it->second << "\n";
 					} catch (std::exception& e) {
 						std::cerr << e.what() << "\n";
 					}
