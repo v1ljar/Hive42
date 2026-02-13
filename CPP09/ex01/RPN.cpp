@@ -33,7 +33,7 @@ void RPN::check_argv(std::string &str) {
 	for (i = 0; i < str.length(); i++) {
 		if (str[i] == ' ')
 			continue;
-		if (!is_nbr(str[i]) && !is_operator(str[i]))
+		if (!std::isdigit(str[i]) && !is_operator(str[i]))
 			throw std::runtime_error("Error");
 		if (str[i + 1] == '\0')
 			break;
@@ -51,7 +51,7 @@ void RPN::process_data(std::string &str) {
 	for (i = 0; i < str.length(); i++) {
 		char c = str[i];
 
-		if (is_nbr(c)) {
+		if (std::isdigit(c)) {
 			stack.push(c - '0');
 		}
 		else if (is_operator(c)) {
@@ -79,24 +79,24 @@ bool RPN::is_operator(char c) {
 	return (false);
 }
 
-bool RPN::is_nbr(char c) {
-	std::string str = "0123456789";
-	size_t found = str.find(c);
-	if (found != std::string::npos)
-		return (true);
-	return (false);
-}
-
 int RPN::do_operation(int fir, int sec, char op) {
+	long long result;
+
+	result = fir;
 	if (op == '+')
-		return (fir + sec);
+		result = (long long)fir + sec;
 	else if (op == '-')
-		return (fir - sec);
+		result = (long long)fir - sec;
 	else if (op == '*')
-		return (fir * sec);
+		result = (long long)fir * sec;
 	else {
 		if (sec == 0)
 			throw std::runtime_error("Error");
-		return (fir / sec);
+		if (fir == INT_MIN && sec == -1)
+			throw std::runtime_error("Error: overflow");
+		result = (long long)fir / sec;
 	}
+	if (result < INT_MIN || result > INT_MAX )
+		throw std::runtime_error("Error: overflow");
+	return (int)result;
 }

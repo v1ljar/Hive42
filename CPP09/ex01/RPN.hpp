@@ -13,6 +13,7 @@
 #include <iostream>
 #include <stack>
 #include <exception>
+#include <climits>
 
 class RPN{
 	public:
@@ -25,6 +26,5 @@ class RPN{
 	void check_argv(std::string &str);
 	void process_data(std::string &str);
 	bool is_operator(char c);
-	bool is_nbr(char c);
 	int  do_operation(int fir, int sec, char op);
 };
