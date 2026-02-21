@@ -1,0 +1,6 @@
+Find out the penultimate stable version of Alpine Linux (the stable version right before the current latest): Alpine Linux 3.22.3
+
+Download (-standard- *.iso *.asc *.sha256 *.sha512) from https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/x86_64/
+
+Alpine Linux setup guide
+https://itsfoss.com/alpine-linux-virtualbox/
