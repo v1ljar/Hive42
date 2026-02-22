@@ -1,0 +1,28 @@
+CONNECTING TO DATABASE AND SHOWING CONTENT
+
+docker exec -it mariadb mariadb -u root -p
+
+show databases;
+
+use wordpress;
+
+show tables;
+ 
+select comment_content from wp_comments;
+
+LOGGING TO WORDPRESS
+url/wp-admin
+url/wp-login.php
+
+DEMONSTRATING CONNECTIONS AND CERTIFICATE
+curl -I http://vuljas.42.fr --insecure
+curl -I https://vuljas.42.fr --insecure
+
+openssl s_client -connect localhost:443 -servername vuljas.42.fr </dev/null | head -n 20
+
+
+CONNECTING TO VM FROM HOST
+ssh -p 3022 user42@127.0.0.1 
+
+COYING FILES FROM HOST TO VM
+scp -r -P 3022 inception vuljas@127.0.0.1:/home/vuljas/shared/
