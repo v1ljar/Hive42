@@ -141,7 +141,7 @@ AI (ChatGPT) was used to explain different concepts, so I would understand them 
 
 A Project description [ section must also explain the use of Docker and the sources included in the project. It must indicate the main design choices, as well as a comparison between:
 	◦ Virtual Machines vs Docker ◦ Secrets vs Environment Variables ◦ Docker Network vs Host Network ◦ Docker Volumes vs Bind Mounts ]
-	Docker is used in this project because it lightweight to host web server and persistantly store data of the website. Docker offers everything that is needed: containers to run processes(mariadb, wordpress, nginx), network(so containers can share data) and volumes(so containers have storage for data).
+	Docker is used in this project because it lightweight, we can set up and run multiple containers to host web server, persistantly store data of the website and containers have internal network to communicate. Docker offers everything that is needed: containers to run processes(mariadb, wordpress, nginx), network(so containers can share data) and volumes(so containers have storage for data).
 
 	**Virtual Machines vs Docker**
 						DOCKER								|					Virtual Machine
