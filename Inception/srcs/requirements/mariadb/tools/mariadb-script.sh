@@ -39,8 +39,8 @@ else
     echo "[MariaDB] Database already initialized."
 fi
 
-sed -i '/^[[:space:]]*skip-networking[[:space:]]*$/d' /etc/my.cnf.d/mariadb-server.cnf
-sed -i 's/^[[:space:]]*bind-address[[:space:]]*=.*/bind-address = 0.0.0.0/' /etc/my.cnf.d/mariadb-server.cnf
+sed -i '/^[[:space:]]*skip-networking[[:space:]]*$/d' /etc/my.conf.d/mariadb-server.conf
+sed -i 's/^[[:space:]]*bind-address[[:space:]]*=.*/bind-address = 0.0.0.0/' /etc/my.conf.d/mariadb-server.conf
 
 echo "[MariaDB] Starting main server..."
 exec mariadbd-safe

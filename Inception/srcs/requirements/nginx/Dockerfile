@@ -13,7 +13,7 @@ RUN openssl req -x509 -nodes \
 
 RUN adduser -D -H -s /sbin/nologin -g www-data -G www-data www-data
 
-COPY conf/nginx.cnf /etc/nginx/nginx.cnf
-RUN chmod 644 /etc/nginx/nginx.cnf
+COPY conf/nginx.conf /etc/nginx/nginx.conf
+RUN chmod 644 /etc/nginx/nginx.conf
 
-CMD ["nginx", "-c", "/etc/nginx/nginx.cnf", "-g", "daemon off;"]
+CMD ["nginx", "-c", "/etc/nginx/nginx.conf", "-g", "daemon off;"]

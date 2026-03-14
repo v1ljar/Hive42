@@ -110,13 +110,13 @@
 				├── mariadb
 				│   ├── Dockerfile
 				│   ├── conf
-				│   │   └── mariadb.cnf
+				│   │   └── mariadb.conf
 				│   └── tools
 				│       └── mariadb-script.sh
 				├── nginx
 				│   ├── Dockerfile
 				│   └── conf
-				│       └── nginx.cnf
+				│       └── nginx.conf
 				└── wordpress
 					├── Dockerfile
 					├── conf
