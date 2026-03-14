@@ -6,9 +6,9 @@
 	The goal of the Inception project is to build a small containerized web infrastructure using Docker.
 	Project is done inside a Virtual Machine, where three containers are orchestrated using Docker Compose to run a blogging webpage.
 	Three main services:
-		- MariaDB - database used by WordPress
-		- WordPress - content management system (CMS) based on PHP and MySQL
-		- Nginx - web server handling HTTPS connections
+		◦ MariaDB - database used by WordPress
+		◦ WordPress - content management system (CMS) based on PHP and MySQL
+		◦ Nginx - web server handling HTTPS connections
 
 	Each service runs in its own container, communicates through Docker network and data is stored using Docker volumes.
 
@@ -18,84 +18,84 @@
 
 ## Instructions
 ### Virtual Machine Setup
-	- This project was done in VM and I chose alpine-standard-3.23.3-x86_64 ISO image to set up the VM with Oracle VirtualBox.
-	- To create a new VM, in Oracle VirtualBox click on New, then fill the fields:
-	- Name: Alpine Linux [ the name of VM ]
-	- Folder: S:\ [ VM files destination ]
-	- ISO Image: C:\alpine-standard-3.23.3-x86_64.iso [ base image of VM ]
-	- Base Memory: 2048 [ specify the amount of RAM for VM ]
-	- Processors: 2 [ specify the amount of CPUs for VM ]
-	- Hard Disk Size: 15.00GB [ specify the size of memory for VM ]
-	- Click Next, it shows the overview, click Finish.
+	◦ This project was done in VM and I chose alpine-standard-3.23.3-x86_64 ISO image to set up the VM with Oracle VirtualBox.
+	◦ To create a new VM, in Oracle VirtualBox click on New, then fill the fields:
+		- Name: Alpine Linux [ the name of VM ]
+		- Folder: S:\ [ VM files destination ]
+		- ISO Image: C:\alpine-standard-3.23.3-x86_64.iso [ base image of VM ]
+		- Base Memory: 2048 [ specify the amount of RAM for VM ]
+		- Processors: 2 [ specify the amount of CPUs for VM ]
+		- Hard Disk Size: 15.00GB [ specify the size of memory for VM ]
+		- Click Next, it shows the overview, click Finish.
 
-	- Right-Click on VM name in Oracle, choose Settings.
+	◦ Right-Click on VM name in Oracle, choose Settings.
 		- Display tab and put the display memory to max (128 MB).
 		- Click OK to save the settings.
 
 ### Alpine Linux Installation
-	- Start the VM by double-clicking on its name. [ Alpine installation is text-based ]
-	- When the machine starts, you will be prompted to log in. Just type root and enter.
-	- To start the installer, enter: setup-alpine
-	- You need to select the keyboard layout. Here, I have chosen “us”.
-	- Enter a hostname of your choice. The default was localhost.
-	- Enter the network interface selection. I press Enter to select default.
-	- It now asks to set the IP. I press Enter to select default.
-	- It asks you if you want to continue manual network configuration? n
-	- Set up root password and retype it.
-	- Select the timezone. Europe\ Helsinki
-	- HTTP proxy settings? I press Enter to select default.
-	- Select which NTP client to run. I press Enter to select default.
-	- Enter mirror number or URL: f
-	- Set up a new user and password.
-	- Set up SSH related settings. I press Enter to select default.
-	- Select disk to use. sda
-	- It asks you to enter How to use it? sys
-	- It asks to erase the disk and continue? y
-	- Power off the VM, execute command poweroff
+	◦ Start the VM by double-clicking on its name. [ Alpine installation is text-based ]
+	◦ When the machine starts, you will be prompted to log in. Just type root and enter.
+	◦ To start the installer, enter: setup-alpine
+	◦ You need to select the keyboard layout. Here, I have chosen “us”.
+	◦ Enter a hostname of your choice. The default was localhost.
+	◦ Enter the network interface selection. I press Enter to select default.
+	◦ It now asks to set the IP. I press Enter to select default.
+	◦ It asks you if you want to continue manual network configuration? n
+	◦ Set up root password and retype it.
+	◦ Select the timezone. Europe\ Helsinki
+	◦ HTTP proxy settings? I press Enter to select default.
+	◦ Select which NTP client to run. I press Enter to select default.
+	◦ Enter mirror number or URL: f
+	◦ Set up a new user and password.
+	◦ Set up SSH related settings. I press Enter to select default.
+	◦ Select disk to use. sda
+	◦ It asks you to enter How to use it? sys
+	◦ It asks to erase the disk and continue? y
+	◦ Power off the VM, execute command poweroff
 
 	Open the VM Settings -> Storage -> Controller:IDE -> Erase the ISO image
 
 ### Desktop Environment Setup
-	- Start the VM again [ to set up a minimal Xfce desktop and LightDM display manager ]
-	- To edit textfiles, we install nano: apk nano
-	- Make sure that the default user is added to wheel group : adduser <username> wheel
-	- Make sure the wheel group has its privileges /etc/doas.d/doas.conf [permit persist :wheel]
-	- Enable community repositories: nano /etc/apk/repositories -> Uncomment line */community
-	- Make sure that you have xorg-base set up: setup-xorg-base
-	- Install the Xfce and related packages
+	◦ Start the VM again [ to set up a minimal Xfce desktop and LightDM display manager ]
+	◦ To edit textfiles, we install nano: apk nano
+	◦ Make sure that the default user is added to wheel group : adduser <username> wheel
+	◦ Make sure the wheel group has its privileges /etc/doas.d/doas.conf [permit persist :wheel]
+	◦ Enable community repositories: nano /etc/apk/repositories -> Uncomment line */community
+	◦ Make sure that you have xorg-base set up: setup-xorg-base
+	◦ Install the Xfce and related packages
 		- apk add xfce4 xfce4-terminal xfce4-screensaver lightdm-gtk-greeter dbus
-	- Start the dbus (desktop bus) service: rc-service dbus start
-	- Enable dbus to start on boot: rc-update add dbus
-	- Enable udev service: setup-devd udev
-	- Now start the LightDM using: rc-service lightdm start
-	- LightDM GUI starts -> Log in as root -> Open terminal
-	- Make lightdm to start on boot: rc-update add lightdm
-	- Allow Users to shut down and reboot: apk add elogind polkit-elogind
-	- Now, poweroff the system: poweroff
+	◦ Start the dbus (desktop bus) service: rc-service dbus start
+	◦ Enable dbus to start on boot: rc-update add dbus
+	◦ Enable udev service: setup-devd udev
+	◦ Now start the LightDM using: rc-service lightdm start
+	◦ LightDM GUI starts -> Log in as root -> Open terminal
+	◦ Make lightdm to start on boot: rc-update add lightdm
+	◦ Allow Users to shut down and reboot: apk add elogind polkit-elogind
+	◦ Now, poweroff the system: poweroff
 
 ### SSH Setup
-	- Open VM settings -> Network -> Port Forwarding:
+	◦ Open VM settings -> Network -> Port Forwarding:
 		- Name: SSH | Protocol: TCP | Host Port: 3022 | Guest Port: 22
-	- Start the VM.
+	◦ Start the VM.
 		- Install the OpenSSH package: apk add openssh
 		- Enable the sshd service to get started at boot time: rc-update add sshd
 		- Start the sshd service on Alpine Linux: service sshd start
 		- Now you can SSH from host machine: ssh <user>@localhost -p 3022
 
 ### Docker Installation
-	- Install Docker and Docker Compose v2:
-	- doas apk add docker docker-cli-compose
-	- Allow Docker access for your user: addgroup <USER> docker
+	◦ Install Docker and Docker Compose v2:
+	◦ doas apk add docker docker-cli-compose
+	◦ Allow Docker access for your user: addgroup <USER> docker
 
 ### Configure Domain Name
-	- Configure domain name so it points to the local IP address:
-	- echo "127.0.0.1 vuljas.42.fr" >> /etc/hosts
+	◦ Configure domain name so it points to the local IP address:
+		- echo "127.0.0.1 vuljas.42.fr" >> /etc/hosts
 
 ### Project Structure
-	- Install doas (so user can call "sudo" commands): apk add doas
-	- Reboot VM and log in to the user account.
-	- Create project repository: mkdir Inception
-	- Create required files:
+	◦ Install doas (so user can call "sudo" commands): apk add doas
+	◦ Reboot VM and log in to the user account.
+	◦ Create project repository: mkdir Inception
+	◦ Create required files:
 		cd Inception
 		.
 		├── Makefile
@@ -125,13 +125,13 @@
 						└── wordpress-script.sh
 
 ### Execution
-	- Run the orchestrated docker-compose file: make
-	- Stop containers without deleting images: make down
-	- Start containers without building new images: make up
-	- Just build docker images: make images
-	- Remove containers, images and volumes: make clean
-	- Clean up everything: make fclean
-	- Clear up everything, build and launch: make re
+	◦ Run the orchestrated docker-compose file: make
+	◦ Stop containers without deleting images: make down
+	◦ Start containers without building new images: make up
+	◦ Just build docker images: make images
+	◦ Remove containers, images and volumes: make clean
+	◦ Clean up everything: make fclean
+	◦ Clear up everything, build and launch: make re
 
 														* * *
 
