@@ -14,8 +14,8 @@ The project also includes documentation files (README.md, DEV_DOC.md, USER_DOC.m
 
 ## Instructions
 ### Virtual Machine Setup
-This project was done in VM and I chose alpine-standard-3.23.3-x86_64 ISO image to set up the VM with Oracle VirtualBox.
-To create a new VM, in Oracle VirtualBox click on New, then fill the fields:
+	- This project was done in VM and I chose alpine-standard-3.23.3-x86_64 ISO image to set up the VM with Oracle VirtualBox.
+	- To create a new VM, in Oracle VirtualBox click on New, then fill the fields:
 	- Name: Alpine Linux [ the name of VM ]
 	- Folder: S:\ [ VM files destination ]
 	- ISO Image: C:\alpine-standard-3.23.3-x86_64.iso [ base image of VM ]
@@ -29,7 +29,7 @@ Right-Click on VM name in Oracle, choose Settings.
 	- Click OK to save the settings.
 
 ### Alpine Linux Installation
-Start the VM by double-clicking on its name. [ Alpine installation is text-based ]
+	- Start the VM by double-clicking on its name. [ Alpine installation is text-based ]
 	- When the machine starts, you will be prompted to log in. Just type root and enter.
 	- To start the installer, enter: setup-alpine
 	- You need to select the keyboard layout. Here, I have chosen “us”.
@@ -52,7 +52,7 @@ Start the VM by double-clicking on its name. [ Alpine installation is text-based
 Open the VM Settings -> Storage -> Controller:IDE -> Erase the ISO image
 
 ### Desktop Environment Setup
-Start the VM again [ to set up a minimal Xfce desktop and LightDM display manager ]
+	- Start the VM again [ to set up a minimal Xfce desktop and LightDM display manager ]
 	- To edit textfiles, we install nano: apk nano
 	- Make sure that the default user is added to wheel group : adduser <username> wheel
 	- Make sure the wheel group has its privileges /etc/doas.d/doas.conf [permit persist :wheel]
@@ -70,7 +70,7 @@ Start the VM again [ to set up a minimal Xfce desktop and LightDM display manage
 	- Now, poweroff the system: poweroff
 
 ### SSH Setup
-Set up the SSH:
+	- Set up the SSH:
 	- Open VM settings -> Network -> Port Forwarding:
 		- Name: SSH | Protocol: TCP | Host Port: 3022 | Guest Port: 22
 	- Start the VM.
@@ -80,17 +80,17 @@ Set up the SSH:
 		- Now you can SSH from host machine: ssh <user>@localhost -p 3022
 
 ### Docker Installation
-Install Docker and Docker Compose v2:
+	- Install Docker and Docker Compose v2:
 	- doas apk add docker docker-cli-compose
 	- Allow Docker access for your user: addgroup <USER> docker
 
 ### Configure Domain Name
-Configure domain name so it points to the local IP address:
+	- Configure domain name so it points to the local IP address:
 	- echo "127.0.0.1 vuljas.42.fr" >> /etc/hosts
 
 ### Project Structure
-Install doas (so user can call "sudo" commands): apk add doas
-Reboot VM and log in to the user account.
+	- Install doas (so user can call "sudo" commands): apk add doas
+	- Reboot VM and log in to the user account.
 	- Create project repository: mkdir Inception
 	- Create required files:
 		cd Inception
@@ -163,7 +163,7 @@ AI (ChatGPT) was used to explain different concepts, so I would understand them 
 	◦ Docker Volumes were used to ensure persistent storage of database data and WordPress files even when recreating containers.
 
 ### Virtual Machines vs Docker
-						DOCKER								|					Virtual Machine
+						DOCKER								|					VIRTUAL MACHINE
 	◦ It boots in a few seconds.							|	◦ It takes a few minutes for VMs to boot.
 	◦ Pre-built docker containers are readily available.	|	◦ Ready-made VMs are challenging to find.
 	◦ Docker has a complex usage mechanism consisting		|	◦ Tools are easy to use and more straightforward to 
@@ -190,13 +190,18 @@ AI (ChatGPT) was used to explain different concepts, so I would understand them 
 	◦ Environment Variables are not encrypted				|	◦ Avoid exposing sensitive data
 
 ### Docker Network vs Host Network
-	◦ Docker Network - In Docker, the bridge network is the default mode. A bridge network is a private internal network that allows containers on the same host to communicate. How it works:
+	◦ Docker Network - the bridge network is the default mode in Docker.
+	A bridge network is a private internal network that allows containers on the same host to communicate. How it works:
 		- The Docker daemon creates a virtual bridge (e.g., docker0) on the host.
 		- Each container is assigned a virtual Ethernet interface (veth) that connects to the bridge.
 		- Containers can communicate with each other via their assigned IPs on the bridge network.
 		- The bridge uses Network Address Translation (NAT) to allow external communication.
 
-	◦ Host Network - Host networking removes network isolation and allows a container to share the host’s network stack. This mode improves performance but reduces security and flexibility. Additionally, the container does not receive a separate IP address and instead shares the host’s IP. This networking method is useful for performance-sensitive applications but is not ideal for applications requiring isolation.
+	◦ Host Network
+		- Host networking removes network isolation and allows a container to share the host’s network stack.
+		- Improves performance but reduces security and flexibility.
+		- Additionally, the container does not receive a separate IP address and instead shares the host’s IP.
+		- This networking method is useful for performance-sensitive applications but is not ideal for applications requiring isolation.
 
 ### Docker Volumes vs Bind Mounts
 	Docker volume and Bind mount are the docker components. Using bind mounts, you may mount a file or directory from your host computer onto your container and access it using its absolute path. Because Docker does everything independently, it is not dependent on the host computer's operating system or your directory structure. The Docker CLI commands or the Docker API may be used to manage Docker Volumes. It is safer to share quantities among many containers. The host computer's absolute path to the file or directory serves as a point of reference. Conversely, when a volume is used, Docker makes a new directory in the host machine's storage directory and keeps it updated.
@@ -208,5 +213,5 @@ AI (ChatGPT) was used to explain different concepts, so I would understand them 
 	◦ Docker volumes may be interacted with using CLIs		|	◦ Bind mounts cannot be accessed by CLI commands. May
 		and APIs.											|		still work instantly with them on the host system.
 	◦ All you need is the volume name to mount it.			|	◦ When using bind mounts for mounting, a route to the 
-	◦ Env vars are not encrypted							|	host computer must be supplied. 
+															|		host computer must be supplied. 
 	◦ In /var/lib/docker/volumes, the volumes are stored.	|	◦ On the host, a bind mount can be located anywhere.
