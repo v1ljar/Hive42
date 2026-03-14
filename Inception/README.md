@@ -3,13 +3,16 @@
 														* * *
 
 ## Description
-The goal of the Inception project is to build a small containerized web infrastructure using Docker. Project is done inside a Virtual Machine, where three containers are orchestrated using Docker Compose to run a blogging webpage. Three main services:
-	- MariaDB - database used by WordPress
-	- WordPress - content management system (CMS) based on PHP and MySQL
-	- Nginx - web server handling HTTPS connections
+	The goal of the Inception project is to build a small containerized web infrastructure using Docker.
+	Project is done inside a Virtual Machine, where three containers are orchestrated using Docker Compose to run a blogging webpage.
+	Three main services:
+		- MariaDB - database used by WordPress
+		- WordPress - content management system (CMS) based on PHP and MySQL
+		- Nginx - web server handling HTTPS connections
 
-Each service runs in its own container, communicates through Docker network and data is stored using Docker volumes.
-The project also includes documentation files (README.md, DEV_DOC.md, USER_DOC.md) that describe the architecture, development process and instructions for managing the containers.
+	Each service runs in its own container, communicates through Docker network and data is stored using Docker volumes.
+
+	The project also includes documentation files (README.md, DEV_DOC.md, USER_DOC.md) that describe the architecture, development process and instructions for managing the containers.
 
 														* * *
 
@@ -25,9 +28,9 @@ The project also includes documentation files (README.md, DEV_DOC.md, USER_DOC.m
 	- Hard Disk Size: 15.00GB [ specify the size of memory for VM ]
 	- Click Next, it shows the overview, click Finish.
 
-Right-Click on VM name in Oracle, choose Settings.
-	- Display tab and put the display memory to max (128 MB).
-	- Click OK to save the settings.
+	- Right-Click on VM name in Oracle, choose Settings.
+		- Display tab and put the display memory to max (128 MB).
+		- Click OK to save the settings.
 
 ### Alpine Linux Installation
 	- Start the VM by double-clicking on its name. [ Alpine installation is text-based ]
@@ -50,7 +53,7 @@ Right-Click on VM name in Oracle, choose Settings.
 	- It asks to erase the disk and continue? y
 	- Power off the VM, execute command poweroff
 
-Open the VM Settings -> Storage -> Controller:IDE -> Erase the ISO image
+	Open the VM Settings -> Storage -> Controller:IDE -> Erase the ISO image
 
 ### Desktop Environment Setup
 	- Start the VM again [ to set up a minimal Xfce desktop and LightDM display manager ]
@@ -133,25 +136,25 @@ Open the VM Settings -> Storage -> Controller:IDE -> Erase the ISO image
 														* * *
 
 ## Resources
-◦ [Alpine Linux setup guide](https://itsfoss.com/alpine-linux-virtualbox/)
-◦ [SSH connection setup](https://www.geeksforgeeks.org/installation-guide/how-to-install-openssh-on-alpine/)
-◦ [VirtualBox shared folders](https://wiki.alpinelinux.org/wiki/VirtualBox_shared_folders)
-◦ [Install Docker and Docker Compose](https://virtualzone.de/posts/alpine-docker-rootless/)
-◦ [Docker Compose](https://docs.docker.com/compose/intro/compose-application-model/)
-◦ [Dockerfile](https://docs.docker.com/build/concepts/dockerfile/)
-◦ [Dockerfile Best Practices](https://docs.docker.com/build/building/best-practices/)
-◦ [Mariadb](https://hub.docker.com/_/mariadb)
-◦ [Wordpress](https://hub.docker.com/_/wordpress)
-◦ [Nginx](https://hub.docker.com/_/nginx)
-◦ [Wordpress with docker compose](https://www.linode.com/docs/guides/wordpress-with-docker-compose/)
-◦ [Explaining Docker Networking Concepts](https://ostechnix.com/explaining-docker-networking-concepts/)
-◦ [WordPress Deployment with NGINX, PHP-FPM and MariaDB using Docker Compose](https://medium.com/swlh/wordpress-deployment-with-nginx-php-fpm-and-mariadb-using-docker-compose-55f59e5c1a)
-◦ [Virtual Machines vs Docker](https://www.geeksforgeeks.org/devops/difference-between-docker-and-virtualization/)
-◦ [Secrets](https://docs.docker.com/engine/swarm/secrets/)
-◦ [Secrets Handling](https://medium.com/@jagadeeshkema/docker-secrets-environment-variables-handling-sensitive-data-the-right-way-0eacb628b7d9)
-◦ [Docker Networks](https://bunny.net/academy/computing/what-is-docker-networking/)
+	◦ [Alpine Linux setup guide](https://itsfoss.com/alpine-linux-virtualbox/)
+	◦ [SSH connection setup](https://www.geeksforgeeks.org/installation-guide/how-to-install-openssh-on-alpine/)
+	◦ [VirtualBox shared folders](https://wiki.alpinelinux.org/wiki/VirtualBox_shared_folders)
+	◦ [Install Docker and Docker Compose](https://virtualzone.de/posts/alpine-docker-rootless/)
+	◦ [Docker Compose](https://docs.docker.com/compose/intro/compose-application-model/)
+	◦ [Dockerfile](https://docs.docker.com/build/concepts/dockerfile/)
+	◦ [Dockerfile Best Practices](https://docs.docker.com/build/building/best-practices/)
+	◦ [Mariadb](https://hub.docker.com/_/mariadb)
+	◦ [Wordpress](https://hub.docker.com/_/wordpress)
+	◦ [Nginx](https://hub.docker.com/_/nginx)
+	◦ [Wordpress with docker compose](https://www.linode.com/docs/guides/wordpress-with-docker-compose/)
+	◦ [Explaining Docker Networking Concepts](https://ostechnix.com/explaining-docker-networking-concepts/)
+	◦ [WordPress Deployment with NGINX, PHP-FPM and MariaDB using Docker Compose](https://medium.com/swlh/wordpress-deployment-with-nginx-php-fpm-and-mariadb-using-docker-compose-55f59e5c1a)
+	◦ [Virtual Machines vs Docker](https://www.geeksforgeeks.org/devops/difference-between-docker-and-virtualization/)
+	◦ [Secrets](https://docs.docker.com/engine/swarm/secrets/)
+	◦ [Secrets Handling](https://medium.com/@jagadeeshkema/docker-secrets-environment-variables-handling-sensitive-data-the-right-way-0eacb628b7d9)
+	◦ [Docker Networks](https://bunny.net/academy/computing/what-is-docker-networking/)
 
-AI (ChatGPT) was used to explain different concepts, so I would understand them better. Also used AI to ask questions related to the project so I can express my understanding of the project and if needed, also detect flaws in knowledge and fix them. I ran into problems with docker-compose, tried to find out the cause of the problem also by sharing the problem with AI, but AI was rather useless in that case.
+	AI (ChatGPT) was used to explain different concepts, so I would understand them better. Also used AI to ask questions related to the project so I can express my understanding of the project and if needed, also detect flaws in knowledge and fix them. I ran into problems with docker-compose, tried to find out the cause of the problem also by sharing the problem with AI, but AI was rather useless in that case.
 
 														* * *
 
