@@ -122,7 +122,7 @@ The project uses several configuration files to define the infrastructure and se
 ---
 
 # Build and launch the project using the Makefile and Docker Compose.
-The project uses a Makefile to simplify Docker Compose commands.
+## The project uses a Makefile to simplify Docker Compose commands.
     ◦ Run the orchestrated docker-compose file:
         - `make`
     ◦ Stop containers without deleting images:
@@ -157,15 +157,15 @@ The project uses a Makefile to simplify Docker Compose commands.
 ---
 
 # Identify where the project data is stored and how it persists.
-The project uses Docker volumes to ensure data persists between container restarts or recreations.
-Data storage locations:
+- The project uses Docker volumes to ensure data persists between container restarts or recreations.
+## Data storage locations:
     - Inside containers:
         - ◦ MariaDB: /var/lib/mysql
         - ◦ WordPress: /var/www/html
     - On the host system:
         - ◦ /home/viljar/data/
 
-Useful commands:
+## Useful commands:
     ◦ Access MariaDB container:
         - `docker exec -it mariadb sh`
     ◦ Access MariaDB database:
