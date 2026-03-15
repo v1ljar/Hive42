@@ -23,8 +23,7 @@
 ---
 
 # Start/stop the project
-<p>The project uses a Makefile to simplify Docker Compose commands.</p>
-
+The project uses a Makefile to simplify Docker Compose commands.
     ◦ Run the orchestrated docker-compose file:
         - `make`
     ◦ Stop containers without deleting images:
@@ -41,8 +40,7 @@
         - `make re`
 
 # Access website and administration panel
-<p>When everything has been built, up, running and healthy- user has access to website and administration panel.</p>
-
+When everything has been built, up, running and healthy- user has access to website and administration panel.
     ◦ Check connection in terminal:
         - `curl -I https://vuljas.42.fr --insecure`
     ◦ Alternative way to check connection in terminal:
@@ -55,18 +53,22 @@
         - `https://vuljas.42.fr/wp-admin`
 
 # Locate and manage credential
-    ◦ Secrets are stored as textfiles and managed by Docker Compose:
-        - In Docker Compose is Secrets section, where each secret file is mounted to the container and initialized.
-        - Each container has Secrets section, where is specified, which secret the container has access to.
-        - To use the secret, we can call the variable in the script.
+**Docker Secrets**
+    ◦ Secrets are stored as textfiles and managed by Docker Compose.
+        - In the Docker Compose, secrets section defines the secret files.
+        - Defined secret file are mounted to the container.
+        - Each container specifies which secret it has access to.
+        - Scripts inside container can read containers secrets now.
 
+**Environment variables**
     ◦ All project related environment variables are defined in .env file.
         - Docker Compose service has env_file variable
             - If container needs access to environment variables [ env_file: .env ]
 
 # Check that the services are running correctly
+**Commands**
     ◦ To check services, use command:
-        - `docker ps -a`
+        `docker ps -a`
     ◦ To check service log, use command:
         - `docker logs <container name>`
     ◦ To inspect container, use command:
