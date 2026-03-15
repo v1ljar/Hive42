@@ -81,6 +81,6 @@
     ◦ To inspect network, use command:
         - docker network inspect <network name>
     ◦ To check volumes, use command:
-        - docker network ls
+        - docker volume ls
     ◦ To inspect volumes, use command:
-        - docker network inspect <network name>
+        - docker volume inspect <volume name>
