@@ -9,12 +9,12 @@
 
 # Provided services
     ◦ There are 3 main services provided:
-        - **MariaDB**: manages the website database
-        - **WordPress**: website frontend and content management
-        - **NGINX**: web server to host website
+        - MariaDB: manages the website database
+        - WordPress: website frontend and content management
+        - NGINX: web server to host website
 
     ◦ Docker networks are used for internal communication between containers:
-        - Only port **443** is exposed to host
+        - Only port 443 is exposed to host
 
     ◦ Docker volumes are use for persistant data management:
         - MariaDB stores website data (users, posts, comments etc.)
@@ -23,7 +23,8 @@
 ---
 
 # Start/stop the project
-    The project uses a Makefile to simplify Docker Compose commands.
+<p>The project uses a Makefile to simplify Docker Compose commands.</p>
+
     ◦ Run the orchestrated docker-compose file:
         - `make`
     ◦ Stop containers without deleting images:
@@ -41,6 +42,7 @@
 
 # Access website and administration panel
 <p>When everything has been built, up, running and healthy- user has access to website and administration panel.</p>
+
     ◦ Check connection in terminal:
         - `curl -I https://vuljas.42.fr --insecure`
     ◦ Alternative way to check connection in terminal:
@@ -63,17 +65,17 @@
             - If container needs access to environment variables [ env_file: .env ]
 
 # Check that the services are running correctly
-    ◦ To check **services**, use command:
+    ◦ To check services, use command:
         - `docker ps -a`
-    ◦ To check **service log**, use command:
+    ◦ To check service log, use command:
         - `docker logs <container name>`
-    ◦ To inspect **container**, use command:
+    ◦ To inspect container, use command:
         - `docker inspect <container name>`
-    ◦ To check **networks**, use command:
+    ◦ To check networks, use command:
         - `docker network ls`
-    ◦ To inspect **network**, use command:
+    ◦ To inspect network, use command:
         - `docker network inspect <network name>`
-    ◦ To check **volumes**, use command:
+    ◦ To check volumes, use command:
         - `docker network ls`
-    ◦ To inspect **volumes**, use command:
+    ◦ To inspect volumes, use command:
         - `docker network inspect <network name>`

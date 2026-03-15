@@ -30,8 +30,9 @@ The project uses several configuration files to define the infrastructure and se
         - WORDPRESS_USER_EMAIL
 
 ### Docker Compose | docker-compose.yml
-    ◦ Docker Compose is used to define and orchestrate the multi-container architecture.
-    ◦ Makes it easy to manage services, networks and volumes in a single YAML configuration file.
+<p>◦ Docker Compose is used to define and orchestrate the multi-container architecture.
+    ◦ Makes it easy to manage services, networks and volumes in a single YAML configuration file. </p>
+
         - Services (each service identified by name) attributes:
             - container_name: specifies the container name
             - build: location of the Dockerfile used to build the image
@@ -61,13 +62,14 @@ The project uses several configuration files to define the infrastructure and se
             - file: location of secret file
 
 ### Dockerfiles
-    ◦ Each container has Dockerfile that is a text document that contains all the commands a user could call on the command line to assemble an image. Used instructions:
-        - FROM: initializes a new build stage and sets the base image for subsequent instructions.
-        - RUN: will execute any commands to create a new layer on top of the current image.
-        - COPY: copies files from the build context.
-        - EXPOSE: informs Docker that the container listens on the specified network ports at runtime.
-        - ENTRYPOINT: allows you to configure a container that will run as an executable.
-        - CMD: sets the command to be executed when running a container from an image.
+<p>◦ Each container has Dockerfile that is a text document that contains all    the commands a user could call on the command line to assemble an image. Used instructions:</p>
+
+    - FROM: initializes a new build stage and sets the base image for subsequent instructions.
+    - RUN: will execute any commands to create a new layer on top of the current image.
+    - COPY: copies files from the build context.
+    - EXPOSE: informs Docker that the container listens on the specified network ports at runtime.
+    - ENTRYPOINT: allows you to configure a container that will run as an executable.
+    - CMD: sets the command to be executed when running a container from an image.
 
 ### .dockerignore file
     ◦ Use .dockerignore file to exclude files and directories from the build context.
@@ -152,7 +154,8 @@ The project uses several configuration files to define the infrastructure and se
 ---
 
 # Build and launch the project using the Makefile and Docker Compose.
-    The project uses a Makefile to simplify Docker Compose commands.
+<p>The project uses a Makefile to simplify Docker Compose commands.</p>
+
     ◦ Run the orchestrated docker-compose file:
         - `make`
     ◦ Stop containers without deleting images:
