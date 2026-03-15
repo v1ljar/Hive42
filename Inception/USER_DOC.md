@@ -23,24 +23,26 @@
 ---
 
 # Start/stop the project
-The project uses a Makefile to simplify Docker Compose commands.
-    Run the orchestrated docker-compose file:
-        `make`
-    Stop containers without deleting images:
-        `make down`
-    Start containers without building new images:
-        `make up`
-    Just build docker images:
-        `make images`
-    Remove containers, images and volumes:
-        `make clean`
-    Clean up everything:
-        `make fclean`
-    Clear up everything, build and launch:
-        `make re`
+<p>The project uses a Makefile to simplify Docker Compose commands.</p>
+
+    ◦ Run the orchestrated docker-compose file:
+        - `make`
+    ◦ Stop containers without deleting images:
+        - `make down`
+    ◦ Start containers without building new images:
+        - `make up`
+    ◦ Just build docker images:
+        - `make images`
+    ◦ Remove containers, images and volumes:
+        - `make clean`
+    ◦ Clean up everything:
+        - `make fclean`
+    ◦ Clear up everything, build and launch:
+        - `make re`
 
 # Access website and administration panel
-When everything has been built, up, running and healthy- user has access to website and administration panel.
+<p>When everything has been built, up, running and healthy- user has access to website and administration panel.</p>
+
     ◦ Check connection in terminal:
         - `curl -I https://vuljas.42.fr --insecure`
     ◦ Alternative way to check connection in terminal:
@@ -54,21 +56,22 @@ When everything has been built, up, running and healthy- user has access to webs
 
 # Locate and manage credential
 **Docker Secrets**
+
     ◦ Secrets are stored as textfiles and managed by Docker Compose.
         - In the Docker Compose, secrets section defines the secret files.
         - Defined secret file are mounted to the container.
         - Each container specifies which secret it has access to.
         - Scripts inside container can read containers secrets now.
 
-**Environment variables**
+**Environment**
+
     ◦ All project related environment variables are defined in .env file.
         - Docker Compose service has env_file variable
             - If container needs access to environment variables [ env_file: .env ]
 
 # Check that the services are running correctly
-**Commands**
     ◦ To check services, use command:
-        `docker ps -a`
+        - `docker ps -a`
     ◦ To check service log, use command:
         - `docker logs <container name>`
     ◦ To inspect container, use command:
