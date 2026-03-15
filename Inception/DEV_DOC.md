@@ -10,6 +10,7 @@ This document describes how developers can set up, build and manage the Inceptio
     - Alpine Linux Virtual Machine
     - Docker
     - Docker Compose
+    - Web browser (Firefox)
     - Make
 
 Docker and Docker Compose must be installed and accessible by the user running the project.
@@ -219,3 +220,42 @@ The project uses several configuration files to define the infrastructure and se
                 ◦ `SHOW TABLES;`
             - To see comments:
                 ◦ `SELECT comment_content FROM wp_comments;`
+
+---
+
+## Change ports
+**MariaDB**
+    ◦ Dockerfile:
+        - EXPOSE <port>
+    ◦ mariadb.conf:
+        - port=<port>
+    ◦ wordpress-script.sh
+        - mariadb-admin ping --protocol=tcp --host=mariadb --port=<port> -u...
+        - config create...--dbhost="$WORDPRESS_DATABASE_HOST:<port>"
+
+**WordPress**
+    ◦ Dockerfile:
+        - EXPOSE <port>
+    ◦ www.conf:
+        - listen = <port>
+    ◦ nginx.conf:
+        - fastcgi_pass wordpress:<port>;
+
+**NGINX**
+    ◦ Dockerfile:
+        - EXPOSE <port>
+    ◦ nginx.conf:
+        - listen <port> ssl;
+        - listen [::]:<port> ssl;<port>
+        - return 301 https://$host:8443$request_uri;
+    ◦ docker-compose.yml
+        - ports:"<port>:<port>"
+    ◦ Build the container again and in wordpress container update site url:
+        - docker exec -it wordpress sh
+        - cd /var/www/html
+        - wp option update siteurl 'https://vuljas.42.fr:<port>' --allow-root
+        - wp option update home 'https://vuljas.42.fr:<port>' --allow-root
+        - exit
+    ◦ Restart nginx container:
+        - cd /srcs/
+        - docker compose restart nginx

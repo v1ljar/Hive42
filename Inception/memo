@@ -26,3 +26,6 @@ ssh -p 3022 user42@127.0.0.1
 
 COYING FILES FROM HOST TO VM
 scp -r -P 3022 inception vuljas@127.0.0.1:/home/vuljas/shared/
+
+TLS version?
+curl -Iv https://vuljas.42.fr --insecure

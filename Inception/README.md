@@ -69,6 +69,7 @@
 	◦ Enable udev service: setup-devd udev
 	◦ Now start the LightDM using: rc-service lightdm start
 	◦ LightDM GUI starts -> Log in as root -> Open terminal
+	◦ Install Firefox web browser: apk add firefox
 	◦ Make lightdm to start on boot: rc-update add lightdm
 	◦ Allow Users to shut down and reboot: apk add elogind polkit-elogind
 	◦ Now, poweroff the system: poweroff

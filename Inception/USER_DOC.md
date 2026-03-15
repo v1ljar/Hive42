@@ -45,8 +45,6 @@
 
     ◦ Check connection in terminal:
         - curl -I https://vuljas.42.fr --insecure
-    ◦ Alternative way to check connection in terminal:
-        - openssl s_client -connect localhost:443 -servername vuljas.42.fr </dev/null | head -n 20
     ◦ Access to website in browser:
         - https://vuljas.42.fr
     ◦ Access to website login page in browser:
