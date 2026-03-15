@@ -152,7 +152,7 @@ The project uses several configuration files to define the infrastructure and se
 ---
 
 # Build and launch the project using the Makefile and Docker Compose.
-<p>The project uses a Makefile to simplify Docker Compose commands.</p>
+    The project uses a Makefile to simplify Docker Compose commands.
     ◦ Run the orchestrated docker-compose file:
         - `make`
     ◦ Stop containers without deleting images:
@@ -194,9 +194,9 @@ The project uses several configuration files to define the infrastructure and se
         ◦ WordPress: /var/www/html
     - On the host system:
         ◦ /home/viljar/data/
-    - Loggin to wordpress in browser:
+    - Login to wordpress in browser:
         ◦ https://vuljas.42.fr/wp-login.php
-    - Loggin to wordpress administrator panel in browser:
+    - Login to wordpress administrator panel in browser:
         ◦ https://vuljas.42.fr/wp-admin
 
 ## Useful commands:
