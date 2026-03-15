@@ -117,31 +117,31 @@ The project uses several configuration files to define the infrastructure and se
 ### Setup scripts (Mariadb & WordPress)
 <p>MariaDB and WordPress need initialization/setup before usage.</p>
 
-- MariaDB:
-    ◦ Check if database exists
-        - If NOT exist:
-            - Initialize datadirectory
-            - Use bootstrap to setup database
-        - Make sure MariaDB configuration file:
-            - Is not skipping networking
-            - Bind address is 0.0.0.0
-        - Start the mariadb
+    - MariaDB:
+        ◦ Check if database exists
+            - If NOT exist:
+                - Initialize datadirectory
+                - Use bootstrap to setup database
+            - Make sure MariaDB configuration file:
+                - Is not skipping networking
+                - Bind address is 0.0.0.0
+            - Start the mariadb
 
-- WordPress:
-    ◦ Check WP-CLI exists:
-        - If NOT exist:
-            - Download it with wget & give execution permission
-    ◦ Check if MariaDB is running:
-        - If NOT running:
-            - Wait for it!
-    ◦ Check if WordPress is downloaded:
-        - If NOT:
-            - Download it with `core download`
-            - Create configuration with `config create`
-            - Install WordPress with `core install`
-            - Create WordPress user with `user create`
-        - Make sure directories have right permissions and ownership
-        - Execute PHP-FPM in the foreground
+    - WordPress:
+        ◦ Check WP-CLI exists:
+            - If NOT exist:
+                - Download it with wget & give execution permission
+        ◦ Check if MariaDB is running:
+            - If NOT running:
+                - Wait for it!
+        ◦ Check if WordPress is downloaded:
+            - If NOT:
+                - Download it with `core download`
+                - Create configuration with `config create`
+                - Install WordPress with `core install`
+                - Create WordPress user with `user create`
+            - Make sure directories have right permissions and ownership
+            - Execute PHP-FPM in the foreground
 
 ## Secrets
     ◦ Secrets are stored as textfiles and managed by Docker Compose:
