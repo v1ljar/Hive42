@@ -1,10 +1,10 @@
-# <u>Developer Documentation</u>
+# **Developer Documentation**
 
 This document describes how developers can set up, build and manage the Inception project.
 
 ---
 
-# <u>Set up the environment from scratch (prerequisites, configuration files, secrets).</u>
+# **Set up the environment from scratch** (prerequisites, configuration files, secrets).
 ## Prerequisites
 - To work with this project, the following components are required:
     - Alpine Linux Virtual Machine
@@ -121,7 +121,7 @@ The project uses several configuration files to define the infrastructure and se
 
 ---
 
-# <u>Build and launch the project using the Makefile and Docker Compose.</u>
+# **Build and launch the project using the Makefile and Docker Compose.**
 ## The project uses a Makefile to simplify Docker Compose commands.
     ◦ Run the orchestrated docker-compose file:
         - `make`
@@ -140,7 +140,7 @@ The project uses several configuration files to define the infrastructure and se
 
 ---
 
-# <u>Use relevant commands to manage the containers and volumes.</u>
+# **Use relevant commands to manage the containers and volumes.**
     ◦ Show all containers:
         `docker ps -a`
     ◦ Show disk usage by container:
@@ -156,7 +156,7 @@ The project uses several configuration files to define the infrastructure and se
 
 ---
 
-# <u>Identify where the project data is stored and how it persists.</u>
+# **Identify where the project data is stored and how it persists.**
 - The project uses Docker volumes to ensure data persists between container restarts or recreations.
 ## Data storage locations:
     - Inside containers:
