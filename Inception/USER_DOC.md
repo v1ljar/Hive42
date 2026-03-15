@@ -1,5 +1,5 @@
 # User Documentation
-    ◦ This document describes users what services are provided, how to:
+    ◦ This document describes users what services are provided and how to:
         - start/stop the project
         - access website and administration panel
         - locate and manage credential
