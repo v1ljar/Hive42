@@ -12,7 +12,8 @@
 
 	Each service runs in its own container, communicates through Docker network and data is stored using Docker volumes.
 
-	The project also includes documentation files (README.md, DEV_DOC.md, USER_DOC.md) that describe the architecture, development process and instructions for managing the containers.
+	The project also includes documentation files (README.md, DEV_DOC.md, USER_DOC.md).
+		◦ Documentation files describe the architecture, development process and instructions for managing the containers.
 
 ---
 
@@ -85,17 +86,20 @@
 
 ### Docker Installation
 	◦ Install Docker and Docker Compose v2:
-	◦ doas apk add docker docker-cli-compose
-	◦ Allow Docker access for your user: addgroup <USER> docker
+		- doas apk add docker docker-cli-compose
+	◦ Allow Docker access for your user:
+		- addgroup <USER> docker
 
 ### Configure Domain Name
 	◦ Configure domain name so it points to the local IP address:
 		- echo "127.0.0.1 vuljas.42.fr" >> /etc/hosts
 
 ### Project Structure
-	◦ Install doas (so user can call "sudo" commands): apk add doas
+	◦ Install doas (so user can call "sudo" commands):
+		- apk add doas
 	◦ Reboot VM and log in to the user account.
-	◦ Create project repository: mkdir Inception
+	◦ Create project repository:
+		- mkdir Inception
 	◦ Create required files:
 		cd Inception
 		.
@@ -137,22 +141,38 @@
 ---
 
 # Resources
- ◦ [Alpine Linux setup guide](https://itsfoss.com/alpine-linux-virtualbox/)
+ ◦ [Alpine Linux setup guide](https://itsfoss.com/alpine-linux-virtualbox/)	
+ 
  ◦ [SSH connection setup](https://www.geeksforgeeks.org/installation-guide/how-to-install-openssh-on-alpine/)
+ 
  ◦ [VirtualBox shared folders](https://wiki.alpinelinux.org/wiki/VirtualBox_shared_folders)
+ 
  ◦ [Install Docker and Docker Compose](https://virtualzone.de/posts/alpine-docker-rootless/)
+ 
  ◦ [Docker Compose](https://docs.docker.com/compose/intro/compose-application-model/)
+ 
  ◦ [Dockerfile](https://docs.docker.com/build/concepts/dockerfile/)
+ 
  ◦ [Dockerfile Best Practices](https://docs.docker.com/build/building/best-practices/)
+ 
  ◦ [Mariadb](https://hub.docker.com/_/mariadb)
+ 
  ◦ [Wordpress](https://hub.docker.com/_/wordpress)
+
  ◦ [Nginx](https://hub.docker.com/_/nginx)
+ 
  ◦ [Wordpress with docker compose](https://www.linode.com/docs/guides/wordpress-with-docker-compose/)
+ 
  ◦ [Explaining Docker Networking Concepts](https://ostechnix.com/explaining-docker-networking-concepts/)
+ 
  ◦ [WordPress Deployment with NGINX, PHP-FPM and MariaDB using Docker Compose](https://medium.com/swlh/wordpress-deployment-with-nginx-php-fpm-and-mariadb-using-docker-compose-55f59e5c1a)
+ 
  ◦ [Virtual Machines vs Docker](https://www.geeksforgeeks.org/devops/difference-between-docker-and-virtualization/)
+ 
  ◦ [Secrets](https://docs.docker.com/engine/swarm/secrets/)
+ 
  ◦ [Secrets Handling](https://medium.com/@jagadeeshkema/docker-secrets-environment-variables-handling-sensitive-data-the-right-way-0eacb628b7d9)
+ 
  ◦ [Docker Networks](https://bunny.net/academy/computing/what-is-docker-networking/)
 
 	◦ AI usage:
@@ -213,7 +233,8 @@
 		- This networking method is useful for performance-sensitive applications but is not ideal for applications requiring isolation.
 
 ### Docker Volumes vs Bind Mounts
-	Docker volume and Bind mount are the docker components. Using bind mounts, you may mount a file or directory from your host computer onto your container and access it using its absolute path. Because Docker does everything independently, it is not dependent on the host computer's operating system or your directory structure. The Docker CLI commands or the Docker API may be used to manage Docker Volumes. It is safer to share quantities among many containers. The host computer's absolute path to the file or directory serves as a point of reference. Conversely, when a volume is used, Docker makes a new directory in the host machine's storage directory and keeps it updated.
+<p>Docker volume and Bind mount are the docker components. Using bind mounts, you may mount a file or directory from your host computer onto your container and access it using its absolute path. Because Docker does everything independently, it is not dependent on the host computer's operating system or your directory structure. The Docker CLI commands or the Docker API may be used to manage Docker Volumes. It is safer to share quantities among many containers. The host computer's absolute path to the file or directory serves as a point of reference. Conversely, when a volume is used, Docker makes a new directory in the host machine's storage directory and keeps it updated.</p>
+
 
 						DOCKER VOLUMES						|					BIND MOUNTS
 	◦ Docker volume is the recommended method for storing	|	◦ Bind mount has existed from Docker's early versions
