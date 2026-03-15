@@ -115,9 +115,9 @@ The project uses several configuration files to define the infrastructure and se
                     - fastcgi_param PATH_INFO: sets PATH_INFO parameter that should be passed to the FastCGI server
 
 ### Setup scripts (Mariadb & WordPress)
-    <p>MariaDB and WordPress need initialization/setup before usage.</p>
+<p>MariaDB and WordPress need initialization/setup before usage.</p>
 
-##### MariaDB:
+- MariaDB:
     ◦ Check if database exists
         - If NOT exist:
             - Initialize datadirectory
@@ -127,7 +127,7 @@ The project uses several configuration files to define the infrastructure and se
             - Bind address is 0.0.0.0
         - Start the mariadb
 
-##### WordPress:
+- WordPress:
     ◦ Check WP-CLI exists:
         - If NOT exist:
             - Download it with wget & give execution permission
