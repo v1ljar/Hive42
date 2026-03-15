@@ -26,33 +26,33 @@
 <p>The project uses a Makefile to simplify Docker Compose commands.</p>
 
     ◦ Run the orchestrated docker-compose file:
-        - `make`
+        - make
     ◦ Stop containers without deleting images:
-        - `make down`
+        - make down
     ◦ Start containers without building new images:
-        - `make up`
+        - make up
     ◦ Just build docker images:
-        - `make images`
+        - make images
     ◦ Remove containers, images and volumes:
-        - `make clean`
+        - make clean
     ◦ Clean up everything:
-        - `make fclean`
+        - make fclean
     ◦ Clear up everything, build and launch:
-        - `make re`
+        - make re
 
 # Access website and administration panel
 <p>When everything has been built, up, running and healthy- user has access to website and administration panel.</p>
 
     ◦ Check connection in terminal:
-        - `curl -I https://vuljas.42.fr --insecure`
+        - curl -I https://vuljas.42.fr --insecure
     ◦ Alternative way to check connection in terminal:
-        - `openssl s_client -connect localhost:443 -servername vuljas.42.fr </dev/null | head -n 20`
+        - openssl s_client -connect localhost:443 -servername vuljas.42.fr </dev/null | head -n 20
     ◦ Access to website in browser:
-        - `https://vuljas.42.fr`
+        - https://vuljas.42.fr
     ◦ Access to website login page in browser:
-        - `https://vuljas.42.fr/wp-login.php`
+        - https://vuljas.42.fr/wp-login.php
     ◦ Access to website administartion panel in browser:
-        - `https://vuljas.42.fr/wp-admin`
+        - https://vuljas.42.fr/wp-admin
 
 # Locate and manage credential
 **Docker Secrets**
@@ -71,16 +71,16 @@
 
 # Check that the services are running correctly
     ◦ To check services, use command:
-        - `docker ps -a`
+        - docker ps -a
     ◦ To check service log, use command:
-        - `docker logs <container name>`
+        - docker logs <container name>
     ◦ To inspect container, use command:
-        - `docker inspect <container name>`
+        - docker inspect <container name>
     ◦ To check networks, use command:
-        - `docker network ls`
+        - docker network ls
     ◦ To inspect network, use command:
-        - `docker network inspect <network name>`
+        - docker network inspect <network name>
     ◦ To check volumes, use command:
-        - `docker network ls`
+        - docker network ls
     ◦ To inspect volumes, use command:
-        - `docker network inspect <network name>`
+        - docker network inspect <network name>
