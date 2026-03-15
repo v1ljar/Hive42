@@ -157,35 +157,35 @@ The project uses several configuration files to define the infrastructure and se
 <p>The project uses a Makefile to simplify Docker Compose commands.</p>
 
     ◦ Run the orchestrated docker-compose file:
-        - `make`
+        - make
     ◦ Stop containers without deleting images:
-        - `make down`
+        - make down
     ◦ Start containers without building new images:
-        - `make up`
+        - make up
     ◦ Just build docker images:
-        - `make images`
+        - make images
     ◦ Remove containers, images and volumes:
-        - `make clean`
+        - make clean
     ◦ Clean up everything:
-        - `make fclean`
+        - make fclean
     ◦ Clear up everything, build and launch:
-        - `make re`
+        - make re
 
 ---
 
 # Use relevant commands to manage the containers and volumes.
     ◦ Show all containers:
-        `docker ps -a`
+        - docker ps -a
     ◦ Show disk usage by container:
-        `docker ps --size`
+        - docker ps --size
     ◦ Display detailed information on one or more containers:
-        `docker container inspect <container name>`
+        - docker container inspect <container name>
     ◦ Fetch the logs of a container:
-        `docker logs <container name>`
+        - docker logs <container name>
     ◦ Lists all the networks the Engine daemon knows about:
-        `docker network ls`
+        - docker network ls
     ◦ Returns information about one or more networks:
-        `docker network inspect <network name>`
+        - docker network inspect <network name>
 
 ---
 
@@ -203,19 +203,19 @@ The project uses several configuration files to define the infrastructure and se
         ◦ https://vuljas.42.fr/wp-admin
 
 ## Useful commands:
-    - Access MariaDB container:
-        ◦ `docker exec -it mariadb sh`
-    - Show list of volumes:
-        ◦ `docker volume ls`
-    - To inspect the configuration of the volume:
-        ◦ `docker volume inspect <volume name>`
-    - Access MariaDB database:
-        ◦ `docker exec -it mariadb mariadb -u root -p`
+    ◦ Access MariaDB container:
+        - docker exec -it mariadb sh
+    ◦ Show list of volumes:
+        - docker volume ls
+    ◦ To inspect the configuration of the volume:
+        - docker volume inspect <volume name>
+    ◦ Access MariaDB database:
+        - docker exec -it mariadb mariadb -u root -p
             - To see databases:
-                ◦ `SHOW DATABASES;`
+                ◦ SHOW DATABASES;
             - Choose "wordpress" database:
-                ◦ `USE WORDPRESS;`
+                ◦ USE WORDPRESS;
             - Show tables:
-                ◦ `SHOW TABLES;`
+                ◦ SHOW TABLES;
             - To see comments:
-                ◦ `SELECT comment_content FROM wp_comments;`
+                ◦ SELECT comment_content FROM wp_comments;
