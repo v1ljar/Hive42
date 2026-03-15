@@ -7,10 +7,10 @@ This document describes how developers can set up, build and manage the Inceptio
 # Set up the environment from scratch (prerequisites, configuration files, secrets).
 ## Prerequisites
 - To work with this project, the following components are required:
-    ◦ Alpine Linux Virtual Machine
-    ◦ Docker
-    ◦ Docker Compose
-    ◦ Make
+    - Alpine Linux Virtual Machine
+    - Docker
+    - Docker Compose
+    - Make
 
 Docker and Docker Compose must be installed and accessible by the user running the project.
 
