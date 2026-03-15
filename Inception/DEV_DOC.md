@@ -16,6 +16,19 @@ Docker and Docker Compose must be installed and accessible by the user running t
 
 ## Configuration files
 The project uses several configuration files to define the infrastructure and services.
+
+### .env file
+    ◦ To store variables used in project:
+        - DOMAIN_NAME
+        - WORDPRESS_TITLE
+        - WORDPRESS_DATABASE_NAME
+        - WORDPRESS_DATABASE_HOST
+        - WORDPRESS_DATABASE_USER
+        - WORDPRESS_ADMIN
+        - WORDPRESS_ADMIN_EMAIL
+        - WORDPRESS_USER
+        - WORDPRESS_USER_EMAIL
+
 ### Docker Compose | docker-compose.yml
     ◦ Docker Compose is used to define and orchestrate the multi-container architecture.
     ◦ Makes it easy to manage services, networks and volumes in a single YAML configuration file.
@@ -101,17 +114,34 @@ The project uses several configuration files to define the infrastructure and se
                     - fastcgi_param SCRIPT_FILENAME: sets SCRIPT_FILENAME parameter that should be passed to the FastCGI server
                     - fastcgi_param PATH_INFO: sets PATH_INFO parameter that should be passed to the FastCGI server
 
-### .env file
-    ◦ To store variables used in project:
-        - DOMAIN_NAME
-        - WORDPRESS_TITLE
-        - WORDPRESS_DATABASE_NAME
-        - WORDPRESS_DATABASE_HOST
-        - WORDPRESS_DATABASE_USER
-        - WORDPRESS_ADMIN
-        - WORDPRESS_ADMIN_EMAIL
-        - WORDPRESS_USER
-        - WORDPRESS_USER_EMAIL
+### Setup scripts (Mariadb & WordPress)
+    <p>MariaDB and WordPress need initialization/setup before usage.</p>
+
+##### MariaDB:
+    ◦ Check if database exists
+        - If NOT exist:
+            - Initialize datadirectory
+            - Use bootstrap to setup database
+        - Make sure MariaDB configuration file:
+            - Is not skipping networking
+            - Bind address is 0.0.0.0
+        - Start the mariadb
+
+##### WordPress:
+    ◦ Check WP-CLI exists:
+        - If NOT exist:
+            - Download it with wget & give execution permission
+    ◦ Check if MariaDB is running:
+        - If NOT running:
+            - Wait for it!
+    ◦ Check if WordPress is downloaded:
+        - If NOT:
+            - Download it with `core download`
+            - Create configuration with `config create`
+            - Install WordPress with `core install`
+            - Create WordPress user with `user create`
+        - Make sure directories have right permissions and ownership
+        - Execute PHP-FPM in the foreground
 
 ## Secrets
     ◦ Secrets are stored as textfiles and managed by Docker Compose:
