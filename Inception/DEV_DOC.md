@@ -1,22 +1,34 @@
+# Developer Documentation
+
+This document describes how developers can set up, build and manage the Inception project.
+
+---
+
 # Set up the environment from scratch (prerequisites, configuration files, secrets).
 ## Prerequisites
-    ◦ Alpine Linux Virual Machine
-    ◦ Docker and required packages installed
+To work with this project, the following components are required:
+    ◦ Alpine Linux Virtual Machine
+    ◦ Docker
+    ◦ Docker Compose
+    ◦ Make
 
-## Configutation files
-### Docker Compose
-    ◦ A tool for defining and running multi-container applications.
+Docker and Docker Compose must be installed and accessible by the user running the project.
+
+## Configuration files
+The project uses several configuration files to define the infrastructure and services.
+### Docker Compose | docker-compose.yml
+    ◦ Docker Compose is used to define and orchestrate the multi-container architecture.
     ◦ Makes it easy to manage services, networks and volumes in a single YAML configuration file.
-        - Services (each service identified my name) attributes:
-            - container_name: set same as service name
-            - build: the location of build files (Dockerfile)
-            - image: custom name for the image
+        - Services (each service identified by name) attributes:
+            - container_name: specifies the container name
+            - build: location of the Dockerfile used to build the image
+            - image: custom name for the built image
             - env_file: specify the name of the environment variables file
             - secrets: specify the secrets container has access
             - healthcheck: command to check container status
             - volumes: specify volume that container has access
             - networks: specify networks that container has access
-            - restart: specify the bafaviour of failure
+            - restart: restart policy
             - depends_on: specify on which service the container depends on
             - ports: expose the port to host
 
@@ -35,7 +47,7 @@
         - Secrets (each secret identified by name) attributes:
             - file: location of secret file
 
-### Dockerfile
+### Dockerfiles
     ◦ Each container has Dockerfile that is a text document that contains all the commands a user could call on the command line to assemble an image. Used instructions:
         - FROM: initializes a new build stage and sets the base image for subsequent instructions.
         - RUN: will execute any commands to create a new layer on top of the current image.
@@ -50,44 +62,56 @@
 ### Container specific .conf file
     ◦ MariaDB:
         - [mysqld]: this is only for the mysqld standalone daemon
-        - datadir: set container data directory
-        - socket: set container socket location
+        - datadir: database data directory
+        - socket: socket file location
         - bind-address: set container bind-address
         - port: set container port
 
     ◦ WordPress Pool Directives (default name is www.conf):
         - [www]: this is only for the www standalone daemon
-        - user: 
-        - group: 
-        - listen: used to mode connecting mechanism of PHP request from frontend server.
-        - pm: child processes type (static/dynamic/ondemand)
+        - user: process user
+        - group: process group
+        - listen: socket or port used by PHP-FPM
+        - pm: process manager mode
         - pm.max_children: the maximum number of child processes
         - pm.min_spare_servers: the number of minimum spare servers
         - pm.max_spare_servers: the number of maximum spare servers
         - clear_env: specify to clear environment variables (yes|no)
 
     ◦ Nginx:
-        - user: specify the user to use
-        - events: 
-            - worker_connections: 
-        - http: 
-            - include: 
-            - server:
-                - listen: 
-                - server_name:
-                - ssl_protocols: 
-                - ssl_certificate: 
-                - ssl_certificate_key: 
-                - root: 
-                - location: 
-                    - try_files: 
-                - location ~ \.php$:
-                    - include: 
-                    - fastcgi_pass: 
-                    - fastcgi_index: 
-                    - fastcgi_split_path_info: 
-                    - fastcgi_param SCRIPT_FILENAME: 
-                    - fastcgi_param PATH_INFO: 
+        - user: worker process user
+        - events: events block contains settings for server
+            - worker_connections: set how many connections a worker can open
+        - http: http block specifies global configuration settings for the NGINX HTTP server
+            - include: specify to include conf file
+            - server: server block contains settings for a specific server
+                - listen: specifies the port to listen for incoming connections
+                - server_name: specifies the domain name that this server block should handle
+                - ssl_protocols: specify protocols to use
+                - ssl_certificate: set certification location
+                - ssl_certificate_key: set certification key location
+                - root: specify the root directory
+                - location /: specifies that requests for the root URL of the website
+                    - try_files: set file locations to use
+                - location ~ \.php$: location block for ~ \.php$ specifies how the server should handle server errors by serving a specific file
+                    - include: specify to include conf file
+                    - fastcgi_pass: sets the address of a FastCGI server
+                    - fastcgi_index: sets a file name that will be appended after a URI 
+                    - fastcgi_split_path_info: a regular expression that captures a value for the $fastcgi_path_info variable
+                    - fastcgi_param SCRIPT_FILENAME: sets SCRIPT_FILENAME parameter that should be passed to the FastCGI server
+                    - fastcgi_param PATH_INFO: sets PATH_INFO parameter that should be passed to the FastCGI server
+
+### .env file
+    ◦ To store variables used in project:
+        - DOMAIN_NAME
+        - WORDPRESS_TITLE
+        - WORDPRESS_DATABASE_NAME
+        - WORDPRESS_DATABASE_HOST
+        - WORDPRESS_DATABASE_USER
+        - WORDPRESS_ADMIN
+        - WORDPRESS_ADMIN_EMAIL
+        - WORDPRESS_USER
+        - WORDPRESS_USER_EMAIL
 
 ## Secrets
     ◦ Secrets are stored as textfiles and managed by Docker Compose:
@@ -95,22 +119,58 @@
         - Each container has Secrets section, where is specified, which secret the container has access to.
         - To use the secret, we can call the variable in the script.
 
+---
+
 # Build and launch the project using the Makefile and Docker Compose.
+The project uses a Makefile to simplify Docker Compose commands.
     ◦ Run the orchestrated docker-compose file:
-        make
+        `make`
     ◦ Stop containers without deleting images:
-        make down
+        `make down`
     ◦ Start containers without building new images:
-        make up
+        `make up`
     ◦ Just build docker images:
-        make images
+        `make images`
     ◦ Remove containers, images and volumes:
-        make clean
+        `make clean`
     ◦ Clean up everything:
-        make fclean
+        `make fclean`
     ◦ Clear up everything, build and launch:
-        make re
+        `make re`
+
+---
 
 # Use relevant commands to manage the containers and volumes.
+    ◦ Show all containers:
+        `docker ps -a`
+    ◦ Show disk usage by container:
+        `docker ps --size`
+    ◦ Display detailed information on one or more containers:
+        `docker container inspect <container name>`
+    ◦ Fetch the logs of a container:
+        `docker logs <container name>`
+    ◦ Lists all the networks the Engine daemon knows about:
+        `docker network ls`
+    ◦ Returns information about one or more networks:
+        `docker network inspect <network name>`
+
+---
 
 # Identify where the project data is stored and how it persists.
+The project uses Docker volumes to ensure data persists between container restarts or recreations.
+Data storage locations:
+    - Inside containers:
+        ◦ MariaDB: /var/lib/mysql
+        ◦ WordPress: /var/www/html
+    - On the host system:
+        ◦ /home/viljar/data/
+
+Useful commands:
+    ◦ Access MariaDB container:
+        `docker exec -it mariadb sh`
+    ◦ Access MariaDB database:
+        `docker exec -it mariadb mariadb -u root -p`
+    ◦ Show list of volumes:
+        `docker volume ls`
+    ◦ To inspect the configuration of the volume:
+        `docker volume inspect <volume name>`
