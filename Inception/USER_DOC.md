@@ -24,20 +24,20 @@
 
 # Start/stop the project
 The project uses a Makefile to simplify Docker Compose commands.
-    ◦ Run the orchestrated docker-compose file:
-        - `make`
-    ◦ Stop containers without deleting images:
-        - `make down`
-    ◦ Start containers without building new images:
-        - `make up`
-    ◦ Just build docker images:
-        - `make images`
-    ◦ Remove containers, images and volumes:
-        - `make clean`
-    ◦ Clean up everything:
-        - `make fclean`
-    ◦ Clear up everything, build and launch:
-        - `make re`
+    Run the orchestrated docker-compose file:
+        `make`
+    Stop containers without deleting images:
+        `make down`
+    Start containers without building new images:
+        `make up`
+    Just build docker images:
+        `make images`
+    Remove containers, images and volumes:
+        `make clean`
+    Clean up everything:
+        `make fclean`
+    Clear up everything, build and launch:
+        `make re`
 
 # Access website and administration panel
 When everything has been built, up, running and healthy- user has access to website and administration panel.
