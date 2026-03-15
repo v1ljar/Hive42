@@ -1,8 +1,8 @@
 *This project has been created as part of the 42 curriculum by vuljas.*
 
-														* * *
+---
 
-## Description
+# <u>Description</u>
 	The goal of the Inception project is to build a small containerized web infrastructure using Docker.
 	Project is done inside a Virtual Machine, where three containers are orchestrated using Docker Compose to run a blogging webpage.
 	Three main services:
@@ -14,9 +14,9 @@
 
 	The project also includes documentation files (README.md, DEV_DOC.md, USER_DOC.md) that describe the architecture, development process and instructions for managing the containers.
 
-														* * *
+---
 
-## Instructions
+# <u>Instructions</u>
 ### Virtual Machine Setup
 	◦ This project was done in VM and I chose alpine-standard-3.23.3-x86_64 ISO image to set up the VM with Oracle VirtualBox.
 	◦ To create a new VM, in Oracle VirtualBox click on New, then fill the fields:
@@ -133,9 +133,9 @@
 	◦ Clean up everything: make fclean
 	◦ Clear up everything, build and launch: make re
 
-														* * *
+---
 
-## Resources
+# <u>Resources</u>
  ◦ [Alpine Linux setup guide](https://itsfoss.com/alpine-linux-virtualbox/)
  ◦ [SSH connection setup](https://www.geeksforgeeks.org/installation-guide/how-to-install-openssh-on-alpine/)
  ◦ [VirtualBox shared folders](https://wiki.alpinelinux.org/wiki/VirtualBox_shared_folders)
@@ -159,9 +159,9 @@
 		- Ask questions related to the project so I can express my understanding of the project and if needed, also detect flaws in knowledge and fix them.
 		- I ran into problems with docker-compose, tried to find out the cause of the problem also by sharing the problem with AI, but AI was rather useless in that case.
 
-														* * *
+---
 
-## Project description
+# <u>Project description</u>
 ### Design Choices
 	◦ Alpine Linux was chosen as the base system because it is lightweight and minimal.
 	◦ Docker Compose was used to orchestrate multiple containers and manage networking, volumes and dependencies between services.

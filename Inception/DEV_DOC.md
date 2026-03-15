@@ -1,10 +1,10 @@
-# Developer Documentation
+# <u>Developer Documentation</u>
 
 This document describes how developers can set up, build and manage the Inception project.
 
 ---
 
-# Set up the environment from scratch (prerequisites, configuration files, secrets).
+# <u>Set up the environment from scratch (prerequisites, configuration files, secrets).</u>
 ## Prerequisites
 - To work with this project, the following components are required:
     - Alpine Linux Virtual Machine
@@ -121,7 +121,7 @@ The project uses several configuration files to define the infrastructure and se
 
 ---
 
-# Build and launch the project using the Makefile and Docker Compose.
+# <u>Build and launch the project using the Makefile and Docker Compose.</u>
 ## The project uses a Makefile to simplify Docker Compose commands.
     ◦ Run the orchestrated docker-compose file:
         - `make`
@@ -140,7 +140,7 @@ The project uses several configuration files to define the infrastructure and se
 
 ---
 
-# Use relevant commands to manage the containers and volumes.
+# <u>Use relevant commands to manage the containers and volumes.</u>
     ◦ Show all containers:
         `docker ps -a`
     ◦ Show disk usage by container:
@@ -156,21 +156,33 @@ The project uses several configuration files to define the infrastructure and se
 
 ---
 
-# Identify where the project data is stored and how it persists.
+# <u>Identify where the project data is stored and how it persists.</u>
 - The project uses Docker volumes to ensure data persists between container restarts or recreations.
 ## Data storage locations:
     - Inside containers:
-        - ◦ MariaDB: /var/lib/mysql
-        - ◦ WordPress: /var/www/html
+        ◦ MariaDB: /var/lib/mysql
+        ◦ WordPress: /var/www/html
     - On the host system:
-        - ◦ /home/viljar/data/
+        ◦ /home/viljar/data/
+    - Loggin to wordpress in browser:
+        ◦ https://vuljas.42.fr/wp-login.php
+    - Loggin to wordpress administrator panel in browser:
+        ◦ https://vuljas.42.fr/wp-admin
 
 ## Useful commands:
-    ◦ Access MariaDB container:
-        - `docker exec -it mariadb sh`
-    ◦ Access MariaDB database:
-        - `docker exec -it mariadb mariadb -u root -p`
-    ◦ Show list of volumes:
-        - `docker volume ls`
-    ◦ To inspect the configuration of the volume:
-        - `docker volume inspect <volume name>`
+    - Access MariaDB container:
+        ◦ `docker exec -it mariadb sh`
+    - Show list of volumes:
+        ◦ `docker volume ls`
+    - To inspect the configuration of the volume:
+        ◦ `docker volume inspect <volume name>`
+    - Access MariaDB database:
+        ◦ `docker exec -it mariadb mariadb -u root -p`
+            - To see databases:
+                ◦ `SHOW DATABASES;`
+            - Choose "wordpress" database:
+                ◦ `USE WORDPRESS;`
+            - Show tables:
+                ◦ `SHOW TABLES;`
+            - To see comments:
+                ◦ `SELECT comment_content FROM wp_comments;`
