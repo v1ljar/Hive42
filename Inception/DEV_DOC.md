@@ -124,19 +124,19 @@ The project uses several configuration files to define the infrastructure and se
 # Build and launch the project using the Makefile and Docker Compose.
 The project uses a Makefile to simplify Docker Compose commands.
     ◦ Run the orchestrated docker-compose file:
-        `make`
+        - `make`
     ◦ Stop containers without deleting images:
-        `make down`
+        - `make down`
     ◦ Start containers without building new images:
-        `make up`
+        - `make up`
     ◦ Just build docker images:
-        `make images`
+        - `make images`
     ◦ Remove containers, images and volumes:
-        `make clean`
+        - `make clean`
     ◦ Clean up everything:
-        `make fclean`
+        - `make fclean`
     ◦ Clear up everything, build and launch:
-        `make re`
+        - `make re`
 
 ---
 
@@ -160,17 +160,17 @@ The project uses a Makefile to simplify Docker Compose commands.
 The project uses Docker volumes to ensure data persists between container restarts or recreations.
 Data storage locations:
     - Inside containers:
-        ◦ MariaDB: /var/lib/mysql
-        ◦ WordPress: /var/www/html
+        - ◦ MariaDB: /var/lib/mysql
+        - ◦ WordPress: /var/www/html
     - On the host system:
-        ◦ /home/viljar/data/
+        - ◦ /home/viljar/data/
 
 Useful commands:
     ◦ Access MariaDB container:
-        `docker exec -it mariadb sh`
+        - `docker exec -it mariadb sh`
     ◦ Access MariaDB database:
-        `docker exec -it mariadb mariadb -u root -p`
+        - `docker exec -it mariadb mariadb -u root -p`
     ◦ Show list of volumes:
-        `docker volume ls`
+        - `docker volume ls`
     ◦ To inspect the configuration of the volume:
-        `docker volume inspect <volume name>`
+        - `docker volume inspect <volume name>`
