@@ -225,6 +225,7 @@ The project uses several configuration files to define the infrastructure and se
 
 ## Change ports
 **MariaDB**
+
     ◦ Dockerfile:
         - EXPOSE <port>
     ◦ mariadb.conf:
@@ -234,6 +235,7 @@ The project uses several configuration files to define the infrastructure and se
         - config create...--dbhost="$WORDPRESS_DATABASE_HOST:<port>"
 
 **WordPress**
+
     ◦ Dockerfile:
         - EXPOSE <port>
     ◦ www.conf:
@@ -242,12 +244,13 @@ The project uses several configuration files to define the infrastructure and se
         - fastcgi_pass wordpress:<port>;
 
 **NGINX**
+
     ◦ Dockerfile:
         - EXPOSE <port>
     ◦ nginx.conf:
         - listen <port> ssl;
         - listen [::]:<port> ssl;<port>
-        - return 301 https://$host:8443$request_uri;
+        - return 301 https://$host:<port>$request_uri;
     ◦ docker-compose.yml
         - ports:"<port>:<port>"
     ◦ Build the container again and in wordpress container update site url:
