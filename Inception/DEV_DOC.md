@@ -250,7 +250,6 @@ The project uses several configuration files to define the infrastructure and se
     ◦ nginx.conf:
         - listen <port> ssl;
         - listen [::]:<port> ssl;<port>
-        - return 301 https://$host:<port>$request_uri;
     ◦ docker-compose.yml
         - ports:"<port>:<port>"
     ◦ Build the container again and in wordpress container update site url:
@@ -259,6 +258,3 @@ The project uses several configuration files to define the infrastructure and se
         - wp option update siteurl 'https://vuljas.42.fr:<port>' --allow-root
         - wp option update home 'https://vuljas.42.fr:<port>' --allow-root
         - exit
-    ◦ Restart nginx container:
-        - cd /srcs/
-        - docker compose restart nginx
